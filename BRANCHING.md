@@ -18,3 +18,6 @@ After each meaningful milestone update STATUS/HANDOFF and link actual SHAs. Neve
 
 ## Integration checkpoint 2026-10-26
 PR #12 integrated `feature/p0-audit-core` into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26` after 4/4 Ubuntu+Windows CI; no promotion to `main`. `feature/p0-audit-core` is a historical active branch; next approved P2 SQLite task should create a fresh scoped branch from `develop` when work starts. Avoid rebasing, deleting or force-pushing existing branch.
+
+## P2 integration checkpoint 2026-10-26
+PR [#13](https://github.com/hibi89/SOVIA_sovereign/pull/13) merged tested opt-in SQLite audit history from `feature/p2-sqlite-history` to `develop`, merge SHA `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`; post-merge CI [40214911902](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214911902) 4/4 SUCCESS. No `main` code promotion. Next scoped branch for offline read-only dashboard should start from current `develop`, not the historical feature branch.

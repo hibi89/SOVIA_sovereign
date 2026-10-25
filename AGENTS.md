@@ -35,3 +35,6 @@ Issue #2: initial schema + synthetic fixture + runnable JSON parse -> single det
 
 ## SQLite P2 verified update 2026-10-26
 Source branch `feature/p2-sqlite-history` implements optional hashed metadata-only SQLite history with idempotent ingest/conflict rollback, version 1 gate, no-clobber backup/restore, explicit purge, 33 regression tests. CI run 40214522381 4/4 green; per job 125 discovered/115 passed/10 optional PDF skipped/0 fail. Continue P2 review/merge to develop, then GUI and commercial acceptance gates; do not silently make stateless audit persistent or claim hashes anonymous. Active feature HEAD must be refreshed before editing; PR not yet merged at this checkpoint.
+
+## P2 v0.7 develop integration override — 2026-10-26 KST
+PR #13 merged SQLite history at `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`; post-merge CI 40214911902 4/4 SUCCESS, each 115 PASS/10 optional PDF SKIP. On `ㄱ`, start next P2 safe local dashboard feature from latest develop, NOT SQLite redo, keeping original stateless path and no external telemetry. Proposed fastest GUI slice: static, read-only HTML generated from SQLite, with locally escaped hashed metadata and no-clobber output; compare with localhost server, log decision in ADR. No production/sale approval.

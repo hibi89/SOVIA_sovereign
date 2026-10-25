@@ -1,12 +1,15 @@
 # SOVIA STATUS — P2 v0.7 verified synthetic SQLite history
 
-Updated 2026-10-26 KST. Repository PUBLIC. Active source feature/p2-sqlite-history at tested SHA 59b982bc8960e38a948c68e49d874457de3e01fa (docs follows). Existing P1/P2 integrated develop cd154200821054b8596d2decf7dc2f55fc93e22e; main still not a released code branch.
+**LATEST INTEGRATION VERIFIED — 2026-10-26 KST:** PR [#13](https://github.com/hibi89/SOVIA_sovereign/pull/13) MERGED the opt-in SQLite history (version 1, recovery and purge) into `develop` at `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`. [Develop post-merge CI 40214911902](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214911902) 4/4 SUCCESS, Windows/Ubuntu × Python 3.11/3.13; each 125 tests discovered, 115 PASS, 10 optional PDF SKIP, 0 FAIL. Source/feature integration is DONE, NOT waiting for a PR. Next safe task on `ㄱ`: create a new scoped branch from latest `develop` and implement a read-only, generated offline HTML history dashboard (no local server/network) with output no-clobber, escaped metadata, report/rule/time overview, tests; then continue installer/retention/customer authorization gates. Do not reimplement P1/CSV/PDF/SQLite. Production/Vercel none; `main` remains documentation-only, not sale-ready. The earlier feature-branch notes below are archival.
+
+
+Updated 2026-10-26 KST. Repository PUBLIC. Active integrated source develop merge SHA edf8ea3de4a4fd781de34642b3d3f07a1ff67e10 (docs follows), 4/4 post-merge CI successful; main still not a released code branch.
 
 DONE_VERIFIED on synthetic Windows+Ubuntu CI: strict JSON/CSV import, 5 policies, evidence-linked HTML/JSON, findings/events CSV export, optional earlier Linux-tested PDF, **NEW opt-in SQLite metadata-history module** with no raw event names/prompt/target/pointer persistence, report idempotency, event identity collision rollback, version-1 schema and explicit no-clobber snapshot/restore and verified purge. Baseline audit CLI remains stateless. Tests CI 40214522381: 4/4 jobs PASS, per job 125 discovered, 115 executed PASS, 10 optional PDF SKIP, 0 FAIL; 33 history cases. First Windows test failed on read-only fsync and unclosed connection test handles (run 40214395712); both fixed and rerun passed.
 
 NOT VERIFIED: local customer's Windows/font install, real n8n/customer data, GUI, true data lifecycle beyond local history (original inputs/backups still retained), multi-process stress/disk failure, privacy legal requirements, product installer, commercial sale/production. SQLite hashed metadata is still potentially linkable and must not be described as anonymous or certified safe. No live Vercel, fees or customer secrets.
 
-NEXT: open and verify PR for integration into develop; keep main unpromoted. Then read-only local history dashboard, clean-device packaging and P2 privacy/recovery gates. No unnecessary duplicate P1 work. Refer HISTORY.md/TEST_PLAN.md/GAP_MATRIX.md and live HANDOFF.
+NEXT: create scoped feature branch from current develop and implement read-only offline history dashboard, clean-device packaging and P2 privacy/recovery gates. No unnecessary duplicate P1 work. Refer HISTORY.md/TEST_PLAN.md/GAP_MATRIX.md and live HANDOFF.
 
 ---
 
