@@ -1,5 +1,6 @@
 """Synthetic-only SQLite history tests: idempotency, conflicts, delete, backup, restore."""
 import copy
+from contextlib import closing
 import json
 from pathlib import Path
 import shutil
@@ -83,7 +84,7 @@ class SQLiteHistoryTests(unittest.TestCase):
         for private in (b"evt-001", b"client_records", b"unauthorized_export",
                         b"demo-agent", b"synthetic:1", b"outside.example"):
             self.assertNotIn(private, raw)
-        with sqlite3.connect(self.db) as c:
+        with closing(sqlite3.connect(self.db)) as c:
             self.assertEqual(["agent_sha256", "content_sha256", "engine_version",
                               "event_count", "evidence_status", "finding_count",
                               "finding_sha256", "identity_sha256", "imported_utc",
@@ -133,14 +134,14 @@ class SQLiteHistoryTests(unittest.TestCase):
 
     def test_unknown_future_version_blocked(self):
         self.insert()
-        with sqlite3.connect(self.db) as c:
+        with closing(sqlite3.connect(self.db)) as c:
             c.execute("PRAGMA user_version=99")
         with self.assertRaises(h.HistoryError):
             h.status(self.db)
 
     def test_known_v1_schema_and_integrity(self):
         self.insert()
-        with sqlite3.connect(self.db) as c:
+        with closing(sqlite3.connect(self.db)) as c:
             self.assertEqual(1, c.execute("PRAGMA user_version").fetchone()[0])
             self.assertEqual("ok", c.execute("PRAGMA integrity_check").fetchone()[0])
             self.assertEqual([], list(c.execute("PRAGMA foreign_key_check")))
@@ -149,7 +150,7 @@ class SQLiteHistoryTests(unittest.TestCase):
         self.insert()
         fake = copy.deepcopy(self.report)
         fake["normalized_policy_sha256"] = fake["report_id"] + "0" * 48
-        with sqlite3.connect(self.db) as c:
+        with closing(sqlite3.connect(self.db)) as c:
             with self.assertRaises(h.HistoryError):
                 h._import_transaction(c, fake)
         self.assertEqual(1, h.status(self.db)["reports"])
