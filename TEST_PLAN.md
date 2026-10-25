@@ -1,3 +1,11 @@
+# SOVIA TEST PLAN — current CSV source milestone, 2026-10-26 KST
+
+Current CI source SHA: 5c99ca3ca1205a26b586a057874172f6607d3e19. [GitHub Actions run 40212874275](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40212874275): Python 3.11 and Python 3.13 both completed SUCCESS, each `python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py tests` PASS and `python -m unittest discover -s tests -v`: **Ran 92 tests, OK (skipped=10)**, i.e. 82 executed PASS and 0 FAIL each. 10 skips are optional ReportLab/Korean PDF paths, not verified in this CI run. Newly added 25 tests (17 parser + 8 CLI) cover CSV schema/permissions/overlong input/header injection/malformed quoting, report equivalence with JSON, isolated Python run, error no-write, policy overwrite and no network. Independent local parser subset was 17 PASS/0 FAIL. No Windows, Excel or real customer-data tests conducted. No production URL.
+
+---
+
+## Earlier verified milestones (historical)
+
 # SOVIA test plan — P2 CSV export checkpoint
 Updated 2026-10-26 KST. Source/tests verified commit 6b3be7a4512049caa5a329776e2a63462cd6c8fa.
 
