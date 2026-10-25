@@ -1,0 +1,31 @@
+# Architecture decision log
+Updated 2026-10-25 KST
+
+## ADR-001: Unified core vs two separate products
+Option A independent Cloud and Private codebases: quickest naive start per product but duplicate tests, bugs, costs and inconsistent policy decisions.
+Option B common SOVIA Core with deployment-specific adapters: small up-front abstraction cost, better consistency and maintenance; Private remains distinct in packaging/security acceptance.
+Decision: **B**, as directed in the product discussion. No separate cloud/private forks.
+
+## ADR-002: Audit after execution vs inline traffic interception
+Option A deterministic post-event audit of supported logs: low cost, safe read-only pilot, easier tests; cannot stop malicious actions in real time.
+Option B inline runtime prevention gateway: potentially higher value; introduces critical-path latency, vendor/SDK integrations, outages and legal liability.
+Decision: **A for MVP**, B as a conditional expansion after customer validation and explicit owner approval.
+
+## ADR-003: Build cloud first vs local-first
+A Cloud-first: easy subscription demo, but requires production data governance, hosting, tenant isolation and spend before paying customers.
+B Local-first: near-zero cash, works in sensitive environments, reduced liability from central raw data; later connectors and hosted deployment require engineering work.
+Decision: **B**, with canonical schema and dependency injection to avoid rewrite for Cloud.
+
+## ADR-004: Persistent monitoring vs human-managed SOC
+A Human-operated monitoring for every customer: service-heavy cost grows with accounts and requires emergency staffing.
+B Product-led automatic policy monitoring with bounded enterprise support: low unit cost, scales better but needs trustworthy notification and documented limitations.
+Decision: **B**; no 24/7 operator promise.
+
+## ADR-005: Customer data collection
+A Central full prompt/document capture maximizes observability but privacy, consent and cost risk high.
+B Structured metadata by default, optional user-approved redacted evidence: limited visibility but lower costs, defensible privacy posture.
+Decision: **B**. Findings must declare observability limits.
+
+## Approvals and unresolved
+Planning docs and initial branch layout authorized by user's request. No paid subscriptions, external services, data transfers, brand registration, production deployments or real customer-data collection authorized. Detailed proprietary policies should remain outside PUBLIC repository until visibility is changed with owner approval.
+Naming/trademark conflict assessment is a future legal task; do not assert registration availability.
