@@ -93,3 +93,97 @@ class AuditTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+class ExtendedAuditTests(unittest.TestCase):
+    def setUp(self):
+        self.document = json.loads((ROOT / 'examples/demo.json').read_text(encoding='utf-8'))
+
+    def test_missing_pointer_detected_and_not_marked_observed(self):
+        self.document['events'][1]['source_pointer'] = None
+        result = evaluate(self.document)
+        finding = [f for f in result['findings'] if f['rule_id'] == 'MISSING_EVIDENCE']
+        self.assertEqual(1, len(finding))
+        self.assertEqual('POINTER_MISSING', finding[0]['evidence_status'])
+
+    def test_present_pointer_explicitly_unverified(self):
+        result = evaluate(self.document)
+        self.assertTrue(all(f['evidence_status'] == 'POINTER_PROVIDED_UNVERIFIED' for f in result['findings']))
+        self.assertTrue(any('독립 검증되지' in x for x in result['coverage_limits']))
+
+    def test_burst_rule_uses_utc_and_agent_run(self):
+        self.document['policy']['max_tool_calls_per_minute'] = 2
+        self.document['events'][1]['occurred_at_utc'] = '2026-10-25T15:01:30Z'
+        third = dict(self.document['events'][0], event_id='evt-003', occurred_at_utc='2026-10-25T15:01:15Z')
+        self.document['events'].insert(0, third)  # out of order does not affect result
+        burst = [f for f in evaluate(self.document)['findings'] if f['rule_id'] == 'BURST_TOOLS']
+        self.assertEqual(['evt-002'], [f['event_ids'][0] for f in burst])
+
+    def test_burst_at_60_seconds_not_alerted(self):
+        self.document['policy']['max_tool_calls_per_minute'] = 1
+        self.document['events'][1]['occurred_at_utc'] = '2026-10-26T00:02:00+09:00'
+        burst = [f for f in evaluate(self.document)['findings'] if f['rule_id'] == 'BURST_TOOLS']
+        self.assertEqual([], burst)
+
+    def test_burst_separated_by_run(self):
+        self.document['policy']['max_tool_calls_per_minute'] = 1
+        self.document['events'][1]['run_id'] = 'other-run'
+        self.document['events'][1]['occurred_at_utc'] = '2026-10-26T00:01:15+09:00'
+        self.assertFalse(any(f['rule_id'] == 'BURST_TOOLS' for f in evaluate(self.document)['findings']))
+
+    def test_invalid_burst_policy(self):
+        for bad in (True, 0, 1001, '3', -1):
+            with self.subTest(bad=bad):
+                self.document['policy']['max_tool_calls_per_minute'] = bad
+                with self.assertRaises(AuditInputError):
+                    evaluate(self.document)
+
+    def test_timeline_escapes_untrusted_agent_name(self):
+        self.document['events'][0]['agent_id'] = '<img src=x onerror=alert(1)>'
+        result = render_html(evaluate(self.document))
+        self.assertIn('이벤트 타임라인', result)
+        self.assertIn('&lt;img src=x onerror=alert(1)&gt;', result)
+        self.assertNotIn('<img src=x', result)
+
+    def test_timezone_to_utc(self):
+        self.assertEqual('2026-10-25T15:01:00Z', evaluate(self.document)['events'][0]['occurred_at_utc'])
+
+    def test_repeated_evaluation_is_deterministic(self):
+        self.assertEqual(evaluate(self.document), evaluate(self.document))
+
+    def test_invalid_domain_rejected(self):
+        self.document['events'][0]['destination_domain'] = 'https://internal.example/path'
+        with self.assertRaises(AuditInputError):
+            evaluate(self.document)
+
+    def test_deep_json_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / 'deep.json'
+            p.write_text('[' * 18 + '1' + ']' * 18, encoding='utf-8')
+            with self.assertRaises(AuditInputError):
+                read_document(p)
+
+    def test_non_utf8_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / 'bad.json'
+            p.write_bytes(b'\xff\xfe')
+            with self.assertRaises(AuditInputError):
+                read_document(p)
+
+    def test_invalid_input_does_not_touch_output(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            inp = Path(tmp) / 'invalid.json'
+            out = Path(tmp) / 'result.html'
+            inp.write_text('not json', encoding='utf-8')
+            res = subprocess.run([sys.executable, str(ROOT / 'sovia_audit.py'), '--input', str(inp), '--output', str(out)], capture_output=True, text=True, timeout=10)
+            self.assertEqual(2, res.returncode)
+            self.assertFalse(out.exists())
+
+    def test_no_untrusted_tool_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            marker = Path(tmp) / 'would_be_executed.txt'
+            self.document['events'][1]['tool_name'] = 'touch ' + str(marker)
+            evaluate(self.document)
+            self.assertFalse(marker.exists())
+
+    def test_burst_missing_threshold_unknown(self):
+        self.assertTrue(any('임계치 정책' in x for x in evaluate(self.document)['coverage_limits']))
