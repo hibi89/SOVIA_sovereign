@@ -4,7 +4,7 @@ Updated 2026-10-26 KST. Source/tests verified commit 6b3be7a4512049caa5a329776e2
 ## Actually executed
 | Command / probe | Result | Interpretation |
 |---|---|---|
-| python -m unittest discover -s tests -v | 54 PASS / 0 FAIL | 40 prior + 14 new CSV checks |
+| python -m unittest discover -s tests -v | 66 PASS / 0 FAIL | 40 P1 + 14 CSV + 12 optional-PDF checks |
 | python -m compileall -q sovia_audit.py tests | PASS | Python syntax |
 | python sovia_audit.py --input examples/demo_five_rules.json --output output/report.html --json-output output/report.json --findings-csv output/findings.csv --events-csv output/events.csv | PASS exit 0 | Fake 3 events, 5 findings, findings.csv 5 rows, events.csv 3 rows, all 4 files nonempty |
 | Temporary clean folder, python -I -B and four flags | PASS exit 0 | Same-machine isolated execution, not second Windows machine |
@@ -14,3 +14,10 @@ Updated 2026-10-26 KST. Source/tests verified commit 6b3be7a4512049caa5a329776e2
 
 ## Unverified / commercial gates
 Excel/Google Sheets actual UI and import variations not tested; spreadsheet formula escaping is defense-in-depth not a certified complete barrier. CSV ingestion unsupported. NTFS/external drives and hardlink compatibility not tested; fail safely. Simulated rollback only, no power-loss guarantee, group of four files not atomic for observers. Real source log provenance, PII scanning, backups, deletion, false positives, clean Windows install and operational end-to-end must pass before sale. Cloud/Private tenant/offline checks not applicable until those modes exist.
+
+## PDF milestone observed (2026-10-26 KST)
+- Code commit e2ffa99485b57d1e07d6b1ac119226fb86b045ed. Python 3.13.5, optional ReportLab 4.4.9 installed in developer environment.
+- `python -m unittest discover -s tests -q` = 66 passed / 0 failed, PDF tests cover optional default-CLI, invalid font/no partial outputs, file collision, byte-stream integrity, Korean font discovery, deterministic output, no-clobber, rollback on hardlink failure, safe no-findings case, raw prompt omission, five output formats. PDF-specific tests are SKIPPED on machines without ReportLab; do not claim PDF verified there.
+- Synthetic 3-event/5-finding PDF generated, rendered to 1 landscape A4 PNG, visually inspected no clipping; PyMuPDF extracted Korean headings and five rule IDs.
+- Synthetic 115-event PDF generated 6 pages; repeated column headers observed; text page coordinates within page bounds.
+- Not verified: fresh Windows device, Malgun Gothic registration, Office PDF viewing, unsupported filesystem, PDF/A, power-loss recovery, authentic customer log source and complete PII redaction. CLI PDF requires optional package and system TTF.

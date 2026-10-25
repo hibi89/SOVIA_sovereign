@@ -1,4 +1,4 @@
-# SOVIA Audit Lite v0.4.0 — offline synthetic quickstart
+# SOVIA Audit Lite v0.5.0 — offline synthetic quickstart
 Tested: Python 3.13.5 on Linux. Standard library only, no API keys or external calls. Windows Python 3.10+ is a design target, not an independently tested platform.
 
 ## One-command demonstration
@@ -22,4 +22,15 @@ Input JSON schema_version "1.0", policy object and <=1000 events, file <=1MiB, n
 Risk rules: unauthorized tool; unapproved destination; sensitive target access lacking explicit permission; configurable burst in trailing 60 seconds; missing evidence pointer. Missing policy is unknown, and provided pointers are not independently checked. Reports do not certify compliance, detect unobserved actions or assure zero leaks.
 
 ## Verification
-Run py -3 -m unittest discover -s tests -v (54 tests passed on the verified developer Linux Python 3.13.5). Existing filename -> exit 2; choose new paths each invocation. HTML+JSON+CSVs have best-effort rollback, not a multi-file transaction under system crash or concurrent readers. Before commercial usage, independent Windows test, backup/delete/recovery, real authorized sanitized logs and security review must pass.
+Run py -3 -m unittest discover -s tests -v (66 tests passed on the verified developer Linux Python 3.13.5). Existing filename -> exit 2; choose new paths each invocation. HTML+JSON+CSVs have best-effort rollback, not a multi-file transaction under system crash or concurrent readers. Before commercial usage, independent Windows test, backup/delete/recovery, real authorized sanitized logs and security review must pass.
+
+## Optional Korean PDF output (P2 v0.5.0)
+Existing HTML/JSON/CSV exports work without installing anything. To add a PDF file install the optional free Python package on the intended machine:
+
+    py -3 -m pip install "reportlab>=4,<5"
+
+Then run with **new unused output filenames**:
+
+    py -3 sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json --findings-csv findings.csv --events-csv events.csv --pdf-output report.pdf
+
+If the system cannot find a Korean TrueType font, specify `--pdf-font "C:\Windows\Fonts\malgun.ttf"` (actual path may vary). Only use a font locally installed and usable under its license; do not upload or distribute its standalone file. The PDF uses A4 landscape, evidence status and Korean warnings. Missing dependency/font fails the invocation before any outputs are published. PDF contains user-supplied *normalized data only*, no raw prompts, and is not a compliance certificate. 2026-10-26 local ReportLab 4.4.9, 66/66 tests PASS, one-page synthetic PDF text/render PASS; 115-event six-page pagination PASS. No independent Windows/Excel/customer validation. Generated PDF may embed font glyphs; the project ZIP contains no fonts.
