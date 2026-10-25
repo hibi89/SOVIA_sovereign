@@ -7,7 +7,7 @@ Branch feature/p0-audit-core; tested code commit e2ffa99485b57d1e07d6b1ac119226f
 - P2 v0.4 exports retained: findings/events CSV, BOM/CRLF, formula-like guard with limitations.
 - P2 v0.5 optional Korean PDF: new `sovia_pdf.py` uses ReportLab only on --pdf-output, system Korean TTF auto-discovery or --pdf-font. A4 landscape, findings/severity/evidence/rationale/remedy, UTC timeline, source-not-verified disclaimer and page numbers. No standalone fonts included, no cloud or external API; base CLI has no new mandatory dependencies.
 - Writer now stages strings and complete PDF bytes with exclusive no-clobber publish and best-effort rollback. Not a fully transactional multi-file system-crash guarantee.
-- Local Python 3.13.5 + ReportLab 4.4.9: `python -m unittest discover -s tests -q` 66 PASS/0 FAIL. Compile PASS. Synthetic 3 event/5 finding HTML+JSON+PDF CLI PASS; PDF 1 page with Korean text extraction and visual PNG inspection PASS. Synthetic 115 event multi-page PDF 6 pages with no extracted-text coordinate overflow PASS.
+- Local Python 3.13.5 + ReportLab 4.4.9: `python -m unittest discover -s tests -q` 67 PASS/0 FAIL. Compile PASS. Synthetic 3 event/5 finding HTML+JSON+PDF CLI PASS; PDF 1 page with Korean text extraction and visual PNG inspection PASS. Synthetic 115 event multi-page PDF 6 pages with no extracted-text coordinate overflow PASS.
 - Source + PDF module + test code Git blob SHAs match validated local bytes: sovia_audit.py b63a21b48f772e8c012ae94479bc15f2f9506af1, sovia_pdf.py 84ac0387d2ae101034e247aca14603a98287f3f3, tests/test_pdf.py 666749101f9affca6f6b65559a578f9239adaa97.
 
 ## Pending or unverified
@@ -18,3 +18,9 @@ Branch feature/p0-audit-core; tested code commit e2ffa99485b57d1e07d6b1ac119226f
 
 ## Next ㄱ
 Check live SHA and HANDOFF first. Continue P2 #6 by scoping offline SQLite history/idempotent import and/or supported CSV source ingest. Prefer shared engine, no raw prompt storage, carefully handle persistent data backup/recovery and non-destructive migrations. Test and update docs. Do NOT close #6 or sell until the commercial gates pass.
+
+## Isolated-Python PDF hotfix — 2026-10-26 KST
+- During extracted ZIP independent smoke, `python -I -B sovia_audit.py ... --pdf-output ...` initially failed because isolated Python excludes the script directory from sys.path. Existing normal-mode PDF and prior 66 tests worked; this exposed an untested packaging path, not a runtime production incident.
+- Fixed optional module loading to import ONLY the adjacent `sovia_pdf.py` via `importlib.util.spec_from_file_location`, without network or global sys.path mutation. Added isolated-PDF regression; final developer run `python -m unittest discover -s tests -q`: **67 PASS / 0 FAIL**, syntax PASS, isolated `-I -B` output PASS.
+- Verified from extracted ZIP `SOVIA_Audit_Lite_P2_PDF_verified.zip`: 67 tests PASS, HTML+JSON+PDF CLI smoke PASS (3 events / 5 findings). ZIP SHA-256 `2fdc573567edd691a3c19280b24ca4932ea5d0092a6ab327ee1da394375639ff`. No standalone font files in ZIP.
+- Final tested code hotfix GitHub SHA `a7a1c6b8e1518887c357aa101c8d254b228c4270`. P2 incomplete: Windows/NTFS and user-side ReportLab/Malgun Gothic, genuine sanctioned input and commercial safety remain UNVERIFIED. Deployment NONE.

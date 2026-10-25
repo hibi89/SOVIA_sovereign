@@ -23,3 +23,5 @@ Message: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈] o
 
 ## PDF output (optional; tested locally)
 Use `--pdf-output report.pdf` after `py -3 -m pip install "reportlab>=4,<5"`; a local Korean TTF is also required (auto-discovered or passed by --pdf-font). PDF generated with Korean text, table and event timeline and visually inspected; Windows font/install and real customer data are unverified. Read QUICKSTART.md. No packaged fonts or paid services.
+
+P2 PDF isolated-mode hotfix a7a1c6b8e151: extracted ZIP 67 tests PASS and `python -I -B` PDF+HTML+JSON smoke PASS, still synthetic local. Handoff/STATUS contain exact evidence.

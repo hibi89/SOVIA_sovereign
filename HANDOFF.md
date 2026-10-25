@@ -9,7 +9,7 @@ P1 five deterministic rules and evidence-linked HTML/JSON; P2 CSV findings/event
 
 ## 3. Test commands / pass fail / verified-unverified
 2026-10-26 KST, local Python 3.13.5 / ReportLab 4.4.9:
-- `python -m unittest discover -s tests -q` = 66 PASS 0 FAIL (54 existing +12 PDF cases).
+- `python -m unittest discover -s tests -q` = 66 PASS 0 FAIL (54 existing + 13 PDF cases).
 - `python -m compileall -q sovia_audit.py sovia_pdf.py tests` PASS.
 - `python sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json --pdf-output report.pdf` PASS exit 0, 3 events and 5 risk findings.
 - PDF visually rendered at 145 DPI, one A4 landscape page; Korean headings and all five risk rule names extracted via PyMuPDF, no visible clipping.
@@ -37,3 +37,9 @@ On ㄱ verify latest refs/docs/code, then implement next small P2 gap: SQLite hi
 
 ## 10. KST date, verified scope, doc basis commit
 2026-10-26 KST. Basis source commit e2ffa99485b57d1e07d6b1ac119226fb86b045ed; 66 local tests, one/6-page PDF QA, source Git blob matching; no real Windows/customer/production checks. This documentation's own commit SHA must be queried after update.
+
+## Isolated-Python PDF hotfix — 2026-10-26 KST
+- During extracted ZIP independent smoke, `python -I -B sovia_audit.py ... --pdf-output ...` initially failed because isolated Python excludes the script directory from sys.path. Existing normal-mode PDF and prior 66 tests worked; this exposed an untested packaging path, not a runtime production incident.
+- Fixed optional module loading to import ONLY the adjacent `sovia_pdf.py` via `importlib.util.spec_from_file_location`, without network or global sys.path mutation. Added isolated-PDF regression; final developer run `python -m unittest discover -s tests -q`: **67 PASS / 0 FAIL**, syntax PASS, isolated `-I -B` output PASS.
+- Verified from extracted ZIP `SOVIA_Audit_Lite_P2_PDF_verified.zip`: 67 tests PASS, HTML+JSON+PDF CLI smoke PASS (3 events / 5 findings). ZIP SHA-256 `2fdc573567edd691a3c19280b24ca4932ea5d0092a6ab327ee1da394375639ff`. No standalone font files in ZIP.
+- Final tested code hotfix GitHub SHA `a7a1c6b8e1518887c357aa101c8d254b228c4270`. P2 incomplete: Windows/NTFS and user-side ReportLab/Malgun Gothic, genuine sanctioned input and commercial safety remain UNVERIFIED. Deployment NONE.

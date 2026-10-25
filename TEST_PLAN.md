@@ -17,7 +17,13 @@ Excel/Google Sheets actual UI and import variations not tested; spreadsheet form
 
 ## PDF milestone observed (2026-10-26 KST)
 - Code commit e2ffa99485b57d1e07d6b1ac119226fb86b045ed. Python 3.13.5, optional ReportLab 4.4.9 installed in developer environment.
-- `python -m unittest discover -s tests -q` = 66 passed / 0 failed, PDF tests cover optional default-CLI, invalid font/no partial outputs, file collision, byte-stream integrity, Korean font discovery, deterministic output, no-clobber, rollback on hardlink failure, safe no-findings case, raw prompt omission, five output formats. PDF-specific tests are SKIPPED on machines without ReportLab; do not claim PDF verified there.
+- `python -m unittest discover -s tests -q` = 67 passed / 0 failed, PDF tests cover optional default-CLI, invalid font/no partial outputs, file collision, byte-stream integrity, Korean font discovery, deterministic output, no-clobber, rollback on hardlink failure, safe no-findings case, raw prompt omission, five output formats. PDF-specific tests are SKIPPED on machines without ReportLab; do not claim PDF verified there.
 - Synthetic 3-event/5-finding PDF generated, rendered to 1 landscape A4 PNG, visually inspected no clipping; PyMuPDF extracted Korean headings and five rule IDs.
 - Synthetic 115-event PDF generated 6 pages; repeated column headers observed; text page coordinates within page bounds.
 - Not verified: fresh Windows device, Malgun Gothic registration, Office PDF viewing, unsupported filesystem, PDF/A, power-loss recovery, authentic customer log source and complete PII redaction. CLI PDF requires optional package and system TTF.
+
+## Isolated-Python PDF hotfix — 2026-10-26 KST
+- During extracted ZIP independent smoke, `python -I -B sovia_audit.py ... --pdf-output ...` initially failed because isolated Python excludes the script directory from sys.path. Existing normal-mode PDF and prior 66 tests worked; this exposed an untested packaging path, not a runtime production incident.
+- Fixed optional module loading to import ONLY the adjacent `sovia_pdf.py` via `importlib.util.spec_from_file_location`, without network or global sys.path mutation. Added isolated-PDF regression; final developer run `python -m unittest discover -s tests -q`: **67 PASS / 0 FAIL**, syntax PASS, isolated `-I -B` output PASS.
+- Verified from extracted ZIP `SOVIA_Audit_Lite_P2_PDF_verified.zip`: 67 tests PASS, HTML+JSON+PDF CLI smoke PASS (3 events / 5 findings). ZIP SHA-256 `2fdc573567edd691a3c19280b24ca4932ea5d0092a6ab327ee1da394375639ff`. No standalone font files in ZIP.
+- Final tested code hotfix GitHub SHA `a7a1c6b8e1518887c357aa101c8d254b228c4270`. P2 incomplete: Windows/NTFS and user-side ReportLab/Malgun Gothic, genuine sanctioned input and commercial safety remain UNVERIFIED. Deployment NONE.
