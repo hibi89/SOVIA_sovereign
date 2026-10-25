@@ -343,7 +343,10 @@ def main(argv=None):
                  (args.pdf_output, "pdf")]
         requests = [(Path(os.path.abspath(path)), fmt) for path, fmt in files if path]
         targets = [path for path, _ in requests]
-        if source in targets or (args.policy and Path(args.policy).resolve() in targets) or len(set(targets)) != len(targets):
+        canonical_targets = [path.resolve() for path in targets]
+        if (source in canonical_targets or
+                (args.policy and Path(args.policy).resolve() in canonical_targets) or
+                len(set(canonical_targets)) != len(canonical_targets)):
             raise AuditInputError("Output paths must differ from input and each other")
         for target in targets:
             if not target.parent.is_dir():
