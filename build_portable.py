@@ -139,7 +139,7 @@ def build(output_path, root=ROOT):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="Build reproducible SOVIA Audit Lite offline beta ZIP")
-    p.add_argument("--output", required=True, help="NEW SOVIA-Audit-Lite-0.9.0-beta.zip path")
+    p.add_argument("--output", required=True, help="NEW SOVIA-Audit-Lite-0.10.0-beta.zip path")
     args = p.parse_args(argv)
     try:
         print(json.dumps(build(args.output), ensure_ascii=False, sort_keys=True))
