@@ -1,6 +1,6 @@
-# SOVIA Audit Lite v0.9.0-beta — portable offline package
+# SOVIA Audit Lite v0.10.0-beta — portable offline package
 
-**Status:** synthetic-test beta, not signed, not a production/customer release. The package contains only the offline stdlib Python auditor/history/dashboard, optional local-font PDF generator, strict CSV parser, a static verifier, docs and **three fabricated examples**. No executable installer, customer data, private configuration, service daemon, telemetry, standalone font or hidden background task.
+**Status:** synthetic-test beta, not signed, not a production/customer release. The package contains only the offline stdlib Python auditor/history/dashboard, optional local-font PDF generator, strict CSV parser, a static verifier, docs and **three fabricated examples**, an offline owner self-check script and a Windows click-to-run launcher. No executable installer, customer data, private configuration, service daemon, telemetry, standalone font or hidden background task.
 
 ## Requirements
 - Windows with Python 3.11+ available through `py -3` (Python 3.11/3.13 verified on GitHub-hosted runners). On Linux/macOS use `python3`.
@@ -13,19 +13,28 @@ For the latest verified CI run in [GitHub Actions](https://github.com/hibi89/SOV
 
 To build from checked-out project source instead:
 
-    py -3 build_portable.py --output dist\SOVIA-Audit-Lite-0.9.0-beta.zip
+    py -3 build_portable.py --output dist\SOVIA-Audit-Lite-0.10.0-beta.zip
 
 First create the `dist` folder; the command refuses existing output or checksum files. The `.sha256` file records the inner ZIP checksum, **not** a digital signature. Compare checksums with a separately trusted value/source when provenance matters; replacing both ZIP and checksum could bypass a mere integrity check.
 
 From trusted repository source, verify and extract to an unused directory:
 
-    py -3 verify_portable.py --archive dist\SOVIA-Audit-Lite-0.9.0-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.9.0-beta.zip.sha256 --extract-to SOVIA-install
+    py -3 verify_portable.py --archive dist\SOVIA-Audit-Lite-0.10.0-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.10.0-beta.zip.sha256 --extract-to SOVIA-install
 
 The verifier rejects unexpected/duplicate paths, symlinks, unknown manifest fields, oversized payloads, checksum mismatches and existing target directories; it reads and verifies ZIP contents **before** extraction. Then verify the freshly extracted payload (before creating any local reports in it):
 
     py -3 SOVIA-install\verify_portable.py --directory SOVIA-install
 
 Files live directly inside `SOVIA-install`, not in an additional nested SOVIA folder. No installation to Program Files, registry changes, internet, external services, authentication or machine privileges.
+
+## One-click Windows owner self-check (synthetic only)
+
+After verifying and extracting the ZIP into a **new unused** SOVIA-install folder, double-click **RUN_SELF_CHECK.cmd** inside that folder (or run it from PowerShell). It tries the installed `py -3` launcher, then `python`, without installing anything or calling the internet. The Python checker first verifies **every packaged file** against the manifest. It then creates a **new results directory next to the app installation** under `SOVIA_DIAGNOSTICS` and runs synthetic 3-event/5-finding audit, SQLite history and recovery, and standalone HTML. Repeated launches create new result folders; nothing is overwritten. No customer log access.
+
+- Read `SELF_CHECK_RESULT.json` inside the new result folder: `AUTOMATED_PASS_MANUAL_PENDING` requires manual browser/font/AV checks; `AUTOMATED_FAILED` indicates failed automated steps and includes a non-sensitive error code.
+- Open `synthetic-audit.html` and `synthetic-dashboard.html` manually in a browser. Confirm Korean text, tables and pagination; record the result yourself. The tool deliberately **does not** mark browser/appearance checks as passed.
+- If ReportLab 4.x and a compatible Korean TTF are installed already, a synthetic PDF is generated as `synthetic-audit.pdf` for you to open and visually review. Missing dependencies/font are reported as `SKIPPED_...`, **not auto-installed or silently declared passed**. No standalone font or remote download.
+- On installation or Python failures, use the manual CLI example below or the structured diagnostic status. Check Windows SmartScreen/antivirus locally; these are NOT bypassed or auto-probed.
 
 ## Clean-demo audit → local history → HTML dashboard
 
