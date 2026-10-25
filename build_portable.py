@@ -18,7 +18,7 @@ import zipfile
 import verify_portable as verify
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_NAME = "SOVIA-Audit-Lite-0.9.0-beta.zip"
+DEFAULT_NAME = "SOVIA-Audit-Lite-0.10.0-beta.zip"
 TEXT_SUFFIXES = (".py", ".json", ".csv", ".md")
 
 
@@ -37,6 +37,9 @@ def make_payload(root=ROOT):
         if source.stat().st_size > verify.MAX_FILE_BYTES:
             raise BuildError("Allowlisted source too large: " + name)
         contents = source.read_bytes()
+        if name.endswith(".cmd"):
+            # Batch entrypoint must keep canonical CRLF on Windows/Ubuntu builds.
+            contents = contents.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
         if name.endswith(TEXT_SUFFIXES):
             contents = contents.replace(b"\r\n", b"\n")
             try:
