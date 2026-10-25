@@ -112,12 +112,17 @@ def _connect(path, readonly=False):
         conn = sqlite3.connect(source.resolve().as_uri() + "?mode=ro", uri=True, timeout=5)
     else:
         conn = sqlite3.connect(path, timeout=5)
-        conn.execute("PRAGMA foreign_keys=ON")
-        conn.execute("PRAGMA secure_delete=ON")
-        conn.execute("PRAGMA busy_timeout=5000")
-        conn.execute("PRAGMA synchronous=FULL")
-    if readonly:
-        conn.execute("PRAGMA query_only=ON")
+    try:
+        if readonly:
+            conn.execute("PRAGMA query_only=ON")
+        else:
+            conn.execute("PRAGMA foreign_keys=ON")
+            conn.execute("PRAGMA secure_delete=ON")
+            conn.execute("PRAGMA busy_timeout=5000")
+            conn.execute("PRAGMA synchronous=FULL")
+    except Exception:
+        conn.close()
+        raise
     return conn
 
 
@@ -248,7 +253,7 @@ def _snapshot(source, destination):
                 _verify_schema(writer)
             finally:
                 writer.close()
-            with stage.open("rb") as handle:
+            with stage.open("r+b") as handle:
                 os.fsync(handle.fileno())
             _publish(stage, target)
         finally:
