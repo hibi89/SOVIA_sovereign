@@ -187,3 +187,19 @@ class ExtendedAuditTests(unittest.TestCase):
 
     def test_burst_missing_threshold_unknown(self):
         self.assertTrue(any('임계치 정책' in x for x in evaluate(self.document)['coverage_limits']))
+
+class FiveRuleDemoTests(unittest.TestCase):
+    def test_five_rule_demo_oracle(self):
+        demo = json.loads((ROOT / 'examples/demo_five_rules.json').read_text(encoding='utf-8'))
+        report = evaluate(demo)
+        self.assertEqual(3, report['event_count'])
+        self.assertEqual(5, report['finding_count'])
+        self.assertEqual({'UNAUTHORIZED_TOOL', 'UNAPPROVED_DESTINATION', 'SENSITIVE_ACCESS', 'MISSING_EVIDENCE', 'BURST_TOOLS'}, {f['rule_id'] for f in report['findings']})
+        self.assertTrue(all(f['event_ids'] == ['evt-003'] for f in report['findings']))
+
+class DigestLabelTests(unittest.TestCase):
+    def test_digest_is_canonical_not_raw_file_hash(self):
+        demo = json.loads((ROOT / 'examples/demo_five_rules.json').read_text(encoding='utf-8'))
+        report = evaluate(demo)
+        self.assertNotIn('input_sha256', report)
+        self.assertEqual(64, len(report['normalized_policy_sha256']))

@@ -178,7 +178,7 @@ def evaluate(document):
         unknown.append("일부 이벤트에 목적지 정보가 없음 (미관측은 안전을 뜻하지 않음)")
     unknown.append("입력 이벤트와 제공된 원본 포인터는 독립 검증되지 않았으며, 미관측 행동은 안전을 뜻하지 않음")
     digest = hashlib.sha256(json.dumps({"events": normalized, "policy": policy}, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
-    return {"report_schema_version": SCHEMA, "engine_version": VERSION, "report_id": digest[:16], "event_count": len(normalized), "finding_count": len(findings), "events": normalized, "findings": findings, "coverage_limits": unknown, "input_sha256": digest}
+    return {"report_schema_version": SCHEMA, "engine_version": VERSION, "report_id": digest[:16], "event_count": len(normalized), "finding_count": len(findings), "events": normalized, "findings": findings, "coverage_limits": unknown, "normalized_policy_sha256": digest}
 
 
 def render_html(report):
