@@ -1,38 +1,31 @@
 # SOVIA operating instructions
-Updated: 2026-10-25 KST
+Updated: 2026-10-26 KST
+
+## One-line new chat entrypoint (MANDATORY)
+Exact user message: **[소비아소버린 깃헙 레포지토리 보고 작업이어가셈]**.
+Treat this as unconditional continuation of the latest authorized, safe repository work, not a request for a recap. Start with [RESUME.md](RESUME.md), verify live repository state, restore [HANDOFF.md](HANDOFF.md) -> [STATUS.md](STATUS.md) -> AGENTS.md -> REQUIREMENTS.md -> MVP_72H.md -> GAP_MATRIX.md -> actual code. Don't ask for repeat background or new confirmation if safe authorized work is available. `ㄱ` means continue similarly.
+Do not assume files/branches/SHAs are unchanged since this document. An inaccessible repository is a tool/access blocker, not proof of a feature failure.
 
 ## Mission and decision authority
-Owner approves payments, scope changes, public disclosure, access/security changes, production changes and customer-data processing. ChatGPT acts as lead architect, developer, tester and reviewer when tools and permissions allow. GitHub is the source of truth for source, tests, requirements, status and handoff. Do not invent successful tests or deployments.
+User is owner. ChatGPT acts as lead designer/developer/reviewer with available tools. GitHub is canonical for code, requirements, tests and handoff. Owner approves external payments, privacy/visibility changes, security and access settings, external customer data transfer, live commercial listing, production deployments and consequential scope cuts. No forced push or destructive repo history rewrite. Verify author/committer attribution and SHA.
 
-## New chat restore order
-1. HANDOFF.md
-2. STATUS.md
-3. AGENTS.md
-4. REQUIREMENTS.md
-5. ARCHITECTURE.md and actual source/tests
-6. Latest GitHub commits, open issues and relevant production evidence
+## Strategic execution
+- Fastest measurable loop: runnable local vertical slice -> blueprint gap reconciliation -> iterative feature fill -> commercial security/readiness gate -> market proof -> Cloud and Private.
+- Target for the initial 72h active development: one synthetic JSON input -> validated canonical events -> explainable risk findings (3 minimum) -> evidence-linked Korean HTML report -> CLI + real smoke/unit test evidence. 2026-10-26~28 is a **target**, not an assertion of work completed.
+- P1 initially uses `feature/p0-audit-core`, integration `develop`, stable `main`; new branches created on demand only.
+- Not negotiable early: input type/size checks, imported text never executed, secrets/redaction, HTML escaping, synthetic data, basic tests. More expensive penetration, endurance, backup/restore, tenant and offline validations are gated **before** relevant pilot/production and may follow the synthetic MVP.
+- Sales collateral may be drafted concurrently (LISTING_PREP.md). No fabricated screenshots, invented certifications, 24/7 SOC guarantee or actual listing before test and approval.
+- If import integration/PDF/UI blocks runnable flow, fall back to supported JSON + HTML, document the missing piece in GAP_MATRIX. One improved retry on failure then pivot.
+- Prefer zero-cash work. Real customers and API/data costs require informed consent and budget.
+- No secrets, customer documents, prompt bodies, restricted policy data in repo. Repository was PUBLIC at most recent verification; confirm before each sensitive step.
 
-User shorthand "ㄱ": inspect current repository truth, choose the next safe unblocked task, implement within already authorized scope, test, report, then update STATUS.md and HANDOFF.md after meaningful changes. Do not ask the user to repeat known context.
+## Standard operational cycle
+1. Inspect latest GitHub refs, HANDOFF, STATUS, requirements, exact code and tests.
+2. Identify next unblocked issue and smallest implementation unit; compare alternative designs for consequential changes.
+3. Implement, run tests, inspect actual output; distinguish DONE, PARTIAL, UNVERIFIED, BLOCKED and NOT_APPLICABLE.
+4. Commit reviewed work with GitHub identity check; integrate when approved/validated. Never treat push, green CI or a Vercel Ready indicator alone as production verification.
+5. Update GAP_MATRIX, STATUS, HANDOFF (all 10 sections) after material changes. Verify last SHA and branch location. Don't produce empty commits.
+6. Report exact changes, test commands/pass-fail, repository/branch/SHA, deployment status/URL or NOT_APPLICABLE, next priority and approvals.
 
-## Delivery principles
-- Prototype -> working local MVP -> feature-gap closure -> hardening -> verified commercial pilot -> cloud/private expansion.
-- Security basics (data minimization, safe parsing, permissions, no secrets, tenant boundaries when applicable) are non-deferrable. Advanced hardening may be stage-gated.
-- Compare at least two designs by operating cost, implementation complexity, security and maintainability before accepting major irreversible decisions.
-- Verify actual code/test/deployment; distinguish DONE, PARTIAL, BLOCKED, UNVERIFIED and NOT_APPLICABLE.
-- Back up before overwriting real data; no force push, unexplained repo resets, empty commits or unnecessary deployment attempts.
-- On failed tools: diagnose, improve and retry at most once. No identical unproductive retries.
-- No offsite transfer of client data or public release of sensitive internals without permission. The repository is currently PUBLIC: keep docs public-safe.
-- Verify GitHub commit author/committer account mapping and SHA. Do not override GIT_AUTHOR_EMAIL/GIT_COMMITTER_EMAIL casually.
-
-## Working branches
-main = validated baseline. develop = integration. feature/p0-audit-core = next execution branch. More branches only when work begins; docs/..., feature/..., fix/... naming.
-Feature branch -> tests -> review diff -> integration into develop -> validation -> release to main. No automatic production deploy is configured.
-Branch and merge protection are not asserted unless independently confirmed.
-
-## Reporting
-After meaningful work include: repository, branch and commit SHA; files changed; exact test commands and passed/failed counts; deployment URL/status (or NOT_APPLICABLE); known risks; next prioritized action; permissions/cost needed. Update HANDOFF's ten required sections. A documentation commit is not product completion.
-
-
-## 72-hour MVP-first delivery rule (2026-10-26)
-Owner approved prioritizing a runnable vertical slice in 3 days (Oct 26-28), then comparing against the original blueprint to fill the gaps, preparing listing materials in parallel. Read MVP_72H.md then GAP_MATRIX.md before coding. First produce real working output; avoid early polishing or future SaaS abstractions. However never postpone basic safe parsing, no-execute ingestion, data minimization/redaction, and regression smoke tests. Advanced penetration, soak, multi-tenant and disaster-recovery checks are gated before affected commercial release, not necessarily in 72-hour demo.
-Keep an updated feature-gap table and never claim deferred work completed. A draft listing is not an actual posted product.
+## New session first executable unit (unless repo moved ahead)
+Issue #2: initial schema + synthetic fixture + runnable JSON parse -> single deterministic rule -> terminal/HTML finding report, basic offline tests. Continue #3/#4/#5/#11 to the three-rule working demo; don't merely replan it.
