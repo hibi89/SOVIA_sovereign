@@ -7,11 +7,13 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import html
 import json
+import os
+import tempfile
 from pathlib import Path
 import re
 import sys
 
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 MAX_BYTES = 1_048_576
 MAX_EVENTS = 1000
 MAX_DEPTH = 16
@@ -84,9 +86,9 @@ def read_document(path):
     file = Path(path)
     if not file.is_file():
         raise AuditInputError("Input file not found")
-    if file.stat().st_size > MAX_BYTES:
-        raise AuditInputError("Input file too large (max 1 MiB)")
-    raw = file.read_bytes()
+    # Read no more than limit+1 even if input grows between stat and read.
+    with file.open("rb") as handle:
+        raw = handle.read(MAX_BYTES + 1)
     if len(raw) > MAX_BYTES:
         raise AuditInputError("Input file too large (max 1 MiB)")
     try:
@@ -202,6 +204,50 @@ def render_html(report):
             "<p>합성 데이터용 사후 규칙 진단입니다. 침해 탐지·사고 부재·컴플라이언스를 보증하지 않습니다.</p></body></html>")
 
 
+def write_reports_atomically(items):
+    """Stage complete files; publish with exclusive hard links; undo our own links on error.
+
+    Staging and final names reside on the same filesystem. Individual published
+    reports never appear partially written. Multi-file rollback is best-effort;
+    it is not a transactional filesystem operation for concurrent readers.
+    """
+    staged = []
+    published = []
+    try:
+        # Reject occupied targets before creating any staging file.
+        if any(path.exists() or path.is_symlink() for path, _ in items):
+            raise AuditInputError("Output path already exists; no files overwritten")
+        for path, text in items:
+            fd, temp_name = tempfile.mkstemp(prefix=".sovia-staging-", suffix=".tmp", dir=path.parent)
+            temp_path = Path(temp_name)
+            staged.append(temp_path)
+            with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as out:
+                out.write(text)
+                out.flush()
+                os.fsync(out.fileno())
+        for (destination, _), staging in zip(items, staged):
+            # os.link refuses to overwrite an existing target, including a race.
+            # Fails safely on unsupported filesystems rather than risking overwrite.
+            os.link(staging, destination)
+            published.append((destination, os.stat(staging)))
+    except Exception:
+        for destination, original in published:
+            # Do not unlink a destination swapped out by another process.
+            try:
+                current = os.stat(destination)
+                if (current.st_dev, current.st_ino) == (original.st_dev, original.st_ino):
+                    destination.unlink()
+            except OSError:
+                pass
+        raise
+    finally:
+        for staging in staged:
+            try:
+                staging.unlink()
+            except FileNotFoundError:
+                pass
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="SOVIA offline read-only audit")
     parser.add_argument("--input", required=True, help="Structured JSON events (max 1 MiB)")
@@ -211,15 +257,16 @@ def main(argv=None):
     try:
         report = evaluate(read_document(args.input))
         source = Path(args.input).resolve()
-        targets = [Path(args.output).resolve()] + ([Path(args.json_output).resolve()] if args.json_output else [])
+        targets = [Path(os.path.abspath(args.output))] + ([Path(os.path.abspath(args.json_output))] if args.json_output else [])
         if source in targets or len(set(targets)) != len(targets):
             raise AuditInputError("Output paths must differ from input and each other")
         for target in targets:
             if not target.parent.is_dir():
                 raise AuditInputError("Output directory does not exist")
-        targets[0].write_text(render_html(report), encoding="utf-8")
+        items = [(targets[0], render_html(report))]
         if args.json_output:
-            targets[1].write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+            items.append((targets[1], json.dumps(report, ensure_ascii=False, indent=2)))
+        write_reports_atomically(items)
         print(f"SOVIA: events={report['event_count']} findings={report['finding_count']} report={targets[0]}")
         return 0
     except (AuditInputError, OSError) as exc:
