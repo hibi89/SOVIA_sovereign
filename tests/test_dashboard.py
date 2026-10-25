@@ -202,16 +202,17 @@ class DashboardTests(unittest.TestCase):
     def test_groups_bounded_without_misrepresenting_total(self):
         self._import()
         with closing(sqlite3.connect(self.db)) as db:
+            db.execute("PRAGMA foreign_keys=ON")
+            report_id, event_id = db.execute(
+                "SELECT report_id, identity_sha256 FROM report_events LIMIT 1"
+            ).fetchone()
             with db:
                 for n in range(25):
                     fid = f"mock{n:04d}"
                     db.execute("INSERT INTO findings VALUES (?,?,?,?,?,?)",
-                               (board.read_snapshot(self.db)["reports"][0][0],
-                                fid, board.read_snapshot(self.db)["events"][0][1] + "x" * 52,
+                               (report_id, fid, event_id,
                                 f"RULE_{n}", "MEDIUM", "POINTER_MISSING"))
-        # The direct SQL above intentionally bypasses app import to simulate
-        # arbitrary legacy metadata, but foreign-key checks still enforce references.
-        # A separate test covers the SQL-bound grouped-query itself.
+        # Direct SQL simulates unusual rule variety while FK integrity remains valid.
         self.assertLessEqual(len(board.read_snapshot(self.db)["rules"]), 20)
 
     def test_html_is_bounded_even_with_long_metadata(self):
