@@ -15,3 +15,6 @@ Avoid creating a forest of stale empty branches; delete only after merge and exp
 ## Change protocol
 Read current HEAD and relevant docs; back up affected persistent data; code smallest vertical slice; run tests; inspect changed files and identity; commit; open/review PR as appropriate; merge to develop; run acceptance; promote to main only verified. Vercel or other deployment settings remain unchanged unless approved.
 After each meaningful milestone update STATUS/HANDOFF and link actual SHAs. Never force push, rewrite history or embed keys.
+
+## Integration checkpoint 2026-10-26
+PR #12 integrated `feature/p0-audit-core` into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26` after 4/4 Ubuntu+Windows CI; no promotion to `main`. `feature/p0-audit-core` is a historical active branch; next approved P2 SQLite task should create a fresh scoped branch from `develop` when work starts. Avoid rebasing, deleting or force-pushing existing branch.

@@ -34,3 +34,6 @@ CSV import accepts allowlisted canonical event metadata only, never arbitrary pr
 
 ## Windows CLI smoke and CI verified
 In GitHub Actions [run 40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272), Ubuntu/Windows × Python 3.11/3.13 all succeeded (per-job 82 PASS, 10 optional PDF SKIP, 0 FAIL). The Windows path-alias mismatch was repaired in source commit `d204b76fdb545b32696a3d8aa97c35c1ffbb1355` with no original data loss. CI is synthetic-only; real Windows machine/PDF font and commercial gates remain pending.
+
+## develop integration (2026-10-26)
+PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) successfully merged tested synthetic core and P2 CSV/PDF to `develop` at `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. `main` remains documentation-only stable baseline by design. Future SQLite work should branch from `develop`; no public release/deployment was performed.

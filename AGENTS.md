@@ -29,3 +29,6 @@ User is owner. ChatGPT acts as lead designer/developer/reviewer with available t
 
 ## New session first executable unit (unless repo moved ahead)
 Issue #2: initial schema + synthetic fixture + runnable JSON parse -> single deterministic rule -> terminal/HTML finding report, basic offline tests. Continue #3/#4/#5/#11 to the three-rule working demo; don't merely replan it.
+
+## Live integration override (2026-10-26)
+`develop` now contains verified P1 and P2 source CSV/PDF through PR #12 at `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. Do not restart P1 issue #2 or assume no source on `develop`. On `ㄱ` create one scoped P2 SQLite metadata-history feature branch from current `develop` after fresh inspection; preserve default stateless CLI and original input, run real tests, update HANDOFF/STATUS. `main` remains unpromoted and documentation-only.

@@ -1,4 +1,8 @@
 # SOVIA HANDOFF — current P2 source CSV checkpoint (10 mandatory sections)
+
+**CURRENT INTEGRATION (2026-10-26 KST):** PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) merged synthetic Audit Lite P1/P2 into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. The previous no-code baseline on `main` is HISTORICAL and `main` is intentionally not promoted. Windows+Ubuntu Python 3.11/3.13 CI run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272): 4/4 success, 82 passed / 10 optional PDF skipped / 0 failed per job; PR validation [40213518280](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213518280) SUCCESS. Next unblocked work is P2 SQLite metadata-only history and recovery on a **new feature branch from develop**. Verify latest HEAD, then read HANDOFF/STATUS/GAP_MATRIX. No production or user Windows/real customer-data verification.
+
+
 Last material update: 2026-10-26 KST. Exact restart trigger: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈] or ㄱ. This is approval to continue unblocked synthetic-only work on the existing branch; always verify fresh GitHub HEAD and branch ancestry.
 
 ## 1. Goal / approved requirements / technology
