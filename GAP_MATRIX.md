@@ -1,28 +1,27 @@
-# SOVIA blueprint-to-working gap matrix
-Last update: 2026-10-26 KST. Tested implementation code commit: 2eda8c37a3ed06702aba14cb53790da3cbaf8e83, feature/p0-audit-core. Local tests 29 PASS, 0 FAIL. Evidence limited to synthetic fixtures.
+# SOVIA original blueprint vs verified shipped prototype
+Updated 2026-10-26 KST. P1 tested source commit 8957e872a0519dae208f49c51c848f95f35f7046, local 40 PASS / 0 FAIL. DONE_VERIFIED means synthetic development environment only.
 
-| Full blueprint feature | 72h MVP | Actual verified status | Next gap/gate |
+| Original design feature | P1 MVP | Actual status | Remaining gate |
 |---|---|---|---|
-| Shared local audit core | Required | DONE_VERIFIED local Python | Packaging P1/P2 |
-| Bounded structured JSON | Required | DONE_VERIFIED | Broader malicious inputs P2 |
-| Typed UTC events and IDs | Required | DONE_VERIFIED | Provenance/real adapter P2 |
-| 3 deterministic rules | Required | DONE_VERIFIED 5 total | Evaluate false positives on genuine sanitized cases |
-| Tool/destination/sensitive access | Required | DONE_VERIFIED | Real-policy semantics review |
-| Burst rule | Stretch | DONE_VERIFIED when threshold configured | Tune threshold per customer |
-| Missing evidence pointer rule | Stretch | DONE_VERIFIED | Genuine pointer validation not done |
-| Evidence states and unknown disclosure | Required | PARTIAL | Verify original evidence and coverage provenance P2 |
-| Korean HTML findings + timeline | Required | DONE_VERIFIED static markup | Browser/UX visual check P1 |
-| Offline CLI + JSON export | Required | DONE_VERIFIED local | Fresh machine and robust write recovery |
-| Tests and reproducible five-rule demo | Required | DONE_VERIFIED local: 29 tests | Clean Windows + CI P1/P2 |
-| CSV import/export | Stretch | DEFERRED | P2 |
-| PDF | Stretch | DEFERRED | P2 |
-| SQLite history/idempotent stored imports | Stretch | DEFERRED | P2 |
-| GUI/dashboard | Stretch | DEFERRED | P2 |
-| n8n/real sanitized supported connector | Post MVP | PLANNED | Commercial pilot gate |
-| Installer/delete/backup/restore | Post MVP | PLANNED | P2 mandatory before sale |
-| Commercial security/privacy and claims | Pre-sale | PLANNED | P2 mandatory |
-| Cloud tenants/auth/billing/alerts | Conditional | PLANNED | P4 revenue-backed |
-| Private air-gapped packaging | Conditional | PLANNED | P5 contracted |
-| Hybrid, governance, SOC | Future | DEFERRED | P6-P7 demand validation |
+| Shared offline core | Required | DONE_VERIFIED (Python stdlib CLI) | Production packaging |
+| 1 MiB JSON cap / 1000 events / depth 16 | Required | DONE_VERIFIED | Extreme malformed/fuzz P2 |
+| Typed canonical UTC event IDs | Required | DONE_VERIFIED locally | Independent original provenance |
+| Five deterministic policy rules | >=3 required | DONE_VERIFIED all five | Real false-positive review |
+| Unknown/missing coverage / pointer status | Required | PARTIAL | Independent source evidence checking P2 |
+| Korean HTML finding report + UTC timeline | Required | DONE_VERIFIED, Chromium set_content | External Windows file-browser open |
+| JSON output / reproducible CLI | Required | DONE_VERIFIED locally | Independent device install |
+| No-clobber staged outputs / rollback | P1 Day3 | DONE_VERIFIED in local tests | Non-NTFS Windows/hardlink + crash recovery |
+| Unit/smoke tests | Required | DONE_VERIFIED 40/40 | Windows platform/CI review |
+| Network-independent local execution | Required | DONE_VERIFIED mocked socket/isolated -I | Packet capture / real integration P2 |
+| CSV input/export | Stretch | DEFERRED | P2 |
+| PDF report / print-ready installer | Stretch | DEFERRED | P2 |
+| SQLite history and idempotency | Stretch | DEFERRED | P2 |
+| Local GUI/dashboard | Stretch | DEFERRED | P2 |
+| n8n and sanitized genuine agent data | Later | PLANNED | P2 authorized integration pilot |
+| Installer, retention/delete, backup/restore | Commercial | PLANNED | P2 BEFORE SALE |
+| PII/secret redaction, abuse and security review | Commercial | PLANNED | P2 BEFORE SALE |
+| Cloud multi-tenant auth/alerts/billing | Future | PLANNED | P4 demand + owner approval |
+| Private airgapped customer deployment | Future | PLANNED | P5 contract + no-egress checks |
+| Hybrid, advanced governance, SOC | Future | DEFERRED | P6/7 based on real demand |
 
-No original blueprint feature removed. DONE_VERIFIED never means independent production/security certification.
+Full blueprint is preserved; passing synthetic tests does not confer production or commercial security certification.

@@ -1,38 +1,39 @@
-# SOVIA HANDOFF — complete 10-part snapshot (KST 2026-10-26)
-Exact resume trigger: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈]. Short trigger: ㄱ. Re-read live HEAD; this document cannot self-reference its own commit.
+# SOVIA HANDOFF — mandatory ten-section verified record
+Updated 2026-10-26 KST. New session: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈]. Continue: ㄱ. Inspect live GitHub SHA before acting; docs cannot self-reference their commit.
 
-## 1. Goals, confirmed scope and tech
-Independent local-first evidence-linked retrospective AI agent audit. One shared Python deterministic core; future Cloud/Private conditional on paying demand. User authorized 3 active-day MVP-first (original Oct 26-28) then blueprint gap-filling and commercial hardening. Budget zero KRW; synthetic-only, offline, no hosted dependencies. Owner approval required for consequential external/privacy/payment/production changes.
+## 1. Goal, use, confirmed needs, technology
+SOVIA Sovereign is evidence-linked independent retrospective AI-agent audit, local-first single shared core for future Cloud and customer-operated Private. User authorized 3 active-day P1 MVP then original blueprint gaps, advanced commercial safety before any live customer. Python 3 stdlib only, synthetic JSON and Korean HTML/JSON, zero KRW development budget, offline/no remote API. Do not dilute confirmed features by reporting a future blueprint as already shipped.
 
-## 2. Implemented functions and decisions
-P0 planning and branches complete. P1 v0.2.0 working on feature/p0-audit-core: bounded JSON, canonical UTC events, five deterministic checks, evidence pointer status, unknown scope, Korean HTML finding table and sorted timeline, JSON export, stdlib-only CLI, two and three-event synthetic fixtures. Burst threshold opt-in; absent policy never interpreted as a safe pass. A provided pointer is NOT independent verification. Avoided CSV/PDF/SQLite/UI early to retain executable timebox.
+## 2. Completed features, changes, reasons
+P0 docs/branches/issues established. P1 v0.3.0 on feature/p0-audit-core: bounded JSON, typed normalized UTC event timeline, 5 deterministic findings (unauthorized tool/destination, sensitive access lacking authorization, configurable tool-call burst, missing evidence), unknown coverage and unverified source pointers, Korean HTML table/timeline, JSON, CLI. New Day3 safeguards: upper-bounded file reads even on race; exclusive non-clobber output, staging with flush/fsync, hard-link publication, best-effort rollback after second report failure. Standard library selected to keep offline installation free; PDF/CSV/SQLite/dashboard intentionally P2 deferred, not removed.
 
-## 3. Tests, commands and counts
-Python 3.13.5 local environment, 2026-10-26 KST:
-- python -m unittest discover -s tests -q -> 29 passed / 0 failed.
+## 3. Tests, precise commands, successes/failures and verified scope
+On local Python 3.13.5, 2026-10-26 KST:
+- python -m unittest discover -s tests -q -> 40 PASS, 0 FAIL.
 - python -m compileall -q sovia_audit.py tests -> PASS.
-- python sovia_audit.py --input examples/demo_five_rules.json --output report_day2_final.html --json-output report_day2_final.json -> exit 0; 3 events, 5 findings, 5 unique rule IDs.
-- Original examples/demo.json smoke -> 2 events, 3 rule findings.
-- Exact Git blob SHA equality verified for tested local source and both fixtures, and remote blob objects.
-Unverified: fresh Windows install, real browser UI, GitHub CI, real authorized sanitized customer feed, no-egress packet test, penetration review, production (N/A).
+- python sovia_audit.py --input examples/demo_five_rules.json --output <new-file>.html --json-output <new-file>.json -> 3 events, 5 distinct findings, exit 0.
+- Clean temporary copy, same machine, python -I -B -> PASS with 5 findings.
+- Chromium set_content inspection: 2 tables, 5 finding rows, 3 timeline rows, zero console/page errors, 1280px no document overflow. file:// navigation blocked administratively, did not verify external browser open.
+- Source, old tests, new tests and fixtures matched remote Git blobs. Baseline 29 tests + 11 delivery/offline/contract tests. One new symlink test initially failed; corrected improper resolve() dereference of dangling target to abspath() and reran all green.
+Unverified: fresh Windows/NTFS install, independent machine, true multi-file crash recovery, network packet capture, genuine log provenance, production/E2E security.
 
-## 4. Done / in progress / pending / blockers / stop point
-DONE local five-rule prototype and 29 tests. IN PROGRESS P1 Day3 acceptance/report/robustness. PENDING full Audit Lite P2 format/UX/integration and commercial validation; future Cloud/Private not started. Current stop point: after code/fixture/test commits, ready for Day3. Public visibility limits only sensitive assets, not public-safe work.
+## 4. DONE / IN PROGRESS / PENDING / BLOCKED and stopping point
+P1 LOCAL PROOF COMPLETE (source/tests/demo and HTML render). Original full product NOT complete. Next P2 practical packaging/Windows filesystem check, CSV/PDF/SQLite/dashboard and sanitized connector inputs; commercial hardening separately required. PUBLIC repository bars confidential assets only; synthetic work unblocked.
 
-## 5. Problems / evidence / attempted fixes / pivot rules
-Pre-project empty repo 404/409 resolved earlier. Direct git network/DNS was unavailable in previous session; use connected GitHub commits/blobs, with hash matching. In current iteration one burst test initially failed because fixture events were 60 seconds apart, not a code defect; corrected fixture and reran to 29/29. Input digest field was inaccurately named input_sha256; corrected to normalized_policy_sha256 before final 29-test pass. Do not claim external input hashes or verified source pointers. If errors recur, diagnose and use at most one materially changed retry before pivot.
+## 5. Failures, evidence, cause, attempts, pivots and retry warning
+Earlier empty repo 404/409 bootstrap resolved. Previous direct git DNS failure: use GitHub connector and blob SHA checks, do not retry blindly. Day2 60-second test boundary fixture corrected. Day3 file:// browser navigation returned ERR_BLOCKED_BY_ADMINISTRATOR due to environment; instead used Chromium page.set_content and verified DOM; do not misclassify as app failure. Day3 dangling symlink target test initially returned success, because resolve() followed target; fixed by keeping absolute destination path then tests 40/40. Future unsupported hardlink on a real Windows/non-NTFS filesystem must be reported and adapted, no silent overwrite fallback.
 
-## 6. Repository, branches, SHAs and code paths
-https://github.com/hibi89/SOVIA_sovereign, PUBLIC. main/develop last confirmed 51ebaf92cbb278a10978d906da927ec644c76d97. Feature code milestone 56334666f08243f09c4275d675b4bbd33bff9f81, final tested code+fixture milestone 2eda8c37a3ed06702aba14cb53790da3cbaf8e83. Files: sovia_audit.py; tests/test_audit.py; examples/demo.json; examples/demo_five_rules.json; QUICKSTART.md; STATUS.md; GAP_MATRIX.md; TEST_PLAN.md; HANDOFF.md; README.md. Verify document follow-up commit separately.
+## 6. Repository/branches/SHAs/key paths
+https://github.com/hibi89/SOVIA_sovereign. PUBLIC. Work branch feature/p0-audit-core, P1 Day3 tested code commit 8957e872a0519dae208f49c51c848f95f35f7046. Old work branch basis 51ae1ae422b0c0c4b18115cdc3b4b2b56d88cf71; main/develop latest checked 51ebaf92cbb278a10978d906da927ec644c76d97. Key paths: sovia_audit.py, examples/demo.json, examples/demo_five_rules.json, tests/test_audit.py, tests/test_delivery.py, QUICKSTART.md, GAP_MATRIX.md, TEST_PLAN.md, STATUS.md, HANDOFF.md. This docs commit will have new SHA, fetch current.
 
-## 7. Production, Vercel, commands, environment
-Production URL NONE; Vercel project NONE; no server/service/paid key. Python 3.13.5 tested, 3.10+ target UNVERIFIED on clean machines. Run python sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json. Windows: py -3. HTML opens locally. Production checks NOT_APPLICABLE.
+## 7. Production URL, Vercel, execution/environment
+Vercel NONE, Production URL NONE, hosting NONE, paid resources NONE. Local tested Python 3.13.5, target 3.10+ not independently validated. Windows command: py -3 sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json ; unit test py -3 -m unittest discover -s tests -q. Choose NEW filenames each run. GitHub SHA vs Vercel NOT APPLICABLE.
 
-## 8. Originals, backups, identity, secrets, prohibition
-Existing main/develop commits untouched; feature commits preserve ancestry as rollback references. GitHub author/committer verified previously as connected user hibi89; verify new commits again. No customer originals/secrets stored, no .env/private prompt upload. PUBLIC repo remains so. No user-owned production records changed. Never overwrite existing personal data, modify repo visibility, transmit customer input, charge money or deploy without owner consent.
+## 8. Original location, backup, authentication, no-modify assets
+Original main/develop unchanged; git ancestry preserves prior code/docs. Local source/test copies saved before modification in ephemeral development workspace; do not assume they persist beyond this session. No uploaded private customer data, raw agent prompts, credentials or env vars. Validate author/committer identity via GitHub commit (hibi89 expected). No forced push or original data overwrite. Public GitHub requires synthetic-only code/docs; owner approval for repo visibility, spending, external data, access changes, sales or production deployment.
 
-## 9. Next priorities, procedure, acceptance, approvals
-Verify latest feature branch HEAD and diff; first improve CLI output failure safety/no-clobber plus regression and clean launch test, or equivalent top-priority P1 day3 gap. Keep code minimally invasive and tested. Review changes, integrate to develop when ready; main only after review. Update STATUS/HANDOFF after material work. Prepare listing draft but no sale until P2 commercial security/data gates and owner approval. User does not need to repeat product concept or prompt.
+## 9. Next priorities, procedures, completion and required approvals
+On ㄱ: query live refs; use HANDOFF/STATUS/AGENTS/REQUIREMENTS then source/tests. P2 first decide packaging strategy based on Windows hardlink feasibility, add structured CSV export with spreadsheet formula guard or printable/PDF if approved, tests first; continue full blueprint GAP_MATRIX. Validate sanitized authorized agent fixture then false positives and backup/restore; sales listing only draft until owner authorizes and P2 security gate passes. Keep code on feature until reviewed for develop; main not promoted automatically. No user manual task until actual independent Windows test is desired.
 
-## 10. Last update KST, actual verification scope and document basis
-2026-10-26 KST. Evidence: local 29 PASS 0 FAIL, CLI three-event five-rule output, compile success, GitHub matched blob hashes; code/fixture commit 2eda8c37a3ed06702aba14cb53790da3cbaf8e83. This document committed subsequently, so fetch actual HEAD after the write. App is P1 prototype, not production service.
+## 10. KST update, verification range and reference commit
+2026-10-26 KST. Tested 40 local unit cases, one five-rule CLI smoke, one isolated temporary copy, compile, Chromium HTML content render, and matching Git blob SHAs. Code basis 8957e872a0519dae208f49c51c848f95f35f7046; subsequent docs-only commit must be fetched fresh. Windows installation, actual production and customer data remained UNVERIFIED / NOT APPLICABLE.
