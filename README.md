@@ -51,3 +51,6 @@ See DASHBOARD.md for prerequisites and privacy. Output requires unused filename 
 
 ## Develop integration of v0.8 offline dashboard
 PR [#14](https://github.com/hibi89/SOVIA_sovereign/pull/14) merged at SHA 1123851900aee34d1c02d2a4590c6a0b5852727d. Post-merge CI [40215946752](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215946752) 4/4 success across Windows/Ubuntu 3.11/3.13; each 138 PASS / 10 optional PDF SKIP / 0 FAIL. Original DB and main unchanged; P2 clean-install/retention/commercial security gates are next and not complete.
+
+## P2 v0.9.0-beta portable offline package
+Reproducible allowlisted ZIP of the five Python modules, offline verifier, synthetic samples and instructions. Build via python build_portable.py --output dist/SOVIA-Audit-Lite-0.9.0-beta.zip (dist must exist and output unused); verify/extract using verify_portable.py --archive ZIP --sha256-file ZIP.sha256 --extract-to NEW_DIRECTORY. See PORTABLE_README.md. CI https://github.com/hibi89/SOVIA_sovereign/actions/runs/40216762276 4/4 Windows/Linux success, each 167 PASS and 10 optional PDF SKIP, archive hash 6442c6896118fc44cd309fcd6596a59d6a17bb6e8252ddc45a8b15c34d5fd7c3. Download CI artifact sovia-portable-beta from the run. Unsigned beta, not commercial release.
