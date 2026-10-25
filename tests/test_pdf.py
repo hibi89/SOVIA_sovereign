@@ -142,3 +142,15 @@ class PDFOptionalTests(unittest.TestCase):
             self.assertEqual(5,len(list(folder.iterdir())))
             self.assertEqual(5,json.loads((folder/'report.json').read_text('utf-8'))['finding_count'])
             self.assertTrue((folder/'report.pdf').read_bytes().startswith(b'%PDF-'))
+
+    @unittest.skipUnless(HAVE_REPORTLAB,'Optional reportlab dependency not installed')
+    def test_pdf_runs_in_isolated_python_mode(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp)
+            cmd=[sys.executable,'-I','-B',str(ROOT/'sovia_audit.py'),
+                 '--input',str(ROOT/'examples/demo_five_rules.json'),
+                 '--output',str(folder/'report.html'),
+                 '--pdf-output',str(folder/'report.pdf')]
+            proc=subprocess.run(cmd,capture_output=True,text=True,timeout=30)
+            self.assertEqual(0,proc.returncode,proc.stderr)
+            self.assertTrue((folder/'report.pdf').read_bytes().startswith(b'%PDF-'))

@@ -320,8 +320,16 @@ def main(argv=None):
                 raise AuditInputError("Output directory does not exist")
         def render_pdf_optional():
             try:
-                from sovia_pdf import render_pdf
-                return render_pdf(report, font_path=args.pdf_font)
+                # Python -I does not put the script directory on sys.path.
+                # Load ONLY the sibling PDF module, with no path or network lookup.
+                from importlib.util import module_from_spec, spec_from_file_location
+                pdf_module = Path(__file__).resolve().with_name("sovia_pdf.py")
+                spec = spec_from_file_location("_sovia_local_pdf", pdf_module)
+                if spec is None or spec.loader is None:
+                    raise ImportError("sovia_pdf.py must be next to sovia_audit.py")
+                module = module_from_spec(spec)
+                spec.loader.exec_module(module)
+                return module.render_pdf(report, font_path=args.pdf_font)
             except (ImportError, ValueError, RuntimeError) as exc:
                 raise AuditInputError("PDF generation unavailable: " + str(exc)) from exc
 
