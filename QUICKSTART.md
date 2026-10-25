@@ -49,3 +49,6 @@ GitHub Actions synthetic offline regression at workflow run 40212874275: Python 
 
 ## Cross-platform synthetic verification (P2 v0.6 checkpoint)
 GitHub Actions run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272) passed Ubuntu and Windows GitHub-hosted Python 3.11/3.13 (4 jobs). Each: 92 discovered / 82 PASS / 10 optional PDF SKIP / 0 FAIL. A Windows path-alias comparison was corrected in `d204b76fdb545b32696a3d8aa97c35c1ffbb1355` after a test failure without original-data overwrite. This is **not** independent validation on a customer's Windows machine or with optional Korean PDF/Malgun font.
+
+## SQLite opt-in history (v0.7)
+The audit CLI above remains stateless. Use `sovia_history.py` only if you explicitly want a local SQLite metadata history. See [HISTORY.md](HISTORY.md) for no-clobber backup and restore, report/all purge, pseudonymization limits and test evidence. 4/4 OS/Python CI matrix passed at run 40214522381; each 115 executed pass / 10 optional PDF skip.

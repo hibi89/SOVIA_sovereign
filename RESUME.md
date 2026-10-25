@@ -1,3 +1,10 @@
+# SOVIA new-chat continuation entrypoint — P2 SQLite milestone
+Exact trigger: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈] or ㄱ. Verify live GitHub first; this is the continuation signal, not a request for a recap. After checking HANDOFF and STATUS on newest active branch/develop, read AGENTS/REQUIREMENTS/GAP_MATRIX/HISTORY and real code/tests. P1, CSV input/output and optional PDF are completed synthetic checkpoints and MUST NOT be restarted.
+
+Current next milestone: P2 v0.7 SQLite opt-in history completed on feature/p2-sqlite-history at tested SHA 59b982bc8960e38a948c68e49d874457de3e01fa, CI run 40214522381 4/4 OS/Python green (115 pass/10 PDF skip each). If PR to develop not yet merged, open and review it; if merged, skip this. Then next P2 priority is read-only local history dashboard, installation/recovery/retention/PII and authorized input adapter. main default remains documentation-only; production not deployed. No need for new permissions for synthetic-only safe development; obtain approval for external data/payments/visibility/production.
+
+---
+
 # SOVIA — new-chat one-line continuation protocol
 
 **CURRENT INTEGRATION (2026-10-26 KST):** PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) merged synthetic Audit Lite P1/P2 into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. The previous no-code baseline on `main` is HISTORICAL and `main` is intentionally not promoted. Windows+Ubuntu Python 3.11/3.13 CI run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272): 4/4 success, 82 passed / 10 optional PDF skipped / 0 failed per job; PR validation [40213518280](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213518280) SUCCESS. Next unblocked work is P2 SQLite metadata-only history and recovery on a **new feature branch from develop**. Verify latest HEAD, then read HANDOFF/STATUS/GAP_MATRIX. No production or user Windows/real customer-data verification.

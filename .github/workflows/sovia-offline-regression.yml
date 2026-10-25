@@ -1,7 +1,7 @@
 name: SOVIA offline regression
 on:
   push:
-    branches: [feature/p0-audit-core, develop]
+    branches: [feature/p0-audit-core, feature/p2-sqlite-history, develop]
   pull_request:
     branches: [develop, main]
   workflow_dispatch:
@@ -23,6 +23,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile source/tests
-        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py tests
+        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py tests
       - name: Run stdlib regression (optional PDF cases may skip)
         run: python -m unittest discover -s tests -v

@@ -1,3 +1,41 @@
+# SOVIA HANDOFF — P2 v0.7 SQLite metadata history (10 required items)
+
+Updated 2026-10-26 KST; scope verified on branch feature/p2-sqlite-history. New chat/ㄱ: read the latest DEVELOP branch when integrated, otherwise this feature branch, then HANDOFF → STATUS → AGENTS → REQUIREMENTS → source and tests. Fresh SHA takes precedence over archival text.
+
+## 1. Goal, confirmed needs and stack
+Local-offline AI agent risk/evidence auditing with one deterministic Python core; staged Audit Lite then commercial hardening; Cloud/Private future conditional. User approves MVP first, incremental gap filling, no initial spending, no unapproved live data.
+
+## 2. Completed functionality/changes/decision
+Existing P1 five-rule JSON core/HTML/JSON and P2 strict CSV ingest/export and optional Korean PDF unchanged. NEW separate sovia_history.py v0.7 opt-in SQLite store with digest-only event identity/content, pseudonymized actor/run/tool, rule IDs, import time/counters; original prompt/target/destination/source pointer not persisted. Same report repeat no-op; same event identity with modified payload rejects transaction. SQLite version 1 schema, backup API to unused filename, restore to unused filename, report/all purge with explicit --confirm-delete + VACUUM. No automatic DB writes from normal sovia_audit.py CLI. ADR-010 compares JSONL vs SQLite; selected SQLite for transactional/idempotent recovery. HISTORY.md is user guide.
+
+## 3. Test commands/pass-fail and scope
+GitHub Actions CI run 40214522381 (source SHA 59b982bc8960e38a948c68e49d874457de3e01fa): python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py tests PASS; python -m unittest discover -s tests -v **each OS/version 125 total, 115 PASS / 10 PDF SKIP / 0 FAIL**, Windows/Ubuntu × Python 3.11/3.13 4/4 success. 33 new SQLite tests; source-only and snapshot/restore/dedup/rollback/purge/isolation covered. CI evidence URL https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214522381. No real consumer desktop/real logs/power-loss stress or PDF optional dependency rerun.
+
+## 4. Done/in progress/pending/stopping point
+DONE verified synthetic P2 SQLite metadata local slice on feature branch, along with existing JSON/CSV and optional prior PDF. IN PROGRESS P2 overall commercial gates. NEXT: PR from feature/p2-sqlite-history into develop after verified checks, then read-only customer dashboard, clean installation, authorized n8n mapping feasibility, clear retention/deletion/PII false-positive test and actual owner PC testing. P2 not sale-ready. P4/P5 production NOT_STARTED.
+
+## 5. Failures, evidence, cause, attempts/pivot
+Initial Github run 40214395712 Linux PASS but Windows FAIL: sqlite backup fsync on read-only file was EBADF, and with sqlite3.connect context didn't close Windows temp handles. Scoped fix in commits 60d2d3faf6f6bd0f0ba2925ebcbcada46554e3e9 / 59b982bc8960e38a948c68e49d874457de3e01fa: writable fsync handle, close connections on config failure, contextlib.closing for test handles. Rerun 40214522381 all 4/4 PASS; no need to retry failed design.
+
+## 6. Repo/branch/SHA/files
+Repo https://github.com/hibi89/SOVIA_sovereign PUBLIC. Feature branch feature/p2-sqlite-history base develop cd154200821054b8596d2decf7dc2f55fc93e22e. Last fully tested source SHA 59b982bc8960e38a948c68e49d874457de3e01fa (before docs commit). Files sovia_history.py, tests/test_history.py, HISTORY.md, workflow .github/workflows/sovia-offline-regression.yml. Develop still previous stable P1/P2 through PR #12 until SQLite PR merged; main documentation-only, not production. Verify all actual heads freshly.
+
+## 7. Production, Vercel, commands and environment
+No Vercel, production URL, live service, subscription or external API. NOT_APPLICABLE Production verification/SHA. Python 3.11/3.13 Ubuntu & Windows CI. CLI examples in HISTORY.md: python sovia_history.py import --input examples/demo_five_rules.json --db new-history.sqlite; status, backup, restore, purge commands. No required third-party package for SQLite. Optional PDF requires ReportLab+local Korean TTF and was skipped in this CI.
+
+## 8. Source/backup/secrets/protected data
+Original main/develop source unchanged by feature until integration; commits and PR supply code rollback. No private/user/customer records touched; PUBLIC repository contains only synthetic fixtures. SQLite import is opt-in; metadata is pseudonymized NOT proven anonymous; SHA dictionary/linkage and timestamps can be sensitive. DB/backups & source files kept outside Git. Snapshot/restore is implemented with unique targets but automatic backup, lifetime/retention and physical secure erase remain missing. For any real existing DB, explicit backup+test restore before further imports. Never share fonts/tokens/.env/customer logs.
+
+## 9. Next priority/steps/approvals
+First check feature HEAD and green CI, open review PR into develop, merge only on verified green matrix, preserve main default. Then implement first read-only local dashboard via standalone UI; add install+user-PC tests, historical browsing, retention, authorized sanitized source adapter, adversarial tests before selling. Owner approval needed for visibility change, money, external data, real customer input, production/Vercel, publication. No owner action required for synthetic-only next work.
+
+## 10. Updated time/basis SHA/verification boundaries
+2026-10-26 KST. Verified 59b982bc8960e38a948c68e49d874457de3e01fa and 40214522381 on GitHub. This documentation commit cannot self-reference. Source+CI, NOT production or user Windows. Documentation may be superseded by merged DEVELOP HEAD; check live ref.
+
+---
+
+## Historical handoff from before SQLite
+
 # SOVIA HANDOFF — current P2 source CSV checkpoint (10 mandatory sections)
 
 **CURRENT INTEGRATION (2026-10-26 KST):** PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) merged synthetic Audit Lite P1/P2 into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. The previous no-code baseline on `main` is HISTORICAL and `main` is intentionally not promoted. Windows+Ubuntu Python 3.11/3.13 CI run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272): 4/4 success, 82 passed / 10 optional PDF skipped / 0 failed per job; PR validation [40213518280](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213518280) SUCCESS. Next unblocked work is P2 SQLite metadata-only history and recovery on a **new feature branch from develop**. Verify latest HEAD, then read HANDOFF/STATUS/GAP_MATRIX. No production or user Windows/real customer-data verification.
