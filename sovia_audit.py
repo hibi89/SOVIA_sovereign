@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 import sys
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 MAX_BYTES = 1_048_576
 MAX_EVENTS = 1000
 MAX_DEPTH = 16
@@ -297,7 +297,8 @@ def write_reports_atomically(items):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="SOVIA offline read-only audit")
-    parser.add_argument("--input", required=True, help="Structured JSON events (max 1 MiB)")
+    parser.add_argument("--input", required=True, help="Structured JSON or source CSV events (max 1 MiB)")
+    parser.add_argument("--policy", help="Required only with source CSV: JSON containing schema_version and policy (no events)")
     parser.add_argument("--output", required=True, help="Output report HTML path")
     parser.add_argument("--json-output", help="Optional machine-readable report path")
     parser.add_argument("--findings-csv", help="Optional findings CSV (Excel-friendly, guarded)")
@@ -306,14 +307,43 @@ def main(argv=None):
     parser.add_argument("--pdf-font", help="Optional path to locally installed Korean TTF font")
     args = parser.parse_args(argv)
     try:
-        report = evaluate(read_document(args.input))
         source = Path(args.input).resolve()
+        if source.suffix.lower() == ".csv":
+            if not args.policy:
+                raise AuditInputError("CSV source requires --policy JSON file")
+            policy_document = read_document(args.policy)
+            if (type(policy_document) is not dict or
+                    set(policy_document) != {"schema_version", "policy"} or
+                    policy_document["schema_version"] != SCHEMA or
+                    type(policy_document["policy"]) is not dict):
+                raise AuditInputError("CSV policy file requires only schema_version 1.0 and policy object")
+            # Restrict policy metadata, so unrelated private data is not admitted.
+            known = {"allowed_tools", "approved_destinations", "sensitive_targets", "max_tool_calls_per_minute"}
+            if set(policy_document["policy"]) - known:
+                raise AuditInputError("CSV policy contains unsupported keys")
+            # Also works with Python -I: explicitly load only the sibling module.
+            from importlib.util import module_from_spec, spec_from_file_location
+            importer = Path(__file__).resolve().with_name("sovia_csv_input.py")
+            spec = spec_from_file_location("_sovia_local_csv", importer)
+            if spec is None or spec.loader is None:
+                raise AuditInputError("sovia_csv_input.py must be next to sovia_audit.py")
+            module = module_from_spec(spec)
+            spec.loader.exec_module(module)
+            try:
+                events = module.read_csv_events(source)
+            except ValueError as exc:
+                raise AuditInputError(str(exc)) from exc
+            report = evaluate({"schema_version": SCHEMA, "policy": policy_document["policy"], "events": events})
+        else:
+            if args.policy:
+                raise AuditInputError("--policy is only valid for CSV source")
+            report = evaluate(read_document(args.input))
         files = [(args.output, "html"), (args.json_output, "json"),
                  (args.findings_csv, "findings"), (args.events_csv, "events"),
                  (args.pdf_output, "pdf")]
         requests = [(Path(os.path.abspath(path)), fmt) for path, fmt in files if path]
         targets = [path for path, _ in requests]
-        if source in targets or len(set(targets)) != len(targets):
+        if source in targets or (args.policy and Path(args.policy).resolve() in targets) or len(set(targets)) != len(targets):
             raise AuditInputError("Output paths must differ from input and each other")
         for target in targets:
             if not target.parent.is_dir():
