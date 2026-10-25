@@ -35,3 +35,22 @@ P2 commercial install/UI/connector (#6) follows working P1; P3 online GTM (#7) c
 
 ## Working branch and operator discipline
 main baseline, develop integration, feature/p0-audit-core next development branch; on-demand feature branches for future phases. Next chat "ㄱ" resumes using HANDOFF -> STATUS -> AGENTS -> REQUIREMENTS -> code.
+
+
+## AUTHORITATIVE UPDATE 2026-10-26 — MVP first, blueprint gaps second, product listing in parallel
+This section supersedes any interpretation of the earlier timeline that requires completing all polished P1/R1-R9 functionality **before** the first runnable demonstration. Work remains date-targeted, NOT guaranteed to run automatically.
+
+| Date | Milestone | Actual deliverable / acceptance | Parallel commercialization |
+|---|---|---|---|
+| Oct 26 (Day 1) | "it runs" | synthetic JSON -> safe canonical parse -> policy finding -> CLI/HTML output, smoke tests | headline + ideal buyer draft |
+| Oct 27 (Day 2) | "it finds something useful" | >=3 evidence-based deterministic rules, healthy/risky cases, Korean risk explanation; add others if time | FAQ, offer scope, sample report outline |
+| Oct 28 (Day 3) | "MVP demonstrable" | run from fresh local environment, output a usable report, actual unit/smoke results; record gap matrix | real demo screenshot AFTER working software, draft price/collateral |
+| Oct 29-Nov 04 | blueprint gap filling | improve PDF/CSV/local UI/SQLite, support actual sanitized agent format; regression tests per slice | listing description/images/FAQ and checkout/revision terms |
+| Nov 05-08 | sellability quality gate | install on clean PC, test bad inputs, redaction, evidence accuracy, report generation, backup/delete and integration; fix critical bugs | prepare to list; publish only when verified + owner approved |
+| Nov 02-22 overlap | customer discovery | remote agency/SMB outreach and customer willingness-to-pay evidence; no assumed sales | free demo + controlled paid pilot if ready |
+
+**P4-P7 remain original long-term plan:** Cloud only when revenue-backed and security gate satisfied; Private only when contract-backed; productized SaaS and hybrid after retention proof. Full-product 4-8 months or longer is a conditional estimate, not an MVP scope.
+
+**Minimum Day-3 MVP:** one structured input, 3 deterministic findings, evidence + unknown status, offline CLI, Korean HTML, executable tests. Stretch: 5 rules, CSV, PDF, SQLite, local GUI. See [MVP_72H.md](MVP_72H.md) and [GAP_MATRIX.md](GAP_MATRIX.md).
+**Safe prioritization:** day-zero basic guards and smoke/regression tests on every slice; deeper security/soak/recovery tests toward commercial gate. No real client secret/data or SaaS operator responsibility prior to gates.
+**Pricing:** hypothesis 199,000 KRW one-time audit, not a verified price; no paid hosting or ads until evidence + approval.

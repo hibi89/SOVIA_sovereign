@@ -37,3 +37,12 @@ Deterministic testability; import idempotency; bounded CPU/memory use; explicit 
 
 ## Success criteria
 MVP = import/test/review/export work on synthetic fixtures with declared passed tests. Commercial-ready requires verified real supported environment, agreements, access isolation, backup/restore, and validated support/price. Production-ready requires end-to-end live checks; a passing build alone is insufficient.
+
+
+## 2026-10-26 MVP-first execution scope clarification (takes precedence for P1 timebox)
+The R1-R9 above remain the **target Audit Lite full blueprint**, not a claim that every item fits into 72 hours. User approved a first runnable subset with later gap filling, without dropping final requirements.
+
+**P1 72-hour mandatory proof:** a local-offline end-to-end demo with one supported structured JSON schema, safe validation, canonical event parsing, at least **three** deterministic rules (unauthorized tool, unapproved destination, sensitive-target access without asserted permission), evidence ID/source pointer + rule rationale and unknown coverage, human-readable Korean HTML risk report, one documented CLI invocation and executable unit/smoke tests. No external calls or live customer data.
+**Stretch if verified within time:** all 5 rules, CSV, PDF, SQLite, read-only browser UI. Stretch items can be deferred into P2 with explicit GAP_MATRIX status. At least one local report must be reproducible; no claim of "finished P1 blueprint" if stretch requirements are missing.
+**P2 before selling:** fulfill the planned format/report/installer/UX/customer-relevant integration and real sanitized input validation, security and recovery gates. Prepare listing collateral as parallel DRAFT work, do not publish until owner approves and capability is verified.
+Safety floor for every stage: imported log data never executed; bounded safe parsing; secrets/raw prompts excluded by default; HTML escaped; unknown events not mislabeled safe.

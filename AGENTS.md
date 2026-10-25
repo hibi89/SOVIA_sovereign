@@ -31,3 +31,8 @@ Branch and merge protection are not asserted unless independently confirmed.
 
 ## Reporting
 After meaningful work include: repository, branch and commit SHA; files changed; exact test commands and passed/failed counts; deployment URL/status (or NOT_APPLICABLE); known risks; next prioritized action; permissions/cost needed. Update HANDOFF's ten required sections. A documentation commit is not product completion.
+
+
+## 72-hour MVP-first delivery rule (2026-10-26)
+Owner approved prioritizing a runnable vertical slice in 3 days (Oct 26-28), then comparing against the original blueprint to fill the gaps, preparing listing materials in parallel. Read MVP_72H.md then GAP_MATRIX.md before coding. First produce real working output; avoid early polishing or future SaaS abstractions. However never postpone basic safe parsing, no-execute ingestion, data minimization/redaction, and regression smoke tests. Advanced penetration, soak, multi-tenant and disaster-recovery checks are gated before affected commercial release, not necessarily in 72-hour demo.
+Keep an updated feature-gap table and never claim deferred work completed. A draft listing is not an actual posted product.

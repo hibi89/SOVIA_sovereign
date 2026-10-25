@@ -25,3 +25,10 @@ Disconnected install, no-egress packet observation, restart/recovery, offline up
 | Time (KST) | SHA | Command | Pass | Fail | Status |
 |---|---|---|---:|---:|---|
 | 2026-10-25 | N/A | Not yet executed | 0 | 0 | NOT_RUN |
+
+
+## 2026-10-26 three-tier testing allocation
+**P1 72-hour mandatory each day:** CLI smoke on small synthetic file, known-safe / known-risk oracle cases, invalid type/size rejection, never execute imported strings, offline no external API, report escape and evidence linkage. Record exact commands, test counts and sample artifact checks. A date target is not a PASS.
+**P2 before listing/pilot:** complete broader negative/adversarial and regression suite above, fresh-machine install, sanctioned sanitized n8n or supported format fixture, retention/delete and recovery, report limitations, false positives. Any sale-threatening issue blocks commercial release.
+**P4/P5 preproduction:** isolation, auth, billing, resilience, monitoring, restore, no-egress, and live URL/UX/API security validation. Penetration and endurance tests where meaningful.
+No tests performed as of this documentation plan change; no fabricated counts.

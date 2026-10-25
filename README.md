@@ -33,3 +33,11 @@ See [AGENTS.md](AGENTS.md), [REQUIREMENTS.md](REQUIREMENTS.md), [ARCHITECTURE.md
 - User shorthand `ㄱ` means: inspect HANDOFF → STATUS → AGENTS → REQUIREMENTS → source; proceed with the next unblocked work item, verify, update status/handoff.
 
 **Important:** Public README is a project description, not an assertion of completed or certified security capabilities.
+
+
+## 72-hour MVP-first execution — updated 2026-10-26 KST
+- [MVP_72H.md](MVP_72H.md) sets day-by-day 2026-10-26~28 implementation and true runnable exit criteria.
+- [GAP_MATRIX.md](GAP_MATRIX.md) tracks every originally planned feature against VERIFIED implementation; no silent scope removal.
+- [LISTING_PREP.md](LISTING_PREP.md) contains only pre-publication product-listing materials and release conditions.
+- Early safety and repeatable smoke/unit tests are mandatory; advanced security and reliability acceptance take place **before** handling real customer data and selling/hosting, not after.
+- Current phase is plans only; code/demo/customer payments are NOT yet present.

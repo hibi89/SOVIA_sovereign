@@ -53,3 +53,12 @@ One versioned domain/policy engine; environment adapters provide identity, persi
 Avoid a single central service holding confidential raw prompts; no automatic external LLM calls; do not market as legal certification or total attack prevention.
 Design security review: ingestion validation, prompt injection as data, tenant isolation, event tampering detection, report reproducibility, deletion+retention, import recovery, human approvals and supplier outage.
 Cloud deployment/Production URL do not exist yet; Vercel/Railway/Supabase are options, not registered projects.
+
+
+## Delivery slicing rule 2026-10-26
+Implement by vertically runnable layers, **not** by finishing each architecture box in isolation:
+1. synthetic JSON -> canonical event -> one policy -> CLI/HTML (day 1)
+2. expand deterministic evidence rules and honest coverage (day 2)
+3. package repeatable local demo + smoke tests, then compare against future full architecture (day 3)
+4. gap fill: CSV/PDF/SQLite/dashboard/adapter, then commercial hardening.
+Keep abstractions minimal; maintain source schema and policy interfaces so Cloud/Postgres and Private can reuse engine later. Do not begin hosted ingestion, global telemetry, tenant auth or billing before local working audit.

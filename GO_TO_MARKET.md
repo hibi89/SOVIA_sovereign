@@ -37,3 +37,8 @@ Collect at least 10 customer discovery conversations (asynchronous acceptable), 
 If interest but no money: change deliverable or buyer. If free observability solves customer needs: avoid cloning commodity features. If per-client customization dominates: productize an integration and keep remaining work as paid setup.
 Metrics: lead->demo->pilot conversion, revenue, support hours per tenant, false positives, event cost, cancellation reasons.
 Trademark: SOVIA name usage must be cleared in relevant jurisdictions before significant brand investment.
+
+
+## Concurrent listing preparation (updated 2026-10-26)
+Parallelize market-facing copy and sample report **during** P1/P2, but never publish or solicit sensitive customer data on a nonfunctional or unchecked audit tool. Use LISTING_PREP.md as the checklist. First synthetic demo -> verified real screenshots -> report sample -> fixed input limitations/price/hours -> security/privacy and commercial terms -> owner approval -> listing.
+Oct 26-28 draft messaging and report outline; Oct 29-Nov 4 collect real product screenshots/FAQ/packaging from actual implementation; Nov 5-8 only if sale-readiness tests pass. Do not claim certification or guaranteed protection.

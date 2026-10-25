@@ -29,3 +29,9 @@ Decision: **B**. Findings must declare observability limits.
 ## Approvals and unresolved
 Planning docs and initial branch layout authorized by user's request. No paid subscriptions, external services, data transfers, brand registration, production deployments or real customer-data collection authorized. Detailed proprietary policies should remain outside PUBLIC repository until visibility is changed with owner approval.
 Naming/trademark conflict assessment is a future legal task; do not assert registration availability.
+
+
+## ADR-006: 72-hour runnable MVP-first delivery (approved 2026-10-26)
+A. Fully implement architecture and comprehensive assurance before demo: lower risk of later rework but slower to validate core value and delays customer discovery.
+B. Build demonstrable vertical slice in 72 hours, run basic safety tests continuously, track blueprint gaps and finish market-facing product requirements before first sale: fastest feedback and lowest cash use; requires disciplined gap ledger to avoid shipping incomplete security claims.
+Decision **B**, as owner requested. Key restriction: advanced hardening may be postponed, but input/data protection and actual smoke/unit tests cannot. Marketing collateral is drafted concurrently, not falsely published as finished product.

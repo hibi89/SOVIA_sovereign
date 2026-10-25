@@ -21,3 +21,9 @@ Local account/authorization, customer-managed keys, offline capability verified 
 
 ## Responsible claims
 This product assists with policy/audit inspection within observed logs; it cannot prove no breach, guarantee compliance, replace counsel, or automatically prevent actions in post-event mode. Any enterprise or regulated client requires contract/privacy review and independent assurance as requested.
+
+
+## MVP-first schedule security split (2026-10-26)
+Security cannot all move to the end: Day-1 floor is bounded parse, no evaluation/execution of log text, no secrets/raw prompts in repo, explicit offline operation, minimal redaction, output encoding/HTML escaping and repeatable smoke tests. Those are functional correctness boundaries of an audit product.
+Post-3-day MVP but pre-first-real-customer/P2-commercial gate: malformed/adversarial file tests, import integrity and false-positive review, safe CSV/PDF exports, dependency review, privacy/contract scope, packaging install/restore/delete, customer-controlled data disposal. Any critical issue blocks selling.
+Pre-Cloud/Private production: rigorous tenant isolation/RBAC, no-egress offline verification, failover/restore, alert delivery and cost controls, independent security testing as required. Detailed acceptance in TEST_PLAN.md. Unsupported is explicitly marked; do not lower stated security quality for schedule.
