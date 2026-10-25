@@ -1,11 +1,14 @@
 # SOVIA STATUS — P2 v0.8 offline dashboard
+
+**LATEST VERIFIED INTEGRATION — 2026-10-26 KST:** [PR #14](https://github.com/hibi89/SOVIA_sovereign/pull/14) merged P2 v0.8 static offline SQLite history dashboard into `develop`, merge SHA `1123851900aee34d1c02d2a4590c6a0b5852727d`. [Post-merge CI run 40215946752](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215946752) completed **4/4 SUCCESS** on Windows/Ubuntu × Python 3.11/3.13; each 148 tests discovered / 138 PASS / 10 optional PDF SKIP / 0 FAIL. All P1 and v0.7 SQLite work remain integrated. **NEXT on ㄱ**: begin P2 portable offline package/fresh-install validation on a new branch from actual latest develop, with deterministic manifest/checksums/verification, sample CLI and user setup instructions. Do not redo the dashboard/SQLite/JSON work. `main` stays documentation-only, no Vercel/production or real customer-data evidence. Independent owner-machine browser visual QA remains UNVERIFIED.
+
 2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
 
 DONE synthetic: P1 5-rule report, source JSON/CSV, guarded CSV export, optional historical PDF, opt-in SQLite v1 metadata-only history, NEW static Korean dashboard with read-only bounded queries, four KPI summaries and five tables. Original audit remains stateless. Tests 23 new; CI all 4 OS/Python jobs green. Existing records unchanged; no external service or actual customer data.
 
-PENDING: reviewed develop PR/merge, actual owner-device HTML visual check, portable installation/upgrade/backups, retention/privacy, user support, real authorized sanitized integration, false-positive/recovery security gates. Local HTML is NOT interactive live dashboard, cryptographic anonymity, or commercial-ready product. No Vercel/Production deployed.
+DONE: PR #14 merged into develop and 4/4 CI green. PENDING: actual owner-device HTML visual check, portable installation/upgrade/backups, retention/privacy, user support, real authorized sanitized integration, false-positive/recovery security gates. Local HTML is NOT interactive live dashboard, cryptographic anonymity, or commercial-ready product. No Vercel/Production deployed.
 
-NEXT on ㄱ: check PR/merge CI and branch heads; if merged skip implementation, then start clean install and packaging from develop. Never restart P1/SQLite.
+NEXT on ㄱ: PR #14 already merged/validated. Start portable install and packaging from current develop. Never restart P1/SQLite.
 
 ---
 

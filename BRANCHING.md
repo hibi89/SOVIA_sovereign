@@ -21,3 +21,6 @@ PR #12 integrated `feature/p0-audit-core` into `develop` at merge SHA `c5dc6099a
 
 ## P2 integration checkpoint 2026-10-26
 PR [#13](https://github.com/hibi89/SOVIA_sovereign/pull/13) merged tested opt-in SQLite audit history from `feature/p2-sqlite-history` to `develop`, merge SHA `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`; post-merge CI [40214911902](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214911902) 4/4 SUCCESS. No `main` code promotion. Next scoped branch for offline read-only dashboard should start from current `develop`, not the historical feature branch.
+
+## P2 offline dashboard integration 2026-10-26
+[PR #14](https://github.com/hibi89/SOVIA_sovereign/pull/14) merged feature/p2-offline-dashboard into develop SHA 1123851900aee34d1c02d2a4590c6a0b5852727d. Post-merge CI [40215946752](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215946752) all 4 OS/Python jobs SUCCESS (each 138 passed / 10 PDF optional skipped). main remains documentation-only; next new branch from develop targets portable offline packaging and clean-install verification. Do not force-push or discard historical branches.

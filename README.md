@@ -48,3 +48,6 @@ Generate a self-contained Korean HTML dashboard from an existing v1 SQLite histo
     py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboard.html
     start .\sample-dashboard.html
 See DASHBOARD.md for prerequisites and privacy. Output requires unused filename and exposes pseudonymized (not anonymous) metadata; don't commit it to PUBLIC repo. 2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+
+## Develop integration of v0.8 offline dashboard
+PR [#14](https://github.com/hibi89/SOVIA_sovereign/pull/14) merged at SHA 1123851900aee34d1c02d2a4590c6a0b5852727d. Post-merge CI [40215946752](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215946752) 4/4 success across Windows/Ubuntu 3.11/3.13; each 138 PASS / 10 optional PDF SKIP / 0 FAIL. Original DB and main unchanged; P2 clean-install/retention/commercial security gates are next and not complete.
