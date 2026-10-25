@@ -1,5 +1,5 @@
 # SOVIA blueprint vs verified implementation (2026-10-26 KST, CSV-source checkpoint)
-Feature CSV commit 770172baa1dfe0eb0fd4b1a63d0afead0eaf6bc2; CI 5c99ca3ca1205a26b586a057874172f6607d3e19. Python 3.11/3.13 on GitHub Actions: 92 total, 82 pass, 10 optional-PDF skip, 0 fail per job. DONE_VERIFIED means synthetic scope only.
+Feature CSV commit 770172baa1dfe0eb0fd4b1a63d0afead0eaf6bc2; CI 5c99ca3ca1205a26b586a057874172f6607d3e19. Windows+Ubuntu Python 3.11/3.13 on GitHub Actions run 40213287272: 4/4 success, each 92 tests discovered, 82 pass, 10 optional-PDF skip, 0 fail. DONE_VERIFIED means synthetic scope only.
 
 | Original requirement | State | Evidence and remaining gap |
 |---|---|---|
@@ -12,7 +12,7 @@ Feature CSV commit 770172baa1dfe0eb0fd4b1a63d0afead0eaf6bc2; CI 5c99ca3ca1205a26
 | CSV **import** of source logs | DONE_VERIFIED P2 synthetic | Strict allowlisted CSV + separate bounded JSON policy; 1MiB/1000 events, 25 new CI cases, JSON report oracle equality; real n8n/customer shape unverified |
 | CSV spreadsheet-injection protection | PARTIAL P2 | Tested formula prefix cases, but no universal guarantee across spreadsheet apps |
 | Atomic output (per file) and rollback | DONE_VERIFIED for tested failures | Multi-file publication not truly transactional, Windows/hardlinks pending |
-| Reproducible CLI / tests | DONE_VERIFIED 82 executed / 10 skipped × 2 CI versions | GitHub Actions 3.11/3.13 with CSV isolated CLI; optional PDF dependency/font tests skipped in current CI, Windows unverified |
+| Reproducible CLI / tests | DONE_VERIFIED 82 executed / 10 skipped × 4 OS/Python CI jobs | GitHub Actions Ubuntu+Windows 3.11/3.13 with isolated CLI; optional PDF dependency/font skipped, owner's independent Windows not verified |
 | Korean PDF report | PARTIAL VERIFIED P2 | Optional ReportLab 4.4.9 + installed Korean TTF; 1-page synthetic PDF and 6-page 115-event test. Separate Windows font/NTFS test pending |
 | SQLite storage, history and dedup | PLANNED P2 | Need idempotency, schema/migration, recovery |
 | Customer-oriented local GUI/dashboard | PLANNED P2 | Usability and install packaging |

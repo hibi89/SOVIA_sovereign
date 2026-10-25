@@ -31,3 +31,6 @@ P2 PDF isolated-mode hotfix a7a1c6b8e151: extracted ZIP 67 tests PASS and `pytho
 py -3 sovia_audit.py --input examples/demo_source.csv --policy examples/demo_policy.json --output report.html --json-output report.json
 ```
 CSV import accepts allowlisted canonical event metadata only, never arbitrary prompt bodies. --policy JSON is mandatory for CSV, unused for original JSON input. GitHub Actions [run 40212874275](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40212874275) verified Python 3.11/3.13 each 92 tests total (82 PASS, 10 optional PDF SKIP, 0 FAIL). P2 is not sale-ready; Windows/real-data/SQLite/GUI/backup remain open. Source commit `770172baa1dfe0eb0fd4b1a63d0afead0eaf6bc2`, CI commit `5c99ca3ca1205a26b586a057874172f6607d3e19`.
+
+## Windows CLI smoke and CI verified
+In GitHub Actions [run 40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272), Ubuntu/Windows × Python 3.11/3.13 all succeeded (per-job 82 PASS, 10 optional PDF SKIP, 0 FAIL). The Windows path-alias mismatch was repaired in source commit `d204b76fdb545b32696a3d8aa97c35c1ffbb1355` with no original data loss. CI is synthetic-only; real Windows machine/PDF font and commercial gates remain pending.

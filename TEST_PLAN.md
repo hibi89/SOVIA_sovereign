@@ -1,3 +1,9 @@
+# SOVIA CROSS-PLATFORM CI UPDATE — 2026-10-26 KST
+
+Code commit d204b76fdb545b32696a3d8aa97c35c1ffbb1355 updated CLI input/output alias comparison using resolved target paths. First Windows run 40213209092 failed one assertion because existing input preservation produced the wrong error string on Windows; no source input was overwritten. GitHub Actions rerun https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272 **completed SUCCESS in all four jobs**: Ubuntu Python 3.11/3.13, Windows Python 3.11/3.13. Each: 92 tests discovered; 82 passed, 10 skipped (optional PDF dependency absent), 0 failed; compile step also PASS. Confirmed in CI run result/job endpoint. GitHub-hosted Windows is not the owner's laptop, and Korean PDF/Office, real sanitized data, installer/recovery and production remain UNVERIFIED.
+
+---
+
 # SOVIA TEST PLAN — current CSV source milestone, 2026-10-26 KST
 
 Current CI source SHA: 5c99ca3ca1205a26b586a057874172f6607d3e19. [GitHub Actions run 40212874275](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40212874275): Python 3.11 and Python 3.13 both completed SUCCESS, each `python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py tests` PASS and `python -m unittest discover -s tests -v`: **Ran 92 tests, OK (skipped=10)**, i.e. 82 executed PASS and 0 FAIL each. 10 skips are optional ReportLab/Korean PDF paths, not verified in this CI run. Newly added 25 tests (17 parser + 8 CLI) cover CSV schema/permissions/overlong input/header injection/malformed quoting, report equivalence with JSON, isolated Python run, error no-write, policy overwrite and no network. Independent local parser subset was 17 PASS/0 FAIL. No Windows, Excel or real customer-data tests conducted. No production URL.
