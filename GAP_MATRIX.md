@@ -1,26 +1,25 @@
-# Blueprint-versus-shipped feature gap matrix
-Baseline 2026-10-26 KST; nothing below is implemented yet. This is the live comparison between the original SOVIA final architecture and the actual released slice. Update per meaningful commit with evidence SHA, tests and status.
+# SOVIA original blueprint versus actual implementation
+Updated 2026-10-26 KST. Evidence: source commit `a1c566921a626d4f4c24fb4eb8b2c405ff67db8e` on `feature/p0-audit-core`, 12 local unit tests PASS and 0 FAIL, one full CLI smoke PASS. Status is based on execution, not files existing only.
 
-States: PLANNED / IN_PROGRESS / DONE_VERIFIED / PARTIAL / BLOCKED / DEFERRED (reason+phase). Never mark a mock screenshot as functional.
-
-| Requirement from original blueprint | Day-3 MVP minimum | Current verified state | Gap-fill phase / gate |
+| Original requirement | 72h MVP priority | Verified status | Missing / next stage |
 |---|---|---|---|
-| Offline common canonical schema + audit core | Required | PLANNED | P1 Day 1 |
-| Structured JSON intake + constraints | Required | PLANNED | P1 Day 1 |
-| Deterministic rules + explanations | >=3 required, 5 target | PLANNED | P1 Day 2 then P2 |
-| Evidence IDs and explicit unobserved limits | Required | PLANNED | P1 Day 2 |
-| HTML Korean risk report | Required | PLANNED | P1 Day 2-3 |
-| Reproducible one-command demo + actual test results | Required | PLANNED | P1 Day 3 |
-| CSV adapter | Stretch | PLANNED | P1 stretch / P2 |
-| PDF report | Stretch or print-to-PDF | PLANNED | P1 stretch / P2 hard gate |
-| SQLite ingestion/history | Stretch | PLANNED | P2 |
-| GUI/local dashboard | Stretch | PLANNED | P2 |
-| Sanitized genuine n8n (candidate) adapter | No | PLANNED | P2 pilot gate |
-| Packaged install/restore/delete | No | PLANNED | P2 commercial gate |
-| Cloud tenants/auth/billing | No | PLANNED | P4 funded gate |
-| Cloud automatic notifications and operator command center | No | PLANNED | P4 funded gate |
-| Private air-gapped packaging | No | PLANNED | P5 customer-backed gate |
-| Hybrid, real-time blocking, expanded connectors, SOC | No | DEFERRED | P6-P7 need validated demand |
+| One shared offline local core | Mandatory | DONE_VERIFIED (CLI only) | Packaging, persistence P2 |
+| Structured JSON ingest / bound validation | Mandatory | DONE_VERIFIED for synthetic JSON | More adversarial and real sanitized input tests |
+| Event normalization UTC + evidence IDs | Mandatory | PARTIAL: IDs, UTC, source pointers | Full event timeline; ingestion provenance verification |
+| At least three explainable policies | Mandatory | DONE_VERIFIED: 3 rules | Burst, missing evidence → next/P2 |
+| Coverage unknown rather than false 'safe' | Mandatory | PARTIAL | Distinguish pointer given versus genuine independent verification |
+| Korean HTML report | Mandatory | DONE_VERIFIED: report generated | Independent browser rendering / print |
+| One-command CLI with synthetic demonstration | Mandatory | DONE_VERIFIED locally | Clean Windows environment reproduction |
+| 12 executable smoke/unit tests | Mandatory | DONE_VERIFIED locally | CI, more negative tests |
+| JSON machine-readable export | Helpful | DONE_VERIFIED locally | Formal versioned export contract |
+| CSV input/export | Stretch | DEFERRED | P2 |
+| PDF output | Stretch | DEFERRED | P2 |
+| SQLite history/dedup | Stretch | DEFERRED | P2 |
+| Local dashboard/browser UI | Stretch | DEFERRED | P2 |
+| Sanitized n8n (candidate) integration | Commercial | PLANNED | P2 customer pilot gate |
+| Installer, deletion, backup/restore, false positive review | Commercial | PLANNED | P2 before sale |
+| Cloud SaaS tenant isolation/auth/billing/alerts | Future | PLANNED | P4 after proven demand and approval |
+| Private offline/no-egress install | Future | PLANNED | P5 customer-backed |
+| Hybrid/advanced governance/SOC | Future | DEFERRED | P6/P7 demand gated |
 
-## Change policy
-Any feature not in the day-three working slice must be tagged; do not delete or downplay the original final design. Only customer evidence or explicit owner approval may permanently remove a final feature. A commercial-ready label requires independent gates in REQUIREMENTS/SECURITY/TEST_PLAN.
+No requirement from the original blueprint has been silently removed. 'DONE_VERIFIED' here refers only to the tested synthetic development environment, not security certification or customer readiness.
