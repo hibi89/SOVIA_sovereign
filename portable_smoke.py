@@ -77,10 +77,26 @@ def smoke():
         if restored_status != db_status:
             raise RuntimeError("Restored SQLite database differs in counts")
         verify_directory(extracted)
+        # Owner-mode diagnostic, executed FROM THE EXTRACTED ZIP with Python -I -B.
+        # All generated synthetic results live outside the pristine app folder.
+        owner_out = root / "owner-results"
+        owner_stdout = _run(extracted / "owner_selfcheck.py", "--output-dir", owner_out)
+        reports = list(owner_out.glob("SOVIA_SELF_CHECK_*/SELF_CHECK_RESULT.json"))
+        if len(reports) != 1 or "AUTOMATED_PASS_MANUAL_PENDING" not in owner_stdout:
+            raise RuntimeError("No successful owner self-check result")
+        owner = json.loads(reports[0].read_text(encoding="utf-8"))
+        if owner["status"] != "AUTOMATED_PASS_MANUAL_PENDING" or any(
+            owner["checks"].get(key) != "PASS" for key in
+            ("python", "package_integrity", "audit", "sqlite", "dashboard", "recovery")
+        ):
+            raise RuntimeError("Owner synthetic self-check did not pass all mandatory checks")
+        if any(value != "NOT_CHECKED" for value in owner["manual_acceptance"].values()):
+            raise RuntimeError("Owner-only manual acceptance was incorrectly passed")
+        verify_directory(extracted)
         return {"status": "portable_clean_install_pass",
                 "archive_sha256": result["sha256"], "release_files": result["files"],
                 "events": 3, "findings": 5, "database_restored": True,
-                "isolated_python": True}
+                "isolated_python": True, "owner_selfcheck": "AUTOMATED_PASS_MANUAL_PENDING"}
 
 
 def main(argv=None):
