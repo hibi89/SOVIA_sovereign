@@ -1,24 +1,25 @@
-# SOVIA Audit Lite P1 v0.3.0 — quickstart
-Status: local synthetic MVP proof, NOT a commercial/production security service.
-Python >=3.10 expected, **tested 3.13.5 on Linux**; Python standard library only, no external API or paid services.
+# SOVIA Audit Lite v0.4.0 — offline synthetic quickstart
+Tested: Python 3.13.5 on Linux. Standard library only, no API keys or external calls. Windows Python 3.10+ is a design target, not an independently tested platform.
 
-## Windows (PowerShell)
-1. In the folder containing sovia_audit.py, ensure Python 3 is installed.
-2. Run with unused report names:
-    py -3 sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json
-3. Open report.html in a local browser. Review report.json if a machine-readable report is needed.
-4. Run tests:
-    py -3 -m unittest discover -s tests -q
+## One-command demonstration
+Use a directory containing sovia_audit.py and examples/demo_five_rules.json. In PowerShell, run with NEW unused output filenames:
 
-Linux/macOS: use python3 instead of py -3. If running from GitHub, use the feature/p0-audit-core branch; main may have documents only until integration.
+    py -3 sovia_audit.py --input examples/demo_five_rules.json --output report.html --json-output report.json --findings-csv findings.csv --events-csv events.csv
 
-## Demonstration and schema
-examples/demo_five_rules.json contains 3 fictional events yielding 5 findings and 5 different rules. examples/demo.json contains 2 events yielding 3 rule findings. Input: one UTF-8 JSON document with schema_version "1.0", policy object, events array. Each event requires event_id, occurred_at_utc (with timezone), agent_id, run_id and tool_name. Optional target, destination_domain, permission_asserted, outcome, source_pointer. Policy: allowed_tools, approved_destinations, sensitive_targets, optional max_tool_calls_per_minute integer 1..1000. Missing policies are explicitly unknown. A present pointer is unverified, not proof.
+Or on Linux/macOS use python3 in place of py -3. The synthetic scenario produces 3 events, 5 findings and 4 output files:
+- report.html — Korean risk table and chronological event timeline.
+- report.json — full machine-readable canonical normalized report, findings and limits.
+- findings.csv — 5 rows with rule/severity/event/evidence/rationale/remediation.
+- events.csv — 3 normalized UTC ordered event rows.
 
-## Output overwrite/compatibility
-Output files must not already exist. Reuse creates a safe error (exit 2) and NEVER overwrites prior reports. Choose distinct new report paths per run. Output parent folders must exist. Files are staged locally and linked exclusively; requires hard-link-capable filesystem. On unsupported filesystems (e.g. some removable drives), generation fails safely rather than weakening the no-clobber behavior. Windows NTFS behavior is still UNVERIFIED. Single file publication is atomic; HTML+JSON pair uses best-effort rollback on failure and is NOT an all-or-nothing power-loss transaction.
+Optional --findings-csv and --events-csv can be omitted. All outputs are **new files only**: never overwrite existing reports. Directories must already exist; unsupported hardlink filesystem causes safe failure. Avoid exporting confidential original data into a PUBLIC source repository.
 
-Input is limited to 1 MiB, 1000 events, 16 JSON levels; imported instructions never executed. Unknown fields such as raw_prompt are not carried into reports; do not interpret this as full PII scanning. Logs are user-supplied, origin and completeness independently unverified. No real client/customer data before approved P2 safeguards. Report does not certify compliance or guarantee zero incidents.
+## CSV details / limitations
+CSV uses csv.writer with UTF-8 BOM and CRLF for common spreadsheet compatibility; formula-like values with potentially dangerous leading = + - @ receive an apostrophe prefix even when preceded by certain whitespace or Unicode marks. This was exercised by synthetic automated tests; not verified across Excel/Sheets versions or import settings, not a universal injection guarantee. CSV export is implemented; CSV **input/import is not**. Original unsanitized payloads or captured prompts must NOT be supplied to commercial use until approval and redaction procedures exist.
 
-## Tested baseline
-2026-10-26 KST: Python 3.13.5 local, 40/40 unit cases, 3-event / 5-finding CLI case, isolated same-machine -I -B execution. Chromium rendered HTML content and confirmed tables; actual file:// open was blocked by this test environment. CSV/PDF/SQLite/local dashboard/n8n/installer and real customer verification remain P2.
+## Source format and risk semantics
+Input JSON schema_version "1.0", policy object and <=1000 events, file <=1MiB, nesting <=16. Events require event_id, occurred_at_utc (timezone), agent_id, run_id, tool_name; optional target, destination_domain, permission_asserted, outcome and source_pointer. Policies: allowed_tools, approved_destinations, sensitive_targets, optional max_tool_calls_per_minute integer 1..1000.
+Risk rules: unauthorized tool; unapproved destination; sensitive target access lacking explicit permission; configurable burst in trailing 60 seconds; missing evidence pointer. Missing policy is unknown, and provided pointers are not independently checked. Reports do not certify compliance, detect unobserved actions or assure zero leaks.
+
+## Verification
+Run py -3 -m unittest discover -s tests -v (54 tests passed on the verified developer Linux Python 3.13.5). Existing filename -> exit 2; choose new paths each invocation. HTML+JSON+CSVs have best-effort rollback, not a multi-file transaction under system crash or concurrent readers. Before commercial usage, independent Windows test, backup/delete/recovery, real authorized sanitized logs and security review must pass.

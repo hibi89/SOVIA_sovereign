@@ -1,29 +1,22 @@
-# SOVIA STATUS — P1 72-hour MVP local acceptance
-Updated: 2026-10-26 KST. Canonical repository: hibi89/SOVIA_sovereign.
-Working branch: feature/p0-audit-core; verified source/test commit: 8957e872a0519dae208f49c51c848f95f35f7046.
-Note: document commit is subsequent; inspect live branch SHA. main and develop remain unchanged at 51ebaf92cbb278a10978d906da927ec644c76d97 at inspection.
+# SOVIA STATUS — P2 CSV export milestone
+Updated: 2026-10-26 KST. Repository: hibi89/SOVIA_sovereign, PUBLIC.
+Working branch: feature/p0-audit-core. Verified code+test commit: 6b3be7a4512049caa5a329776e2a63462cd6c8fa.
+Docs commit follows separately; always verify live branch head. main/develop remain at 51ebaf92cbb278a10978d906da927ec644c76d97 at inspection.
 
-## Verified DONE in local environment
-- P1 offline Python stdlib-only audit prototype v0.3.0: bounded JSON input (1 MiB / 1000 events / depth 16); UTC normalization; deterministic five policies (unauthorized tool, unapproved destination, sensitive target access lacking permission, configurable 60-second burst, missing evidence pointer).
-- Report: Korean HTML findings table, event timeline, unknown/coverage limitations, escape untrusted text, machine-readable JSON. Evidence pointer supplied is NOT independent proof; canonical digest not raw-file hash.
-- CLI: no overwrite of existing reports, staged writes, atomic publish of each report with exclusive hard links, best-effort rollback if second publish fails. No network/API integration.
-- Source/test files actually exercised locally then Git blob SHA matched to connected GitHub source (source f57f7b50456d67d1807b47e6060d9517faf8db5e; baseline tests 6d6270658748554b220abe4178bbf6593c9ed183; delivery tests 0ca87140c46f737182f26775d0fcc6ffe6d85472).
-- Tests: python -m unittest discover -s tests -q -> 40 PASS, 0 FAIL. python -m compileall -q sovia_audit.py tests -> PASS. CLI synthetic five-rule case -> 3 events / 5 findings / exit 0. Fresh temporary directory copy with interpreter -I -B -> PASS, same machine/Python 3.13.5.
-- Chromium headless set_content HTML render -> 2 tables, 5 finding rows, 3 timeline rows, 0 page/console errors, no horizontal document overflow at 1280px. Direct file:// navigation blocked by browser environment administrator; fallback render confirms HTML markup, NOT actual on-machine file URL navigation.
-- File guardrails tested: existing HTML and JSON unchanged, dangling symlink rejected, simulated second output failure rollback and temp cleanup, malformed input no output, socket-disabled audit eval, no raw_prompt carryover.
+## Verified DONE (synthetic, local)
+- P1 shared offline Python standard library audit v0.3: 5 deterministic rules, HTML findings/event timeline + JSON, event IDs and unverified evidence-pointer statuses, safe bounded JSON ingest and no-clobber report writes.
+- P2 CSV export v0.4.0 added: two OPTIONAL flags --findings-csv and --events-csv, alongside existing --output HTML and optional --json-output. Findings contain rule, severity, event ID, source pointer, evidence status, rationale and remedy. Events sorted by normalized UTC time. Stable column schema; UTF-8 BOM, CRLF, csv.writer quote handling. Common spreadsheet formula-like cell prefixes guarded by leading apostrophe, not a universal Excel/Google Sheets security certification.
+- Reuses original write_reports_atomically staging/exclusive-hardlink no-clobber; pre-existing CSV blocks all outputs, simulated fourth publish failure unwinds files. No data transmitted externally.
+- Command: python -m unittest discover -s tests -v => 54 PASS / 0 FAIL on Python 3.13.5. python -m compileall -q sovia_audit.py tests => PASS.
+- End-to-end synthetic four-file smoke (HTML/JSON/findings CSV/events CSV): PASS, 3 events / 5 findings / 5 CSV rows for findings / 3 rows for events. Clean temporary copy with python -I -B and all four outputs: PASS on same machine.
+- Local Git blob SHA matched uploaded remote blobs: sovia_audit.py eb886ab5d9a24663f3414cecf74c5dcd9d48f205; tests/test_csv.py 29858eca381a9e161554bc02cd78776278d7034f.
 
-## PARTIAL / NOT VERIFIED
-- User's Windows Python installation, Windows NTFS hard-link support, clean independent device install, interruption/power-loss transaction, real customer or n8n data, false-positive benchmark and security penetration not validated. Multi-file HTML+JSON publish is NOT a full transaction for concurrent watchers. On filesystems denying hard links CLI returns error safely; alternative packaging remains P2.
-- Report existence/format alone does not prove completeness of event sources. Do not call prototype a certified security product.
-- Full blueprint P2 deferred: CSV/PDF/SQLite/dashboard/n8n adapter, retention/delete/recovery, installer, authorized sanitized samples, customer contract/data flow and commercial validation.
-- Cloud SaaS, Private, Hybrid: NOT STARTED. Vercel project/production URL: NONE, deployment SHA verification NOT APPLICABLE. No customer records, paid usage or external calls.
-- Repository visibility PUBLIC; no confidential IP, tokens, logs, prompts or customer records may be committed.
+## NOT IMPLEMENTED / UNVERIFIED
+- CSV IMPORT is NOT implemented. CSV exports are synthetic and rule evidence is not independently verified. Actual spreadsheet app tests across Excel versions, formula guard under arbitrary import settings, Windows NTFS hardlinks, separate Windows clean install are UNVERIFIED.
+- PDF, SQLite history/idempotency, local dashboard, genuine authorized n8n adapter, PII/secret scanning and disclosure, deletion/backup/recovery, packaging/license and sales-readiness security are P2 pending.
+- Cloud, Private, Hybrid, production/Vercel and paid users: NOT STARTED/NOT APPLICABLE.
+- PUBLIC repo: do not commit raw customer logs, private prompts, API tokens or sensitive company policy.
+- HTML/JSON/CSV multi-file publication uses best-effort rollback; NOT atomic as a group under concurrent readers/power failure.
 
-## Next work
-1. P2 highest value: acceptance-grade offline packaging/Windows validation and safe CSV/PDF exports; preserve one shared audit engine.
-2. Compare evidence quality and adapt sanctioned sanitized n8n fixture; then SQLite/idempotency and local UX.
-3. Before launch: PII/redaction, false positives, recovery, installation, security/privacy, customer terms and owner authorization.
-4. Existing branch code is a locally verified P1 proof, not merged into main/develop. Review integration before promotion. On ㄱ resume highest-priority unblocked gap.
-
-## Basis
-Local Python 3.13.5; 40/40 unittest; CLI/synthetic fixture; Chromium set_content; remote Git blob SHA verification; source commit 8957e872a0519dae208f49c51c848f95f35f7046.
+## Next priority (ㄱ)
+P2 #6: test PDF via print-ready HTML or a dependency-free PDF path and compare feasibility; alternatively implement SQLite event history with deterministic dedup. Prioritize customer-visible output and offline packaging while protecting P1/P2 tested behavior. Keep CSV import distinct from CSV exports in GAP_MATRIX. Run regression, update HANDOFF/STATUS, then review develop integration. User approval needed before repo privacy change, real data, payments, commercial release or production deployment.

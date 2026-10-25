@@ -1,20 +1,16 @@
-# SOVIA test plan, execution evidence and remaining gates
-Updated 2026-10-26 KST. P1 code commit 8957e872a0519dae208f49c51c848f95f35f7046.
+# SOVIA test plan — P2 CSV export checkpoint
+Updated 2026-10-26 KST. Source/tests verified commit 6b3be7a4512049caa5a329776e2a63462cd6c8fa.
 
-## Actual test runs (Python 3.13.5 local)
-| Command | Result | Scope |
+## Actually executed
+| Command / probe | Result | Interpretation |
 |---|---|---|
-| python -m unittest discover -s tests -q | PASS 40 / FAIL 0 | 29 existing + 11 additional: output pre-exists, JSON/HTML no-clobber, staged publish rollback on simulated second file failure, staging cleanup, report completeness, repeat-run, dangling symlink target, isolated temp copy, raw prompt omitted, invalid output directory, patched socket (no attempted connection), HTML two tables |
-| python -m compileall -q sovia_audit.py tests | PASS | Syntax |
-| python sovia_audit.py --input examples/demo_five_rules.json --output <unused>.html --json-output <unused>.json | PASS; exit 0, 3 events, 5 unique findings | Offline synthetic CLI |
-| python -I -B sovia_audit.py inside temp copy | PASS, 5 findings | Same-machine isolated-directory environment; not actual new Windows PC |
-| Headless Chromium page.set_content(generated HTML) | PASS: 2 tables, 5 findings, 3 timeline events, 0 page errors/console errors; 1280 px no overflow | Browser rendering of markup, NOT browser file:// navigation |
+| python -m unittest discover -s tests -v | 54 PASS / 0 FAIL | 40 prior + 14 new CSV checks |
+| python -m compileall -q sovia_audit.py tests | PASS | Python syntax |
+| python sovia_audit.py --input examples/demo_five_rules.json --output output/report.html --json-output output/report.json --findings-csv output/findings.csv --events-csv output/events.csv | PASS exit 0 | Fake 3 events, 5 findings, findings.csv 5 rows, events.csv 3 rows, all 4 files nonempty |
+| Temporary clean folder, python -I -B and four flags | PASS exit 0 | Same-machine isolated execution, not second Windows machine |
+| Local Git blob SHA check | PASS | Source eb886ab5d9a24663f3414cecf74c5dcd9d48f205; tests/test_csv.py 29858eca381a9e161554bc02cd78776278d7034f match remote |
 
-Day3 transient failures: dangling symlink path bug detected by new test (CLI exit 0 unexpectedly), corrected absolute-target handling; final rerun 40/40 pass. Chromium file:// navigation blocked administratively, pivot to page.set_content with successful DOM render. Neither was a verified production incident.
+14 CSV-specific tests: fixed finding/event headers and counts, timezone stable ordering, BOM+Korean+CRLF, formula-like strings starting = + - @ (including Unicode prefix characters), dangerous values in both outputs, comma/quote handling, raw_prompt exclusion, empty-safe findings header, bad export kind, 4-output CLI, existing CSV preservation, duplicate-output rejection, simulated failure of fourth staged publish rolling back all prior files, optional CSV disabled by default.
 
-## Limitations/remaining tests
-- Multi-output publication uses exclusive hard links with fsync-staged full files; best-effort rollback for normal errors but no guarantee of full multi-file atomic visibility or power-loss recovery.
-- Filesystems without os.link/hardlink support fail safely, need Windows/NTFS and unsupported-filesystem test.
-- No GitHub Actions test claim; no second machine/browser actual file URL, no native installer, no real log feeds, tenant security or network capture.
-- Before selling: genuine permissioned sanitized input, PII scanning, CSV injection defense, false positives, file corruption/recovery, deletion/backups, platform compatibility, support/disclaimer/contract, external service risk review.
-- Cloud/Private future: tenant boundary, auth/RBAC, rate limits, alerts replay, billing sandbox, restore, disconnected offline no-egress and live deployment browser/API checks.
+## Unverified / commercial gates
+Excel/Google Sheets actual UI and import variations not tested; spreadsheet formula escaping is defense-in-depth not a certified complete barrier. CSV ingestion unsupported. NTFS/external drives and hardlink compatibility not tested; fail safely. Simulated rollback only, no power-loss guarantee, group of four files not atomic for observers. Real source log provenance, PII scanning, backups, deletion, false positives, clean Windows install and operational end-to-end must pass before sale. Cloud/Private tenant/offline checks not applicable until those modes exist.

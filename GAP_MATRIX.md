@@ -1,27 +1,24 @@
-# SOVIA original blueprint vs verified shipped prototype
-Updated 2026-10-26 KST. P1 tested source commit 8957e872a0519dae208f49c51c848f95f35f7046, local 40 PASS / 0 FAIL. DONE_VERIFIED means synthetic development environment only.
+# SOVIA blueprint vs verified implementation (2026-10-26 KST)
+P2 code commit 6b3be7a4512049caa5a329776e2a63462cd6c8fa, feature/p0-audit-core. Local Python 3.13.5 test 54 PASS / 0 FAIL. DONE_VERIFIED means synthetic local scope only.
 
-| Original design feature | P1 MVP | Actual status | Remaining gate |
-|---|---|---|---|
-| Shared offline core | Required | DONE_VERIFIED (Python stdlib CLI) | Production packaging |
-| 1 MiB JSON cap / 1000 events / depth 16 | Required | DONE_VERIFIED | Extreme malformed/fuzz P2 |
-| Typed canonical UTC event IDs | Required | DONE_VERIFIED locally | Independent original provenance |
-| Five deterministic policy rules | >=3 required | DONE_VERIFIED all five | Real false-positive review |
-| Unknown/missing coverage / pointer status | Required | PARTIAL | Independent source evidence checking P2 |
-| Korean HTML finding report + UTC timeline | Required | DONE_VERIFIED, Chromium set_content | External Windows file-browser open |
-| JSON output / reproducible CLI | Required | DONE_VERIFIED locally | Independent device install |
-| No-clobber staged outputs / rollback | P1 Day3 | DONE_VERIFIED in local tests | Non-NTFS Windows/hardlink + crash recovery |
-| Unit/smoke tests | Required | DONE_VERIFIED 40/40 | Windows platform/CI review |
-| Network-independent local execution | Required | DONE_VERIFIED mocked socket/isolated -I | Packet capture / real integration P2 |
-| CSV input/export | Stretch | DEFERRED | P2 |
-| PDF report / print-ready installer | Stretch | DEFERRED | P2 |
-| SQLite history and idempotency | Stretch | DEFERRED | P2 |
-| Local GUI/dashboard | Stretch | DEFERRED | P2 |
-| n8n and sanitized genuine agent data | Later | PLANNED | P2 authorized integration pilot |
-| Installer, retention/delete, backup/restore | Commercial | PLANNED | P2 BEFORE SALE |
-| PII/secret redaction, abuse and security review | Commercial | PLANNED | P2 BEFORE SALE |
-| Cloud multi-tenant auth/alerts/billing | Future | PLANNED | P4 demand + owner approval |
-| Private airgapped customer deployment | Future | PLANNED | P5 contract + no-egress checks |
-| Hybrid, advanced governance, SOC | Future | DEFERRED | P6/7 based on real demand |
+| Original requirement | State | Evidence and remaining gap |
+|---|---|---|
+| Offline deterministic shared core and UTC event normalization | DONE_VERIFIED P1 | Five rules, fake events, no mandatory external API |
+| Bounded structured JSON import | DONE_VERIFIED P1 | 1MiB / 1000 events / depth 16; security hardening P2 |
+| Five evidence-linked rules, unknown coverage | DONE_VERIFIED (pointer coverage partial) | Independent provenance and false positives pending |
+| Korean HTML findings and UTC timeline | DONE_VERIFIED P1 | Chromium markup inspected; actual Windows file-open unverified |
+| JSON report | DONE_VERIFIED P1 | Machine-readable, fixed reporting schema |
+| CSV **export** of findings and events | DONE_VERIFIED P2 local | Two optional flags, 5+3 rows, BOM/CRLF, formula-like cell guard, non-clobber; Excel version/import settings unverified |
+| CSV **import** of source logs | PLANNED P2 | Not available; do not conflate with export |
+| CSV spreadsheet-injection protection | PARTIAL P2 | Tested formula prefix cases, but no universal guarantee across spreadsheet apps |
+| Atomic output (per file) and rollback | DONE_VERIFIED for tested failures | Multi-file publication not truly transactional, Windows/hardlinks pending |
+| Reproducible CLI / tests | DONE_VERIFIED 54/54 | Isolated same-machine copy; fresh Windows not tested |
+| Printable PDF report | PLANNED P2 | Source formatting/browser print fallback to assess |
+| SQLite storage, history and dedup | PLANNED P2 | Need idempotency, schema/migration, recovery |
+| Customer-oriented local GUI/dashboard | PLANNED P2 | Usability and install packaging |
+| Sanitized n8n or other genuine authorized adapter | PLANNED P2 | Customer data/permission gate |
+| Installer, deletion and backup/restore | PLANNED commercial P2 | Pre-sale mandatory |
+| PII masking, adversarial inputs, false-positive review | PARTIAL (early basic tests) | Full pre-sale checks remain |
+| Cloud / Private / Hybrid | NOT STARTED future | Revenue demand and explicit owner approvals |
 
-Full blueprint is preserved; passing synthetic tests does not confer production or commercial security certification.
+Preserve the original final architecture. Nothing labeled sale-ready, production-ready or externally certified.

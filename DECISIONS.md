@@ -35,3 +35,8 @@ Naming/trademark conflict assessment is a future legal task; do not assert regis
 A. Fully implement architecture and comprehensive assurance before demo: lower risk of later rework but slower to validate core value and delays customer discovery.
 B. Build demonstrable vertical slice in 72 hours, run basic safety tests continuously, track blueprint gaps and finish market-facing product requirements before first sale: fastest feedback and lowest cash use; requires disciplined gap ledger to avoid shipping incomplete security claims.
 Decision **B**, as owner requested. Key restriction: advanced hardening may be postponed, but input/data protection and actual smoke/unit tests cannot. Marketing collateral is drafted concurrently, not falsely published as finished product.
+
+## ADR-007: P2 CSV export path (2026-10-26)
+Alternative A: stdlib csv.writer, fixed findings+events columns, Excel-compatible UTF-8 BOM, explicit CRLF, guarded formula-like values, no third-party install. Low execution cost and good portability, but output remains text-only and spreadsheet behavior varies by import mode.
+Alternative B: pandas + openpyxl XLSX export. Rich typed tabs/formatting and safer display control in compatible Excel, but dependency footprint, install time, test matrix and maintenance cost increase for a small offline MVP.
+Decision: **A for first P2 milestone**, already tested with synthetic data (54 unit tests; commit 6b3be7a4512049caa5a329776e2a63462cd6c8fa). Add XLSX only on evidence of customer demand. CSV export is not source CSV ingestion; maintain separate gap. Escaping leading = + - @ with apostrophe reduces common formula injection but is NOT a guaranteed cross-application security boundary. No production/customer claim.
