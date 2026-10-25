@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import csv
+import io
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -13,7 +15,7 @@ from pathlib import Path
 import re
 import sys
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 MAX_BYTES = 1_048_576
 MAX_EVENTS = 1000
 MAX_DEPTH = 16
@@ -204,6 +206,48 @@ def render_html(report):
             "<p>합성 데이터용 사후 규칙 진단입니다. 침해 탐지·사고 부재·컴플라이언스를 보증하지 않습니다.</p></body></html>")
 
 
+FINDING_CSV_FIELDS = (
+    "report_id", "finding_id", "rule_id", "rule_version", "severity",
+    "event_id", "source_pointer", "evidence_status", "rationale", "recommended_action",
+)
+EVENT_CSV_FIELDS = ("report_id",) + EVENT_KEYS
+
+
+def _spreadsheet_safe(value):
+    """Escape spreadsheet formula-like cells; CSV quoting alone is insufficient.
+
+    This is a defense for common spreadsheet auto-detection, NOT a guarantee for
+    all versions or import modes. The original event objects stay unchanged.
+    """
+    if value is None:
+        return ""
+    text = str(value)
+    stripped = text.lstrip(" \t\r\n\ufeff\u00a0\u200b\u200c\u200d")
+    if stripped.startswith(("=", "+", "-", "@", "\t", "\r", "\n")):
+        return "'" + text
+    return text
+
+
+def render_csv(report, kind):
+    """Return UTF-8-BOM RFC-4180-style CSV with fixed fields and safe cells."""
+    if kind not in ("findings", "events"):
+        raise ValueError("Unknown CSV report kind")
+    fields = FINDING_CSV_FIELDS if kind == "findings" else EVENT_CSV_FIELDS
+    output = io.StringIO(newline="")
+    writer = csv.writer(output, lineterminator="\r\n")
+    writer.writerow(fields)
+    if kind == "findings":
+        rows = ({"report_id": report["report_id"], "event_id": ",".join(f["event_ids"]), **{
+            k: f.get(k) for k in fields if k not in ("report_id", "event_id")}}
+            for f in report["findings"])
+    else:
+        rows = ({"report_id": report["report_id"], **e} for e in
+                sorted(report["events"], key=lambda e: (e["occurred_at_utc"], e["event_id"])))
+    for row in rows:
+        writer.writerow([_spreadsheet_safe(row.get(key)) for key in fields])
+    return "\ufeff" + output.getvalue()
+
+
 def write_reports_atomically(items):
     """Stage complete files; publish with exclusive hard links; undo our own links on error.
 
@@ -253,19 +297,28 @@ def main(argv=None):
     parser.add_argument("--input", required=True, help="Structured JSON events (max 1 MiB)")
     parser.add_argument("--output", required=True, help="Output report HTML path")
     parser.add_argument("--json-output", help="Optional machine-readable report path")
+    parser.add_argument("--findings-csv", help="Optional findings CSV (Excel-friendly, guarded)")
+    parser.add_argument("--events-csv", help="Optional chronological events CSV (Excel-friendly, guarded)")
     args = parser.parse_args(argv)
     try:
         report = evaluate(read_document(args.input))
         source = Path(args.input).resolve()
-        targets = [Path(os.path.abspath(args.output))] + ([Path(os.path.abspath(args.json_output))] if args.json_output else [])
+        files = [(args.output, "html"), (args.json_output, "json"),
+                 (args.findings_csv, "findings"), (args.events_csv, "events")]
+        requests = [(Path(os.path.abspath(path)), fmt) for path, fmt in files if path]
+        targets = [path for path, _ in requests]
         if source in targets or len(set(targets)) != len(targets):
             raise AuditInputError("Output paths must differ from input and each other")
         for target in targets:
             if not target.parent.is_dir():
                 raise AuditInputError("Output directory does not exist")
-        items = [(targets[0], render_html(report))]
-        if args.json_output:
-            items.append((targets[1], json.dumps(report, ensure_ascii=False, indent=2)))
+        formats = {
+            "html": lambda: render_html(report),
+            "json": lambda: json.dumps(report, ensure_ascii=False, indent=2),
+            "findings": lambda: render_csv(report, "findings"),
+            "events": lambda: render_csv(report, "events"),
+        }
+        items = [(path, formats[fmt]()) for path, fmt in requests]
         write_reports_atomically(items)
         print(f"SOVIA: events={report['event_count']} findings={report['finding_count']} report={targets[0]}")
         return 0
