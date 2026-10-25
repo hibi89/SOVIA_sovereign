@@ -1,3 +1,10 @@
+# P2 v0.8 dashboard test evidence — 2026-10-26 KST
+2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+CI commands: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py tests; python -m unittest discover -s tests -v. Matrix Windows/Ubuntu x Python 3.11/3.13 4/4 SUCCESS. Each 148 discovered; 138 PASS, 10 SKIP because optional PDF dependency not installed, 0 FAIL. New 23 tests include HTML XSS, CSP/no network/assets, input DB bytes preserved, unknown/invalid schema, missing input, symlink/output alias, unused-file-only publishing, aggregate group size and recent 100 rows, isolated -I execution, empty state. No browser rendering or owner Windows live UI checked; customer integration/packaging/security pending.
+
+---
+
+## Archived previous test evidence
 # P2 SQLITE HISTORY TEST CHECKPOINT — 2026-10-26 KST
 
 Code SHA 59b982bc8960e38a948c68e49d874457de3e01fa; CI https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214522381 4/4 success. Ubuntu+Windows Python 3.11+3.13 each: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py tests PASS; python -m unittest discover -s tests -v: Ran 125 tests, OK (skipped=10). Thus 115 passed, 10 optional ReportLab/PDF cases skipped, 0 failed EACH job. 33 new history cases cover first import, duplicates, modified-ID rollback, JSON/CSV equivalence, hashed-only storage, unknown schema, malicious data as inert text, no-clobber backup and restore, corrupt restore, explicit selective/all purge, independent backup, CLI isolation and no network.
