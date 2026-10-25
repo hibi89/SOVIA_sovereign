@@ -1,33 +1,32 @@
-# SOVIA STATUS — verified implementation snapshot
-Updated: 2026-10-26 KST after first working local code slice.
-Repo: https://github.com/hibi89/SOVIA_sovereign (PUBLIC at verification)
-Branch worked: `feature/p0-audit-core`; source commit `a1c566921a626d4f4c24fb4eb8b2c405ff67db8e`.
-Prior main/develop HEAD: `51ebaf92cbb278a10978d906da927ec644c76d97` (unchanged by source work).
-The document-update commit follows this snapshot and must be verified separately.
+# SOVIA STATUS — 2026-10-26 KST
 
-## Completed and verified
-- P0 planning / architecture / issue backlog / handoff protocol on main.
-- P1 first runnable Python 3 stdlib-only offline JSON→typed normalized events→3 deterministic rule findings→HTML/JSON report CLI on feature branch.
-- Synthetic example: 2 events, 3 HIGH findings linked to event evt-002 / synthetic:2.
-- Limits: 1 MiB, ≤1000 events, nesting≤16; JSON duplicate keys, duplicate event IDs, invalid timestamps/types rejected; HTML escaping; no execution of imported actions; extraneous raw_prompt field dropped.
-- Tests: `python -m unittest discover -s tests -v` → PASS 12, FAIL 0. CLI smoke → exit 0. The local source / demo / test file Git blob SHAs matched uploaded blobs exactly:
-  - sovia_audit.py `30bfa96c9e1407c5a2ddd0468e3b0e19cc9c72d4`
-  - examples/demo.json `e21fc488adb357684b153ba44a5d9fb2878555e0`
-  - tests/test_audit.py `1398fc26ea53de32af997982cffb7d23333a4a73`
-- GitHub remote feature HEAD was re-read as `a1c566921a626d4f4c24fb4eb8b2c405ff67db8e`, commit changed exactly those 3 files.
+## Verified repository state
+- Repository: hibi89/SOVIA_sovereign; PUBLIC; feature implementation ONLY on feature/p0-audit-core.
+- Source+test+five-rule fixture verified commit: 2eda8c37a3ed06702aba14cb53790da3cbaf8e83. This document commit follows; always re-query live HEAD.
+- main and develop at 51ebaf92cbb278a10978d906da927ec644c76d97 as last verified, docs-only; no release, merge or production.
+- Local runtime: Python 3.13.5. No external package installation, paid API, service deployment, customer data or live customer usage.
 
-## Partial / deferred / blocked
-- P1 72h minimum: first vertical slice DONE; 3 rule minimum DONE; demo instructions DONE; fresh-machine reproduction, UI browser visual verification, negative deep-nesting tests, event timeline and coverage completeness remain unfinished.
-- Full Audit Lite blueprint: CSV/PDF/SQLite/GUI/agent adapters/retention/recovery/commercial hardening NOT_IMPLEMENTED. Refer GAP_MATRIX.md.
-- Repository remains PUBLIC despite preference for private: sensitive/private code or customer data prohibited; owner approval needed to change visibility.
-- Hosting, Vercel, production URL, real customer feed, actual marketplace sale: NONE. Deployment checks NOT_APPLICABLE.
-- No paid calls, external customer data transfer or account/domain changes.
+## Completed and tested
+- Offline JSON read-only audit, validation cap 1 MiB / 1,000 events / JSON depth 16.
+- Five deterministic rules: UNAUTHORIZED_TOOL, UNAPPROVED_DESTINATION, SENSITIVE_ACCESS, BURST_TOOLS (enabled only when max_tool_calls_per_minute specified), MISSING_EVIDENCE.
+- Event ID and source pointer per finding; provided pointer clearly marked POINTER_PROVIDED_UNVERIFIED, absent POINTER_MISSING.
+- Korean HTML finding report and UTC chronological event timeline, escaped untrusted text; JSON export. Unknown/missing policy and unobserved limits disclosed.
+- Canonicalized event+policy hash correctly labeled normalized_policy_sha256 (NOT a raw input file hash).
+- Unit tests: python -m unittest discover -s tests -q => 29 PASS / 0 FAIL, run on 2026-10-26 KST.
+- Syntax: python -m compileall -q sovia_audit.py tests => PASS.
+- CLI five-rule smoke: python sovia_audit.py --input examples/demo_five_rules.json --output report_day2_final.html --json-output report_day2_final.json => exit 0, 3 synthetic events, 5 unique rule findings (evt-003). Original two-event fixture still gives 3 findings.
+- All source/test/demo Git blob SHA values checked against files uploaded via connected GitHub.
 
-## Next safe units
-1. Add tests for nested JSON, malicious-looking fields, non-UTF8, partial/unknown coverage, deterministic output and rejection side effects.
-2. Improve report with event timeline and explicit pointer-provided-not-verified distinction; add burst/missing-evidence rules if scoped and tested.
-3. Demonstrate clean offline install, gap-check original architecture; prepare DRAFT listing only. Do not promote main or sell without explicit commercial gate.
-4. Update STATUS and HANDOFF with verified commit after each material milestone; on `ㄱ` resume next unblocked coding unit.
+## In progress / remaining / blocked
+- P1 core working locally, NOT final production or commercial application.
+- Need Day3 clean-machine reproduction, broader regression and negative cases, report presentation review, documented CLI installer/package, remaining source-contract gaps.
+- Full target P2: CSV/PDF/SQLite/GUI/n8n adapter, data deletion/recovery, sanitized real integration, false-positive & privacy review, commercial packaging and security.
+- Cloud/Private not started. Vercel/Production URL: NONE, SHA match: NOT_APPLICABLE.
+- PUBLIC GitHub blocks sensitive/secret/customer material without owner-controlled privacy review; safe synthetic feature work proceeds.
+- No live customer audits or runtime agent monitoring verified.
 
-## Acceptance distinctions
-Local tests PASSED ≠ customer data validated; GitHub source committed ≠ deployed product. Commercial and production gates remain open.
+## Next unit (on ㄱ)
+1. Recheck GitHub SHA, HANDOFF and actual code.
+2. Tighten CLI output atomicity/no-clobber or add secure CSV/printable report ONLY with tests; prioritize clean reproducible offline package and exception safety.
+3. Run full 29+ regression tests and clean environment validation. Compare original blueprint (GAP_MATRIX); write documentation and merge review before promoting main.
+4. Do not publish, change visibility, spend money, use customer data or deploy without owner approval.
