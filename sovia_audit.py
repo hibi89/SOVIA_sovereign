@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 import sys
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 MAX_BYTES = 1_048_576
 MAX_EVENTS = 1000
 MAX_DEPTH = 16
@@ -265,8 +265,11 @@ def write_reports_atomically(items):
             fd, temp_name = tempfile.mkstemp(prefix=".sovia-staging-", suffix=".tmp", dir=path.parent)
             temp_path = Path(temp_name)
             staged.append(temp_path)
-            with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as out:
-                out.write(text)
+            data = text.encode("utf-8") if isinstance(text, str) else text
+            if not isinstance(data, bytes):
+                raise AuditInputError("Report must be UTF-8 text or bytes")
+            with os.fdopen(fd, "wb") as out:
+                out.write(data)
                 out.flush()
                 os.fsync(out.fileno())
         for (destination, _), staging in zip(items, staged):
@@ -299,12 +302,15 @@ def main(argv=None):
     parser.add_argument("--json-output", help="Optional machine-readable report path")
     parser.add_argument("--findings-csv", help="Optional findings CSV (Excel-friendly, guarded)")
     parser.add_argument("--events-csv", help="Optional chronological events CSV (Excel-friendly, guarded)")
+    parser.add_argument("--pdf-output", help="Optional standalone Korean PDF (requires reportlab)")
+    parser.add_argument("--pdf-font", help="Optional path to locally installed Korean TTF font")
     args = parser.parse_args(argv)
     try:
         report = evaluate(read_document(args.input))
         source = Path(args.input).resolve()
         files = [(args.output, "html"), (args.json_output, "json"),
-                 (args.findings_csv, "findings"), (args.events_csv, "events")]
+                 (args.findings_csv, "findings"), (args.events_csv, "events"),
+                 (args.pdf_output, "pdf")]
         requests = [(Path(os.path.abspath(path)), fmt) for path, fmt in files if path]
         targets = [path for path, _ in requests]
         if source in targets or len(set(targets)) != len(targets):
@@ -312,7 +318,15 @@ def main(argv=None):
         for target in targets:
             if not target.parent.is_dir():
                 raise AuditInputError("Output directory does not exist")
+        def render_pdf_optional():
+            try:
+                from sovia_pdf import render_pdf
+                return render_pdf(report, font_path=args.pdf_font)
+            except (ImportError, ValueError, RuntimeError) as exc:
+                raise AuditInputError("PDF generation unavailable: " + str(exc)) from exc
+
         formats = {
+            "pdf": render_pdf_optional,
             "html": lambda: render_html(report),
             "json": lambda: json.dumps(report, ensure_ascii=False, indent=2),
             "findings": lambda: render_csv(report, "findings"),
