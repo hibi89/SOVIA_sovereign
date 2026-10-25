@@ -58,3 +58,6 @@ Run py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboar
 
 ## Portable beta v0.9
 Full Windows PowerShell instructions in PORTABLE_README.md; create a new private local output folder for audit.html, history.sqlite, dashboard.html. No need for pip for base reports or history. Python 3.11+ required; ReportLab+OS Korean font optional for PDF. Source ZIP SHA256 6442c6896118fc44cd309fcd6596a59d6a17bb6e8252ddc45a8b15c34d5fd7c3 verified on 4/4 Windows+Ubuntu CI jobs https://github.com/hibi89/SOVIA_sovereign/actions/runs/40216762276. No private customer data or ready-to-sell certification implied.
+
+## Owner Windows self-check v0.10 (synthetic only)
+Obtain latest verified `sovia-portable-beta` CI artifact, verify inner SOVIA-Audit-Lite-0.10.0-beta.zip SHA256 against trusted source, extract to NEW SOVIA folder, and double-click `RUN_SELF_CHECK.cmd`. Read sibling SOVIA_DIAGNOSTICS/SOVIA_SELF_CHECK_.../SELF_CHECK_RESULT.json, open HTMLs manually; `AUTOMATED_PASS_MANUAL_PENDING` does not certify Korean PDF/font, browser, Defender, private customer use or paid release. See OWNER_ACCEPTANCE.md. CI https://github.com/hibi89/SOVIA_sovereign/actions/runs/40218607947 4/4 success; ZIP SHA 894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b.

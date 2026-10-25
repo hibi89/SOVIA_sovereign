@@ -1,7 +1,7 @@
 name: SOVIA offline regression
 on:
   push:
-    branches: [feature/p0-audit-core, feature/p2-sqlite-history, feature/p2-offline-dashboard, feature/p2-portable-package, develop]
+    branches: [feature/p0-audit-core, feature/p2-sqlite-history, feature/p2-offline-dashboard, feature/p2-portable-package, feature/p2-owner-selfcheck, develop]
   pull_request:
     branches: [develop, main]
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile source/tests
-        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py tests
+        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py owner_selfcheck.py tests
       - name: Run stdlib regression (optional PDF cases may skip)
         run: python -m unittest discover -s tests -v
 
@@ -33,15 +33,15 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: |
           python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
-          python build_portable.py --output dist/SOVIA-Audit-Lite-0.9.0-beta.zip
-          python verify_portable.py --archive dist/SOVIA-Audit-Lite-0.9.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.9.0-beta.zip.sha256
+          python build_portable.py --output dist/SOVIA-Audit-Lite-0.10.0-beta.zip
+          python verify_portable.py --archive dist/SOVIA-Audit-Lite-0.10.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.10.0-beta.zip.sha256
       - name: Publish synthetic portable beta as CI artifact (not release)
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
         with:
           name: sovia-portable-beta
           path: |
-            dist/SOVIA-Audit-Lite-0.9.0-beta.zip
-            dist/SOVIA-Audit-Lite-0.9.0-beta.zip.sha256
+            dist/SOVIA-Audit-Lite-0.10.0-beta.zip
+            dist/SOVIA-Audit-Lite-0.10.0-beta.zip.sha256
           if-no-files-found: error
           retention-days: 14

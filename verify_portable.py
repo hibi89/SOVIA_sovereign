@@ -16,7 +16,7 @@ import shutil
 import sys
 import zipfile
 
-VERSION = "0.9.0-beta"
+VERSION = "0.10.0-beta"
 FORMAT = "SOVIA_PORTABLE_V1"
 PREFIX = "SOVIA/"
 FILES = (
@@ -26,6 +26,8 @@ FILES = (
     "sovia_history.py",
     "sovia_dashboard.py",
     "verify_portable.py",
+    "owner_selfcheck.py",
+    "RUN_SELF_CHECK.cmd",
     "PORTABLE_README.md",
     "examples/demo_five_rules.json",
     "examples/demo_source.csv",
