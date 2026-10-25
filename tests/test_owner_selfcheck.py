@@ -96,7 +96,7 @@ class OwnerSelfCheckTests(unittest.TestCase):
         report = json.loads(reports[0].read_text(encoding="utf-8"))
         self.assertEqual("AUTOMATED_FAILED", report["status"])
         self.assertEqual({}, report["synthetic"])
-        self.assertEqual({}, report["checks"])
+        self.assertEqual({"python": "PASS"}, report["checks"])
         self.assertFalse((reports[0].parent / "synthetic-audit.html").exists())
 
     def test_missing_portable_manifest_fails_before_running_app(self):
