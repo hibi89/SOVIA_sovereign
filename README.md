@@ -41,3 +41,10 @@ PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) successfully merged 
 
 ## P2 v0.7 optional SQLite audit history
 `sovia_history.py` is separate from the stateless `sovia_audit.py` CLI. With a NEW, locally chosen DB file: `py -3 sovia_history.py import --input examples/demo_five_rules.json --db history.sqlite`. Query with `py -3 sovia_history.py status --db history.sqlite`; see [HISTORY.md](HISTORY.md) for backup, restore, purge, CSV policy support and privacy limitations. No mandatory external packages or network, no raw prompt or tool/target labels stored in the history DB, but hash/timestamp metadata is NOT fully anonymous. Tested on Ubuntu/Windows Python 3.11/3.13 (CI run 40214522381), each 115 PASS/10 PDF SKIP/0 FAIL. Customer device/real-input/installer/secure-retention gates pending. **Not sale-ready.**
+
+## Offline P2 v0.8 history dashboard
+Generate a self-contained Korean HTML dashboard from an existing v1 SQLite history, without API keys, internet, local server or JavaScript:
+    py -3 sovia_history.py import --input examples/demo_five_rules.json --db sample-history.sqlite
+    py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboard.html
+    start .\sample-dashboard.html
+See DASHBOARD.md for prerequisites and privacy. Output requires unused filename and exposes pseudonymized (not anonymous) metadata; don't commit it to PUBLIC repo. 2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.

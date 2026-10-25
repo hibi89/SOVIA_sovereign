@@ -1,3 +1,10 @@
+# SOVIA RESUME — tested P2 v0.8 dashboard
+2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+Exact new-chat command: [소비아소버린 깃헙 레포지토리 보고 작업이어가셈], shorthand ㄱ.
+Use live GitHub: latest DEVELOP HANDOFF -> STATUS -> AGENTS -> REQUIREMENTS -> GAP_MATRIX -> actual code and test before acting. Feature branch feature/p2-offline-dashboard must be checked for merged PR; integrate only when green. Then move to P2 portable packaging/clean installation/retention/real customer data gating. No main code release, production URL, paid services or confidential source in PUBLIC repo.
+
+---
+
 # SOVIA new-chat continuation entrypoint — P2 SQLite milestone
 
 **LATEST INTEGRATION VERIFIED — 2026-10-26 KST:** PR [#13](https://github.com/hibi89/SOVIA_sovereign/pull/13) MERGED the opt-in SQLite history (version 1, recovery and purge) into `develop` at `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`. [Develop post-merge CI 40214911902](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214911902) 4/4 SUCCESS, Windows/Ubuntu × Python 3.11/3.13; each 125 tests discovered, 115 PASS, 10 optional PDF SKIP, 0 FAIL. Source/feature integration is DONE, NOT waiting for a PR. Next safe task on `ㄱ`: create a new scoped branch from latest `develop` and implement a read-only, generated offline HTML history dashboard (no local server/network) with output no-clobber, escaped metadata, report/rule/time overview, tests; then continue installer/retention/customer authorization gates. Do not reimplement P1/CSV/PDF/SQLite. Production/Vercel none; `main` remains documentation-only, not sale-ready. The earlier feature-branch notes below are archival.

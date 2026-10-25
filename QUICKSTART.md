@@ -52,3 +52,6 @@ GitHub Actions run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actio
 
 ## SQLite opt-in history (v0.7)
 The audit CLI above remains stateless. Use `sovia_history.py` only if you explicitly want a local SQLite metadata history. See [HISTORY.md](HISTORY.md) for no-clobber backup and restore, report/all purge, pseudonymization limits and test evidence. 4/4 OS/Python CI matrix passed at run 40214522381; each 115 executed pass / 10 optional PDF skip.
+
+## Offline SQLite dashboard v0.8
+Run py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboard.html for a previously created history DB, then open HTML locally. No JavaScript/server/network; see DASHBOARD.md. 2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.

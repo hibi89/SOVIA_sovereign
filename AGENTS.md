@@ -38,3 +38,7 @@ Source branch `feature/p2-sqlite-history` implements optional hashed metadata-on
 
 ## P2 v0.7 develop integration override — 2026-10-26 KST
 PR #13 merged SQLite history at `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`; post-merge CI 40214911902 4/4 SUCCESS, each 115 PASS/10 optional PDF SKIP. On `ㄱ`, start next P2 safe local dashboard feature from latest develop, NOT SQLite redo, keeping original stateless path and no external telemetry. Proposed fastest GUI slice: static, read-only HTML generated from SQLite, with locally escaped hashed metadata and no-clobber output; compare with localhost server, log decision in ADR. No production/sale approval.
+
+## P2 v0.8 dashboard checkpoint 2026-10-26
+2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+On ㄱ first determine PR and develop integration, then continue portable install/clean-machine UX and privacy/retention gates. Do not claim UI visual QA from HTMLParser tests or market release. Main remains docs-only.

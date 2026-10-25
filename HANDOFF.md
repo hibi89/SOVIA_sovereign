@@ -1,3 +1,39 @@
+# SOVIA HANDOFF — P2 v0.8 offline dashboard, mandatory 10 sections
+2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+
+## 1. Goals/requirements/technology
+Python standard-library-first local agent evidence/risk audit; 5 deterministic policy checks; opt-in history and report. User approved zero-cash MVP-first, then blueprint gaps, security before commercial sale. Future Cloud/Private share core, no live release yet.
+
+## 2. Completed functionality and decisions
+Existing five-rule JSON audit, guarded metadata CSV import/export, optional PDF (ReportLab+OS TTF), SQLite v1 metadata-only idempotent history/backups/restore/purge unchanged. NEW sovia_dashboard.py static HTML: 4 metrics, rule/severity aggregates and recent 100 report/finding/event rows from SQLite read-only snapshot, escaped/size-capped values, CSP disallowing scripts/network, zero remote assets, no-clobber output. ADR-011 chooses static HTML over local HTTP server to minimize setup/security/maintenance for MVP; live filtering deferred.
+
+## 3. Actual tests, pass/fail, verified/unverified
+GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334, code+workflow commit c8bcbc9d9191c0bd98da66750fae3b456258391f, Windows/Ubuntu Python 3.11/3.13 all four jobs SUCCESS. Command: python -m unittest discover -s tests -v. Each: 148 discovered, 138 PASS, 10 SKIP (optional PDF/ReportLab), 0 FAIL. Compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py tests PASS. 23 new tests verify DOM, synthetic counts, empty state, HTML injection escape, no script/network dependencies, identical DB before/after, bounded query result, no overwrite, symlink/source alias protection, isolated Python -I package and corrupt DB safe failure. Browser visual, owner Windows fonts, real data, power-loss and sale tests UNVERIFIED.
+
+## 4. Completed/in progress/pending/stop
+DONE safe synthetic read-only dashboard source+tests on feature/p2-offline-dashboard as of code SHA above. NEXT review PR integration to develop; if already merged, skip. Then portable clean-install packaging, owner-side browser UX check, retention/privacy, authorized sanitized n8n mapping and commercial tests. P2 overall remains incomplete. No Vercel/production.
+
+## 5. Failed attempts, evidence, root causes and pivots
+No failed dashboard CI run at code checkpoint. Earlier Windows SQLite snapshot fsync and test handle issues were fixed and verified (run 40214522381). Initial malformed documentation-tool draft did not reach GitHub (source unchanged); continue using a smaller docs write. No network server built. If screenshots/actual browser not supported, label appearance unverified instead of claiming a rendered QA pass.
+
+## 6. GitHub/branches/SHAs/files
+Repository https://github.com/hibi89/SOVIA_sovereign, PUBLIC. Feature feature/p2-offline-dashboard based on develop ff11358e7103816addecca898cf194d901e2ab97, tested code SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; docs SHA to be confirmed separately. Paths sovia_dashboard.py, tests/test_dashboard.py, DASHBOARD.md, updated workflow. Core source unchanged. main is documentation-only, deliberately not released.
+
+## 7. Production URL, project, commands, environment
+Production/Vercel: NONE, NOT_APPLICABLE. Windows PowerShell synthetic: py -3 sovia_history.py import --input examples/demo_five_rules.json --db sample-history.sqlite; then py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboard.html; open local HTML in browser. Python 3.11/3.13 Windows+Ubuntu CI success; no API token/network/paid services.
+
+## 8. Originals, backup, protected data, credentials
+Original develop/main preserved until reviewed PR. Test data synthetic only, no secrets/customer logs or fonts committed. History contains hashed identifiers/timestamps, not guaranteed anonymous; dashboard may expose linkable hash prefixes and timings. HTML is local and should not be placed in PUBLIC Git. Existing SQLite input never edited; output new filename only. Existing backups remain independent and retention/secure erasure not complete.
+
+## 9. Next priorities, success and approvals
+Check feature PR and CI, integrate into develop only after green reviewed. Next scoped P2 work: zero-cost clean-install ZIP/portable demo with manifest/checksums and owner Windows/browser validation; retention and real sanitized adapter later. Payments, external data, visibility, customer logs, Vercel and public sale require explicit owner approval; synthetic-only code/docs do not.
+
+## 10. KST update / verification time/scope / basis
+2026-10-26 KST, checked source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f and CI 40215480334. The current documentation commit cannot reference itself. No actual browser/production/customer compliance proof.
+
+---
+
+## Archived previous handoff
 # SOVIA HANDOFF — P2 v0.7 SQLite metadata history (10 required items)
 
 **LATEST INTEGRATION VERIFIED — 2026-10-26 KST:** PR [#13](https://github.com/hibi89/SOVIA_sovereign/pull/13) MERGED the opt-in SQLite history (version 1, recovery and purge) into `develop` at `edf8ea3de4a4fd781de34642b3d3f07a1ff67e10`. [Develop post-merge CI 40214911902](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214911902) 4/4 SUCCESS, Windows/Ubuntu × Python 3.11/3.13; each 125 tests discovered, 115 PASS, 10 optional PDF SKIP, 0 FAIL. Source/feature integration is DONE, NOT waiting for a PR. Next safe task on `ㄱ`: create a new scoped branch from latest `develop` and implement a read-only, generated offline HTML history dashboard (no local server/network) with output no-clobber, escaped metadata, report/rule/time overview, tests; then continue installer/retention/customer authorization gates. Do not reimplement P1/CSV/PDF/SQLite. Production/Vercel none; `main` remains documentation-only, not sale-ready. The earlier feature-branch notes below are archival.
