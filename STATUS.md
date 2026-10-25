@@ -1,3 +1,16 @@
+# SOVIA STATUS — P2 v0.7 verified synthetic SQLite history
+
+Updated 2026-10-26 KST. Repository PUBLIC. Active source feature/p2-sqlite-history at tested SHA 59b982bc8960e38a948c68e49d874457de3e01fa (docs follows). Existing P1/P2 integrated develop cd154200821054b8596d2decf7dc2f55fc93e22e; main still not a released code branch.
+
+DONE_VERIFIED on synthetic Windows+Ubuntu CI: strict JSON/CSV import, 5 policies, evidence-linked HTML/JSON, findings/events CSV export, optional earlier Linux-tested PDF, **NEW opt-in SQLite metadata-history module** with no raw event names/prompt/target/pointer persistence, report idempotency, event identity collision rollback, version-1 schema and explicit no-clobber snapshot/restore and verified purge. Baseline audit CLI remains stateless. Tests CI 40214522381: 4/4 jobs PASS, per job 125 discovered, 115 executed PASS, 10 optional PDF SKIP, 0 FAIL; 33 history cases. First Windows test failed on read-only fsync and unclosed connection test handles (run 40214395712); both fixed and rerun passed.
+
+NOT VERIFIED: local customer's Windows/font install, real n8n/customer data, GUI, true data lifecycle beyond local history (original inputs/backups still retained), multi-process stress/disk failure, privacy legal requirements, product installer, commercial sale/production. SQLite hashed metadata is still potentially linkable and must not be described as anonymous or certified safe. No live Vercel, fees or customer secrets.
+
+NEXT: open and verify PR for integration into develop; keep main unpromoted. Then read-only local history dashboard, clean-device packaging and P2 privacy/recovery gates. No unnecessary duplicate P1 work. Refer HISTORY.md/TEST_PLAN.md/GAP_MATRIX.md and live HANDOFF.
+
+---
+
+## Previous status (archived)
 # SOVIA STATUS — authoritative verified P2 CSV-source checkpoint
 
 **CURRENT INTEGRATION (2026-10-26 KST):** PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) merged synthetic Audit Lite P1/P2 into `develop` at merge SHA `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. The previous no-code baseline on `main` is HISTORICAL and `main` is intentionally not promoted. Windows+Ubuntu Python 3.11/3.13 CI run [40213287272](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272): 4/4 success, 82 passed / 10 optional PDF skipped / 0 failed per job; PR validation [40213518280](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213518280) SUCCESS. Next unblocked work is P2 SQLite metadata-only history and recovery on a **new feature branch from develop**. Verify latest HEAD, then read HANDOFF/STATUS/GAP_MATRIX. No production or user Windows/real customer-data verification.

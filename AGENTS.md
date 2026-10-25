@@ -32,3 +32,6 @@ Issue #2: initial schema + synthetic fixture + runnable JSON parse -> single det
 
 ## Live integration override (2026-10-26)
 `develop` now contains verified P1 and P2 source CSV/PDF through PR #12 at `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. Do not restart P1 issue #2 or assume no source on `develop`. On `ㄱ` create one scoped P2 SQLite metadata-history feature branch from current `develop` after fresh inspection; preserve default stateless CLI and original input, run real tests, update HANDOFF/STATUS. `main` remains unpromoted and documentation-only.
+
+## SQLite P2 verified update 2026-10-26
+Source branch `feature/p2-sqlite-history` implements optional hashed metadata-only SQLite history with idempotent ingest/conflict rollback, version 1 gate, no-clobber backup/restore, explicit purge, 33 regression tests. CI run 40214522381 4/4 green; per job 125 discovered/115 passed/10 optional PDF skipped/0 fail. Continue P2 review/merge to develop, then GUI and commercial acceptance gates; do not silently make stateless audit persistent or claim hashes anonymous. Active feature HEAD must be refreshed before editing; PR not yet merged at this checkpoint.

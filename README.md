@@ -37,3 +37,7 @@ In GitHub Actions [run 40213287272](https://github.com/hibi89/SOVIA_sovereign/ac
 
 ## develop integration (2026-10-26)
 PR [#12](https://github.com/hibi89/SOVIA_sovereign/pull/12) successfully merged tested synthetic core and P2 CSV/PDF to `develop` at `c5dc6099a76f5f3f9f3ca523855f88487bb4fa26`. `main` remains documentation-only stable baseline by design. Future SQLite work should branch from `develop`; no public release/deployment was performed.
+
+
+## P2 v0.7 optional SQLite audit history
+`sovia_history.py` is separate from the stateless `sovia_audit.py` CLI. With a NEW, locally chosen DB file: `py -3 sovia_history.py import --input examples/demo_five_rules.json --db history.sqlite`. Query with `py -3 sovia_history.py status --db history.sqlite`; see [HISTORY.md](HISTORY.md) for backup, restore, purge, CSV policy support and privacy limitations. No mandatory external packages or network, no raw prompt or tool/target labels stored in the history DB, but hash/timestamp metadata is NOT fully anonymous. Tested on Ubuntu/Windows Python 3.11/3.13 (CI run 40214522381), each 115 PASS/10 PDF SKIP/0 FAIL. Customer device/real-input/installer/secure-retention gates pending. **Not sale-ready.**

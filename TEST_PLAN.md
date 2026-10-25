@@ -1,3 +1,13 @@
+# P2 SQLITE HISTORY TEST CHECKPOINT — 2026-10-26 KST
+
+Code SHA 59b982bc8960e38a948c68e49d874457de3e01fa; CI https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214522381 4/4 success. Ubuntu+Windows Python 3.11+3.13 each: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py tests PASS; python -m unittest discover -s tests -v: Ran 125 tests, OK (skipped=10). Thus 115 passed, 10 optional ReportLab/PDF cases skipped, 0 failed EACH job. 33 new history cases cover first import, duplicates, modified-ID rollback, JSON/CSV equivalence, hashed-only storage, unknown schema, malicious data as inert text, no-clobber backup and restore, corrupt restore, explicit selective/all purge, independent backup, CLI isolation and no network.
+
+First run https://github.com/hibi89/SOVIA_sovereign/actions/runs/40214395712 failed Windows: fsync on rb handle EBADF, SQLite test connections not closed under NTFS, leading locked temporary files. Changed fsync to r+b; always close SQLite connections on initialization error and use closing() in test contexts. Repeat 40214522381 all successful. No customer machine, PDF optional dependencies, power-loss, multi-process load, disk-full, forensic delete or production acceptance test; these remain P2/P4 gates.
+
+---
+
+## Historical test records
+
 # SOVIA CROSS-PLATFORM CI UPDATE — 2026-10-26 KST
 
 Code commit d204b76fdb545b32696a3d8aa97c35c1ffbb1355 updated CLI input/output alias comparison using resolved target paths. First Windows run 40213209092 failed one assertion because existing input preservation produced the wrong error string on Windows; no source input was overwritten. GitHub Actions rerun https://github.com/hibi89/SOVIA_sovereign/actions/runs/40213287272 **completed SUCCESS in all four jobs**: Ubuntu Python 3.11/3.13, Windows Python 3.11/3.13. Each: 92 tests discovered; 82 passed, 10 skipped (optional PDF dependency absent), 0 failed; compile step also PASS. Confirmed in CI run result/job endpoint. GitHub-hosted Windows is not the owner's laptop, and Korean PDF/Office, real sanitized data, installer/recovery and production remain UNVERIFIED.
