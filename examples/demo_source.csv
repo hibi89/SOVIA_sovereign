@@ -1,0 +1,4 @@
+event_id,occurred_at_utc,agent_id,run_id,tool_name,target,destination_domain,permission_asserted,outcome,source_pointer
+evt-001,2026-10-26T00:01:00+09:00,demo-agent,demo-001,approved_lookup,public_docs,internal.example,true,ok,synthetic:1
+evt-002,2026-10-26T00:01:15+09:00,demo-agent,demo-001,approved_lookup,public_docs,internal.example,true,ok,synthetic:2
+evt-003,2026-10-26T00:01:30+09:00,demo-agent,demo-001,unauthorized_export,client_records,outside.example,false,ok,

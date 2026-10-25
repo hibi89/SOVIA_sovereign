@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "policy": {
+    "allowed_tools": ["approved_lookup"],
+    "approved_destinations": ["internal.example"],
+    "sensitive_targets": ["client_records"]
+  },
+  "events": [
+    {"event_id":"evt-001","occurred_at_utc":"2026-10-26T00:01:00+09:00","agent_id":"demo-agent","run_id":"demo-001","tool_name":"approved_lookup","target":"public_docs","destination_domain":"internal.example","permission_asserted":true,"outcome":"ok","source_pointer":"synthetic:1"},
+    {"event_id":"evt-002","occurred_at_utc":"2026-10-26T00:02:00+09:00","agent_id":"demo-agent","run_id":"demo-001","tool_name":"unauthorized_export","target":"client_records","destination_domain":"outside.example","permission_asserted":false,"outcome":"ok","source_pointer":"synthetic:2"}
+  ]
+}
