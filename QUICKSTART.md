@@ -55,3 +55,6 @@ The audit CLI above remains stateless. Use `sovia_history.py` only if you explic
 
 ## Offline SQLite dashboard v0.8
 Run py -3 sovia_dashboard.py --db sample-history.sqlite --output sample-dashboard.html for a previously created history DB, then open HTML locally. No JavaScript/server/network; see DASHBOARD.md. 2026-10-26 KST: P2 v0.8 feature/p2-offline-dashboard implements a read-only SQLite v1 to standalone Korean HTML dashboard; no local server, JS, outbound network, data write or output overwrite. Tested source SHA c8bcbc9d9191c0bd98da66750fae3b456258391f; GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40215480334 4/4 SUCCESS, Windows/Ubuntu x Python 3.11/3.13, each 148 discovered/138 PASS/10 optional PDF SKIP/0 FAIL. New tests 23. Not owner PC/browser visual QA, real customer records or production.
+
+## Portable beta v0.9
+Full Windows PowerShell instructions in PORTABLE_README.md; create a new private local output folder for audit.html, history.sqlite, dashboard.html. No need for pip for base reports or history. Python 3.11+ required; ReportLab+OS Korean font optional for PDF. Source ZIP SHA256 6442c6896118fc44cd309fcd6596a59d6a17bb6e8252ddc45a8b15c34d5fd7c3 verified on 4/4 Windows+Ubuntu CI jobs https://github.com/hibi89/SOVIA_sovereign/actions/runs/40216762276. No private customer data or ready-to-sell certification implied.
