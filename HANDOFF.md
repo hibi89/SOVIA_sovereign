@@ -1,33 +1,36 @@
-# SOVIA HANDOFF
-Updated (KST): 2026-10-25. This handoff records repository documentation initialization; the latest branch/commit truth must be re-queried at next start.
-Repo: hibi89/SOVIA_sovereign. GitHub visibility checked PUBLIC. Baseline first commit c8101ad0746bccbc814fc4e5b7ba5bcd0a6f5ff9; consult current HEAD after documentation writes.
+# SOVIA HANDOFF — ten-part operational restoration
+Updated: 2026-10-25 KST; docs state inspected relative to verified architecture commit b838d3f6dddc15b0b38302e6e393be0405e6e559. This final documentation commit will have its own later SHA: always inspect live GitHub main HEAD.
 
-## 1. Goal, confirmed requirements, technology
-Near-zero cash route: one SOVIA Core -> local read-only Audit Lite MVP (first) -> limited paid pilot -> funded Cloud subscription -> customer-owned Private offline. Core Python, local SQLite, deterministic risk policies, supported JSON/CSV first, evidence/report output. Cloud and Private reuse one core; no auto external LLM dependency.
+## 1. Objective, confirmed requirements and stack
+User appointed ChatGPT SOVIA chief designer/developer/reviewer. Zero-cash-first independent AI-agent evidence/risk auditing product: ONE shared Python rules/evidence Core, read-only offline Audit Lite as first runnable MVP, Cloud subscription after paying demand, Private customer-controlled offline after explicit demand. Local Python+SQLite+synthetic fixtures, JSON/CSV adapter; later n8n/OTel where verified. Avoid unnecessary external LLM API. Full requirements: REQUIREMENTS.md.
 
-## 2. Completed functions/changes and decisions
-Only repository/bootstrap documents initialized, no product features. See DECISIONS.md for common-core vs dual-repo, local-first vs Cloud-first, after-event audit vs runtime interception, automatic monitoring vs human SOC. No production settings changed.
+## 2. Completed work, decisions and rationale
+Created initial README and 12 supporting docs including .gitignore. Compared alternative designs in DECISIONS.md: unified Core vs independent products, local-first vs Cloud-first, retrospective audit vs interception, automation vs human-operated SOC, metadata vs raw content. Selected unified offline-first, post-event evidence engine. GitHub branches main/develop/feature/p0-audit-core created at b838d3f6dddc15b0b38302e6e393be0405e6e559. Created issue backlog #1-11. NO application code has been built.
 
-## 3. Exact tests and outcome
-Product test commands: none executed. Passed=0, Failed=0, NOT_RUN. GitHub repo and initial commit metadata inspection did succeed; no HTTP/UI/API or security tests exist. Never describe docs as deployed product.
+## 3. Test commands, exact result and verification boundary
+Tests run: NONE; app tests PASS=0 FAIL=0 NOT_RUN. GitHub tree fetch confirmed 13 files; branches endpoint confirmed 3 branches with matching SHA; Git Git metadata confirmed hibi89 account for author+committer. 11 issue creation results SUCCESS. No local CLI/UI/API or deployment tested; do not label design files a working MVP.
 
-## 4. Done/in-progress/queued/blocked and stop point
-DONE repo discovered, public visibility/owner access verified, README created. IN_PROGRESS documentation batch and branch/issue creation. QUEUED implement schema/fixture/tests and CLI, then report and dashboard. BLOCKED proprietary material due PUBLIC repo until visibility decision.
+## 4. Done/in progress/pending/blocked and stop point
+DONE P0 docs/branch/issue initialization. P1 NOT_STARTED. P2+ downstream NOT_STARTED. BLOCKED owner choice Public vs Private for confidential business details (issue #1). STOP POINT: before P1 code. Follow ROADMAP.md and issues #2-5, #11. No runtime service exists.
 
-## 5. Failures, causes, retries, alternatives
-An initial GET /contents returned 404 because repo was empty, not auth failure; branch list empty and commits endpoint gave 409, confirming state. Not a blocker. Do not repeatedly retry as if permissions were wrong. For private release, owner may change visibility in repo settings; keep any restricted design offline until then.
+## 5. Error history, root causes, attempted action and no-repeat guidance
+GET repo/contents 404 and GET commits 409 were caused by an EMPTY newly created repo, confirmed by empty branches response. Initialized README with create_file, generated docs Git tree, commit and fast-forward main update. Not a permissions failure. Do not repeat empty-repo diagnostics. Git tree, author and branch verification succeeded.
 
-## 6. Repository/branches/SHAs/paths
-Owner/repo: hibi89/SOVIA_sovereign; default main. Expected develop and feature/p0-audit-core creation after docs commit. Read AGENTS.md, REQUIREMENTS.md, ARCHITECTURE.md, ROADMAP.md, GO_TO_MARKET.md, SECURITY.md, TEST_PLAN.md, BRANCHING.md, DECISIONS.md, STATUS.md. Reinspect live branch names and SHA before code changes.
+## 6. Repository, branches, commits and source paths
+Repository: https://github.com/hibi89/SOVIA_sovereign
+main/develop/feature/p0-audit-core baseline SHA b838d3f6dddc15b0b38302e6e393be0405e6e559 prior to this status refresh.
+Files README.md, AGENTS.md, REQUIREMENTS.md, ARCHITECTURE.md, DECISIONS.md, ROADMAP.md, GO_TO_MARKET.md, BRANCHING.md, SECURITY.md, TEST_PLAN.md, STATUS.md, HANDOFF.md, .gitignore.
+Issue list: https://github.com/hibi89/SOVIA_sovereign/issues
+Actual code paths currently NONE; proposed layout in ARCHITECTURE.md.
 
-## 7. Production URL, Vercel/project, commands/environment
-Production URL: NONE; Vercel project: NONE; build/run commands: NOT_APPLICABLE until code exists. Local Windows development with Python (proposed; version unpinned pending implementation). No hosting fees authorized.
+## 7. Production, Vercel, commands and environment
+Production URL NONE, Vercel project NONE, GitHub Action NONE. App build/run command NONE (not implemented). Host plans are cost hypotheses, not purchased. Proposed development: existing Windows PC, Python (pin runtime when code created), local SQLite. Never assume a deploy succeeded.
 
-## 8. Original sources, backups, credentials, do-not-modify
-New empty repo was original; README initial commit is recoverable by SHA. No customer datasets, source logs or credentials. Do not upload .env, tokens, customer prompts/documents, proprietary policy details while PUBLIC. Before changing any later customer data, take explicit backups.
+## 8. Originals, backups, credentials, no-modify areas
+Repository was empty originally. Initial README commit c8101ad0746bccbc814fc4e5b7ba5bcd0a6f5ff9 is recovery point; architecture baseline b838d3f6dddc15b0b38302e6e393be0405e6e559 also recovery point. No imported customer datasets or secrets. Repo currently PUBLIC; never push .env, customer prompts/documents, API keys or private rule details. Do not unilaterally change privacy, payments, security or production settings.
 
-## 9. Next priority, procedure, completion and approvals
-(a) Verify docs commit and branch heads/issue backlog. (b) Resolve PUBLIC vs desired Private with owner; do not change security setting unilaterally. (c) User ㄱ => create first runnable schema/fixtures/testing slice in feature/p0-audit-core; verify actual tests and record counts. (d) build read-only local audit/report before any Cloud. Paid subscriptions, data transmission, production deployment, security/permission changes require approval.
+## 9. Next actions, priorities, completion and approvals
+First: owner privacy visibility choice. For next "ㄱ" proceed safely on feature/p0-audit-core with issue #2 event schema + deterministic fixtures + executable tests. Verify actual passed/failed count, then implement issue #3 import, #4 rules, #5 demo/report, #11 QA. Update status/handoff after substantive changes. P1 completion is verified demo and executable tests, not documentation. Cloud/Private purchases or new real-data transfer require approval.
 
-## 10. Updated time, verification boundary, document-basis commit
-Updated 2026-10-25 KST, verified initial repo/README only at writing time. Baseline c8101ad0746bccbc814fc4e5b7ba5bcd0a6f5ff9. Docs batch HEAD to be verified after commit; this document does not pretend its own SHA can reference itself. No production verification.
+## 10. Last update KST, basis and scope
+2026-10-25 KST. Based on verified GitHub tree/branches/commit, successful issue creation, and no service access; main baseline b838d3f6dddc15b0b38302e6e393be0405e6e559 before this metadata commit. Re-read current main commit SHA at next session; document cannot self-cite its own commit object. Product/environment tests: NOT_RUN.

@@ -1,36 +1,37 @@
-# Delivery roadmap / low cash to enterprise evolution
-Date basis: 2026-10-25 KST; all dates are targets, not completion promises.
-Prioritize verifiable end-to-end operation over attractive mockups.
+# Delivery roadmap / zero cash to enterprise
+As of 2026-10-25 KST; estimated windows and labor are planning assumptions, not guarantees. See issues for actionable tasks and STATUS.md for actual completion.
 
-## Time-boxes and gates
-| Phase | Target window | Deliverables | Exit criteria | Cash gate |
+| Phase | Goal window | Engineering effort estimate | Deliverable / hard completion gate | Cash strategy |
 |---|---|---|---|---|
-| P0 Foundation | Oct 25-26 | Repo, policies, ADRs, specs, branches, issue backlog | Docs, owner links, commit/permissions verified | 0 KRW |
-| P1 3-day functional MVP | Oct 26-28 | Local importer, canonical model, 5 deterministic checks, CLI, HTML/PDF report, synthetic tests | Testable demo and exact pass/fail evidence | 0 KRW target |
-| P2 Sellable local Lite | Oct 29-Nov 8 | Supported real integration (n8n candidate), polished local UI, scrubbed fixtures, docs, installer, error recovery | Non-synthetic sanitized input test, security smoke checks, report accuracy | 0-50k KRW discretionary cap pending approval |
-| P3 Market validation | Nov 2-Nov 22 overlapping P2 | Free demo, technical content, remote outreach, 10-15 leads, pilot offer | Real objections, 1+ willing-to-pay customer, no unsupported claims | No ads initially |
-| P4 Cloud alpha | After paid signal, ~4-8 weeks | Tenant auth/isolation, event cap, reliable queue, alert, dashboard, billing plan | Isolation tests, replay/restore, cost limits, end-to-end live smoke | Only after funded/approved |
-| P5 Private pilot | After contracted demand, ~3-6 weeks additional | Docker/offline package, local alert, no-egress test, offline upgrade/restore | Air-gapped reproducible install, customer data kept local, support SLA scoped | Contract/funding gate |
-| P6 Productized SaaS | After retention proof, 2-4 months | Onboarding, integrations, health SLO, recurring payment, audit retention, billing, docs | Real customer operating KPIs and recovery evidence | Revenue-backed |
-| P7 Enterprise maturity | Customer-led | Hybrid relay, advanced approvals/evidence, deeper controls, external audits/certification where needed | Verified scope and expert signoff | Quote-driven |
+| P0 Setup | Oct 25 | 2-5 h | Verified repo docs, issue backlog and branches | 0 KRW |
+| P1 Functional MVP | Oct 26-28 | 18-30 h | Runnable local evidence demo, deterministic rules, HTML/PDF, tests | 0 KRW target |
+| P2 Sellable Audit Lite | Oct 29-Nov 08 | 25-60 h | Supported sanitized real-format adapter, UI/install, privacy and recovery checks | 0-50k KRW optional with approval |
+| P3 Market validation (overlap) | Nov 02-22 | 10-30 h sales/testing | 10-15 interviews/outreach, verified willingness to pay, one paid pilot goal | No paid ads |
+| P4 Cloud Alpha | After paid proof, 4-8 weeks estimated | 100-220 h | Multi-tenant isolated real service, verified login/API/backup/alerts/budget/real deployment | Only revenue+approval |
+| P5 Private Pilot | After signed need, 3-6 weeks estimated | 70-160 h | Offline customer-controlled install, no-egress tests, local alerts and upgrade/restore | Customer-funded/approval |
+| P6 SaaS scale | Retention-dependent, 2-4 months | 100-250 h | Self-service onboarding/billing, operational SLO, runbooks, integrations | Revenue-funded |
+| P7 Enterprise Hybrid | Demand-dependent | TBD by contract | Verified evidence chain, optional hybrid, independent controls mapping | Quote and signoff |
 
-Dates after P3 deliberately conditional; no blanket deadline for an unvalidated B2B platform. Overlap research with building, but do not skip security minimums for external customer data.
+Caution: P4-P7 depend on evidence and may change radically; no unconditional full-company delivery deadline. Three-day MVP is a prototype, not a certified security product.
 
-## Stage-by-stage work breakdown
-P0: verify GitHub visibility/branch/auth -> create docs/branches -> make work issues -> establish handoff.
-P1: schema+fixtures -> importer -> five policy rules -> evidence+report -> CLI -> deterministic tests -> demo acceptance.
-P2: first supported agent integration -> local UI -> install/export/delete -> safety testing -> pricing demo package.
-P3: target agency/SMB interviews -> free local demo -> paid scope statement -> measure conversion and hours of work -> decide GO/PIVOT.
-P4: multi-tenant auth/RBAC/RLS -> queues -> budget quotas -> alert delivery -> backups -> real deployment smoke -> terms/billing.
-P5: offline packaging -> no outbound network tests -> customer-owned backups -> licensing and updates -> restricted hardware matrix.
-P6: self-service setup, billing lifecycle, retention, monitoring, cost optimization, customer support playbook.
-P7: integrations driven by contracts; do not claim regulatory certification without external verification.
+## Critical path
+P0 -> P1 event schema (#2) -> safe ingest (#3) -> evidence rules (#4) -> report/demo (#5) -> security/QA (#11).
+P2 commercial install/UI/connector (#6) follows working P1; P3 online GTM (#7) can overlap. P4 (#8) and P5 (#9) are alternative monetization deployments of the *same* core; P6/7 (#10) follow retention and contract proof.
 
-## Status standard
-Planned != implemented. Mark DONE only after commit + exact test evidence. GitHub push != deployed. Deployed != production function verified. Public-facing production is NOT_APPLICABLE until configured. Always document blocked dependencies and approval gates.
+## Spending gates and pivots
+1. Do not buy hosting, domain, ads or external LLM for P1.
+2. MVP built/tested locally using synthetic input; do not send customer raw documents anywhere.
+3. No real client ingestion without contract, explicit data path, legal/privacy/security minimums.
+4. Paid Cloud only after actual paying signal and owner-approved monthly spend cap.
+5. Private support and NAS compatibility only for verified contract-backed environments.
+6. At 10+ prospects without a paying signal, review offer/target and consider pivot before funding more development.
 
-## Key performance gates
-- Local: measurable precision/false-positive rate against a labeled synthetic+authorized sanitized fixture set.
-- Commercial pilot: at least one actual customer willing to pay; service time and support burden logged.
-- SaaS: tenant isolation proof, safe deletion, a restored backup, alert success/failure replay, customer monthly spend limit and billing correctness.
-- Private: offline-first install and no-egress verification; not every NAS model supported by default.
+## Product release definition
+- P1: runnable demonstrator, exact test commands and pass/fail numbers.
+- P2: packaged repeatable real supported input path, report limitations, confidentiality handling, recovery test.
+- Cloud: monitored production, tenancy tests, backup restored, alert delivery and billing check, live URL/HTTP/UI/API/console inspection, GitHub SHA matching deployment.
+- Private: customer-hosted air-gapped runtime, no-egress proof, reproducible restore/update, supported platform list.
+- "Done" is never inferred from plan, Git commit, CI green or cloud Ready status alone.
+
+## Working branch and operator discipline
+main baseline, develop integration, feature/p0-audit-core next development branch; on-demand feature branches for future phases. Next chat "ㄱ" resumes using HANDOFF -> STATUS -> AGENTS -> REQUIREMENTS -> code.
