@@ -34,9 +34,19 @@ jobs:
         run: python portable_smoke.py
       - name: Verify extracted v0.11 P2 candidate end-to-end (isolated Python)
         run: python portable_smoke_p2.py
-      - name: Windows Edge real local-file DOM smoke (extracted P2 synthetic ZIP)
+      - name: Windows Edge real local-file DOM and screenshot smoke (extracted P2 synthetic ZIP)
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
-        run: python -I -B windows_edge_local_smoke.py
+        run: |
+          python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
+          python -I -B windows_edge_local_smoke.py --screenshot-dir dist/browser-qa
+      - name: Publish synthetic Edge screenshots for visual review (NOT acceptance)
+        if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovia-p2-synthetic-edge-visuals
+          path: dist/browser-qa/*.png
+          if-no-files-found: error
+          retention-days: 7
       - name: Build distinct downloadable v0.11 P2 candidate
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: |
