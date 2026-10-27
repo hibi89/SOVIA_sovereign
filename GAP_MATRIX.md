@@ -1,3 +1,13 @@
+## CURRENT P2 — watermarked actual-engine synthetic sales sample generator (2026-10-27 KST)
+
+[PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged `develop` SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`. Fixed-fabricated-input-only `sovia_demo_pack.py` calls real five-rule audit engine and writes an UNUSED local folder containing visible+print SAMPLE HTML (offline CSP), explicitly wrapped synthetic JSON, buyer scope notes and unsigned SHA-256/byte-count manifest. `tests/test_demo_pack.py` 29 synthetic safety/regression tests, `SALES_SYNTHETIC_SAMPLE.md`. No actual screenshots, public listing, client data or external API. Unchanged 12-file v0.10 portable ZIP and main docs-only.
+
+[Actions 40472609343](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40472609343) tested SHA `667a54319a3a6a36f01417ac29ff826745ddf7c4`: 4/4 success Windows/Ubuntu Python 3.11/3.13, 599 tests discovered/job, 0 FAIL, old portable smoke PASS. First CI run `40472528662` found 1 mistaken test import of portable allowlist, corrected in test and full rerun green. Post-doc final HEAD CI to confirm.
+
+**Gaps:** Owner must actually run/view the sample and capture honest screenshots, verify Windows/browser/Defender/Korean PDF, independent real installed n8n/source data/consent and privacy false-negative, legal retention/backup/support, version and signed commercial release. Generator provides an **unpublished synthetic draft**, not a completed published sales portfolio. Next safe unit: quantify supported synthetic volume/resource timebox and define narrow honest customer scope.
+
+---
+
 ## CURRENT P2 — source-only owner synthetic HTML/PDF static preflight (2026-10-27 KST)
 
 [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged `develop` SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. Added `sovia_owner_artifact_preflight.py`, 35 `tests/test_owner_artifact_preflight.py`, `OWNER_ARTIFACT_STATIC_PREFLIGHT.md` for distinct read-only post-selfcheck static artifact check: selfcheck v0.10 synthetic contract, output JSON 3 events/5 findings/five rules, audit HTML text and report ID, dashboard 1/3/5 counters and CSP, conservative active HTML/resources/CSS screening, optional PDF %PDF-/%%EOF only. Symlink/size inputs rejected; no writes/network. Result **manual pending**, not real Windows/browser/Defender/SmartScreen/Korean PDF visual or security proof. Owner checklist and earlier read-only evidence checker remain separate and unchanged.

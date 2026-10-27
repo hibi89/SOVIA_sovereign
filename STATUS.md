@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 owner-review synthetic SAMPLE generator
+
+- **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC; source `develop`, default `main` docs-only. [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`; no public sales listing, production, Vercel, signed release.
+- **New:** `sovia_demo_pack.py` + 29 `tests/test_demo_pack.py` + `SALES_SYNTHETIC_SAMPLE.md`. Source-only Python offline generator accepts **only exact fixed fabricated** `examples/demo_five_rules.json`, runs actual existing SOVIA 5-rule engine to produce 3 events/5 findings, wraps HTML with visible+print SAMPLE warning and offline CSP, wraps JSON with no-customer/no-release flags, adds explicit scope.md and unsigned SHA-256 file manifest. Creates only NEW unused folder, no input swap/overwrites/network, no screenshots and no listing. Old 12-file ZIP, existing audit/owner checker and main unchanged.
+- **CI:** [Actions 40472609343](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40472609343) feature SHA `667a54319a3a6a36f01417ac29ff826745ddf7c4` **4/4 SUCCESS** Windows/Ubuntu Python 3.11/3.13; 599 tests discovered each, Windows 589 pass/10 optional skip, Ubuntu 588 pass/11 skip, zero failed. Prior 12-file synthetic portable smoke PASS 4 jobs with unchanged SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. First run `40472528662` had 1 test import error (wrong module for FILES) corrected and full retest green. Post-doc HEAD CI to verify.
+- **Open:** Actual verified app screenshots and owner Windows/browser/Korean PDF/Defender acceptance, real installed n8n integration and source approval, independent privacy/retention false negatives, authenticated provenance, support and commercial/release signoff. Sample generator **available** but outputs not posted/published; a synthetic sample is not a verified customer case.
+- **Next ㄱ:** inspect latest HEAD, documentation and feature coverage. Select **new** P2 measurable bottleneck (e.g. bounded performance/volume benchmark and explicit customer scope) without repeating previously merged PRs #16–#31. Real release/deploy/customer data/access/payments require owner's explicit approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 owner synthetic artifact static preflight
 
 - **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC, `develop` active code, `main` docs-only; [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. Production/Vercel/release/commercial listing NONE.

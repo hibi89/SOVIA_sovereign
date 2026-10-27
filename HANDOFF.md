@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 reproducible synthetic SAMPLE sales pack (10 sections)
+
+## 1. Mission / scope / stack
+SOVIA offline-first retrospective AI-agent audit: stdlib Python 3.11+, deterministic five-risk-rule engine, synthetic JSON/CSV, Korean HTML/optional PDF, SQLite and local static dashboard. Old 12-file v0.10 portable beta unchanged. Product is NOT production/customer-ready; this P2 unit produces an explicitly watermarked **fabricated-data sample** suitable for owner review of sales collateral, not a customer case, actual screenshot or published listing.
+
+## 2. Implemented solution / key trade-off
+`LISTING_PREP.md` had an unfilled synthetic sample marketing artifact. Existing audit engine produced real findings, but no clearly labeled reproducible customer-facing SAMPLE pack. Chose to reuse audited `sovia_audit.evaluate()/render_html()` on an **exactly locked three-event fabricated fixture**, instead of generated/fake screenshots or editing the core/portable. Added `sovia_demo_pack.py` and `SALES_SYNTHETIC_SAMPLE.md`: create new unused local folder with 4 files: `SOVIA_SAMPLE_REPORT.html` (prominent visible+print SAMPLE banner, offline CSP), `SOVIA_SAMPLE_REPORT.json` (actual engine output with synthetic wrapper), `SOVIA_SAMPLE_SCOPE.md` (feature/unverified limits), `SOVIA_SAMPLE_MANIFEST.json` (unsigned SHA-256/bytes for three files, not an identity/signature). No arbitrary input accepted, no network, no customer data, no overwrite; no actual screenshots or sales listing.
+
+## 3. Tests / evidence / boundaries
+[PR #31 feature Actions 40472609343](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40472609343) tested SHA `667a54319a3a6a36f01417ac29ff826745ddf7c4`: Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**; each `python -m unittest discover -s tests -v` 599 tests discovered, Windows 589 pass /10 PDF optional skip, Ubuntu 588 pass /11 skip, 0 fail. Unchanged 12-file v0.10 clean ZIP synthetic 3 events/5 findings/SQLite/dashboard/backup restore/owner self-check PASS all 4. Full screenshots/browser/physical owner PC/Defender/Korean PDF visual/real n8n/customer permission/release not verified. Post-document HEAD CI requires fresh verification.
+
+## 4. Done / pending / stop boundary
+DONE source-only generator, 29 focused synthetic tests, strict fixture validation/real engine outputs, sample watermark and manifest, docs, [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged. PENDING actually executing/reviewing generated sample on owner's PC, real screenshots for listing, verified customer-supported n8n/version, lawful consent, privacy false-negatives, independent Windows acceptance, backup/retention/support and signed commercial release approval. Source-only code does not equate to marketing materials published, actual report screenshot or supported product delivery.
+
+## 5. Failure and correction / remaining risks
+First PR CI run `40472528662` found **one test import error**, test accidentally imported portable allowlist `FILES` from `build_portable` instead of authoritative `verify_portable.FILES`. Corrected only test reference. Repeat full run `40472609343` 4/4 success. No core failure. SHA manifest is unsigned, anyone could regenerate; watermark is visible/print HTML banner, not tamper-proof. Exact fixture comparison protects against accidental substitutions and extra private fields, but cannot secure a compromised source checkout. Outputs are real engine-generated synthetic examples, not an independent customer case or security guarantee.
+
+## 6. Repository/branches/SHAs/paths
+PUBLIC repository `hibi89/SOVIA_sovereign`, code `develop`, default `main` docs-only. [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) tested feature branch `feature/p2-synthetic-sales-sample-pack` HEAD `667a54319a3a6a36f01417ac29ff826745ddf7c4`, merge SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`. New `sovia_demo_pack.py`, `tests/test_demo_pack.py`, `SALES_SYNTHETIC_SAMPLE.md`. Docs `HANDOFF.md`, `STATUS.md`, `RESUME.md`, `GAP_MATRIX.md` and `LISTING_PREP.md` updated; refresh latest final SHA.
+
+## 7. Runtime/cost/deployment
+`python -I -B sovia_demo_pack.py --synthetic-only --output-dir NEW_UNUSED_LOCAL_FOLDER` on trusted develop source; Python stdlib only and no required payments/API. Four files generated with no network or user file overwrite. Outputs are local; no public site, listing, deployment, GitHub Release, signer or production URL. Existing 12-file beta portable ZIP intentionally remains byte-identical SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b` and EXCLUDES P2 generator.
+
+## 8. Originals/privacy/backups/permissions
+Only exact `examples/demo_five_rules.json` fabricated metadata are used: `demo-agent`, `*.example`, `synthetic:*`. No live n8n, customer data, credentials, prompts, API, upload or system registration. User files/DB/backup untouched, no force push, branch permission/visibility changes or production. Manual owners must not upload real customer inputs, Windows paths/screenshots or private fonts to the PUBLIC repo.
+
+## 9. Next priorities / owner approval
+Next `ㄱ`: verify current develop SHA, Actions, docs. Choose distinct P2 sellable gap such as **supported input volume/resource benchmarking** or customer-facing scope/limits contract, not reimplement PRs #16–#31. The owner must review genuine generated sample/report and take actual screenshots if listing; owner action required for real hardware, AV, Korean PDF manual acceptance and for all real data, API, access, payment, sale, signed release or deployment. Avoid any claim that 599 unit tests confer legal/production readiness.
+
+## 10. Time/evidence cutoff
+2026-10-27 KST; verified feature `667a54319a3a6a36f01417ac29ff826745ddf7c4`, 4/4 successful run `40472609343`, PR merge `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`. Final docs HEAD and CI should be verified after docs commit. Browser/manual/customer/privacy/commercial readiness remain UNKNOWN/NOT DONE.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 owner synthetic output static preflight (10 sections)
 
 ## 1. Mission, scope and frozen requirements

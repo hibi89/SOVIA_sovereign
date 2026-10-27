@@ -1,3 +1,11 @@
+## 2026-10-27 P2 update — reproducible synthetic SAMPLE pack source (NOT published)
+
+[PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) adds **source-only** `sovia_demo_pack.py` with full test coverage; see `SALES_SYNTHETIC_SAMPLE.md`. It runs the existing deterministic SOVIA engine on one **locked fabricated 3-event/5-finding fixture**, then writes to a new local folder: visibly/print-watermarked SAMPLE HTML, explicitly labeled JSON, honest buyer-facing scope, and unsigned checksums. It does **not** fabricate screenshots, demonstrate actual owner Windows/browser rendering, authorize customer logs, publish a marketplace listing, claim a signed release or replace original v0.10 ZIP. A working generator meets the code prerequisite, **not** the checklist's owner-reviewed/publication tasks.
+
+[PR CI 40472609343](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40472609343) full Windows/Ubuntu × Python 3.11/3.13 4/4 SUCCESS, 599 tests/job, 0 FAIL; old portable ZIP unchanged. Local owner review of actual sample and real app screenshots remain pending. Pricing `199,000 KRW` remains purely a hypothesis, not a quote, supported volume/delivery commitment or released offer.
+
+---
+
 # SOVIA Audit Lite — product listing preparation (DRAFT, not published)
 Date: 2026-10-26 KST
 A draft for online listing on Krmong, a product site, technical blog or B2B outreach. No commercial claims until feature tests and legal readiness confirm them.
