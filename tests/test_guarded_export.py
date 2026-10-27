@@ -116,7 +116,7 @@ class GuardedExportTests(unittest.TestCase):
         self.assertFalse(result["commercial_quota_or_sla_approved"])
 
     def test_insufficient_free_space_rejected_without_staging(self):
-        with mock.patch.object(guard.shutil, "disk_usage", return_value=(1000, 1000, 0)):
+        with mock.patch.object(guard.shutil, "disk_usage", return_value=mock.Mock(free=0)):
             with self.assertRaisesRegex(
                     guard.GuardedExportError, "^INSUFFICIENT_FREE_SPACE_PREFLIGHT$"):
                 self.execute()
@@ -219,7 +219,7 @@ class GuardedExportTests(unittest.TestCase):
         parent = self.folder
         small = [(parent / "a.html", b"x" * 30), (parent / "b.json", b"y" * 40)]
         with mock.patch.object(guard.shutil, "disk_usage",
-                               return_value=(1000000, 900000, 2 * guard.FREE_SPACE_RESERVE_PER_FILE + 69)) as storage:
+                               return_value=mock.Mock(free=2 * guard.FREE_SPACE_RESERVE_PER_FILE + 69)) as storage:
             with self.assertRaisesRegex(guard.GuardedExportError, "^INSUFFICIENT_FREE_SPACE_PREFLIGHT$"):
                 guard._check_storage(small)
             self.assertEqual(storage.call_count, 1)
