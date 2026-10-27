@@ -194,5 +194,73 @@ class HistoryV012Tests(unittest.TestCase):
 
 
 
+    def test_lookalike_v2_table_without_primary_key_and_unique_refused(self):
+        forged = self.root / "lookalike.sqlite3"
+        # These column names and user_version match the real v2 history,
+        # and PRAGMA quick_check says "ok", but constraints are absent.
+        with closing(sqlite3.connect(forged)) as db:
+            db.execute("""CREATE TABLE reports (
+                report_uid TEXT,
+                source_report_id TEXT,
+                engine_version TEXT,
+                source_digest TEXT,
+                findings_digest TEXT,
+                event_count INTEGER,
+                finding_count INTEGER,
+                imported_utc TEXT)""")
+            db.execute("PRAGMA user_version=2")
+            db.commit()
+            self.assertEqual("ok", db.execute("PRAGMA quick_check").fetchone()[0])
+            self.assertEqual(h.COLUMNS, tuple(
+                row[1] for row in db.execute("PRAGMA table_info(reports)")
+            ))
+        with self.assertRaisesRegex(
+            h.HistoryV012Error, "INVALID_HISTORY_SCHEMA_OR_INTEGRITY"
+        ):
+            h.status(forged)
+        with self.assertRaisesRegex(
+            h.HistoryV012Error, "INVALID_HISTORY_SCHEMA_OR_INTEGRITY"
+        ):
+            h.import_synthetic(forged, SAMPLE)
+        with closing(sqlite3.connect(forged)) as db:
+            self.assertEqual(0, db.execute("SELECT COUNT(*) FROM reports").fetchone()[0])
+
+    def test_added_trigger_to_valid_v2_history_refused_without_changes(self):
+        h.import_synthetic(self.db, SAMPLE)
+        with closing(sqlite3.connect(self.db)) as db:
+            db.execute("""CREATE TRIGGER corrupt_on_insert AFTER INSERT ON reports
+                          BEGIN UPDATE reports SET finding_count=finding_count+1;
+                          END""")
+            db.commit()
+            self.assertEqual("ok", db.execute("PRAGMA quick_check").fetchone()[0])
+            original_row = db.execute(
+                "SELECT report_uid, event_count, finding_count FROM reports"
+            ).fetchone()
+        for operation in (
+            lambda: h.status(self.db),
+            lambda: h.import_synthetic(self.db, SAMPLE),
+            lambda: h.backup(self.db, self.root / "refused-backup.sqlite3"),
+        ):
+            with self.assertRaisesRegex(
+                h.HistoryV012Error, "INVALID_HISTORY_SCHEMA_OR_INTEGRITY"
+            ):
+                operation()
+        self.assertFalse((self.root / "refused-backup.sqlite3").exists())
+        with closing(sqlite3.connect(self.db)) as db:
+            self.assertEqual(original_row, db.execute(
+                "SELECT report_uid, event_count, finding_count FROM reports"
+            ).fetchone())
+
+    def test_added_nontrigger_index_to_valid_v2_history_refused(self):
+        h.import_synthetic(self.db, SAMPLE)
+        with closing(sqlite3.connect(self.db)) as db:
+            db.execute("CREATE INDEX unsolicited_lookup ON reports(event_count)")
+            db.commit()
+        with self.assertRaisesRegex(
+            h.HistoryV012Error, "INVALID_HISTORY_SCHEMA_OR_INTEGRITY"
+        ):
+            h.status(self.db)
+
+
 if __name__=="__main__":
     unittest.main()

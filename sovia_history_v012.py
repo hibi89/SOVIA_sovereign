@@ -21,6 +21,19 @@ ENGINE_VERSION = "0.12.0-preview"
 COLUMNS = ("report_uid", "source_report_id", "engine_version",
            "source_digest", "findings_digest", "event_count",
            "finding_count", "imported_utc")
+# The local beta owns a single fixed table DDL. Column names alone do not
+# establish PRIMARY KEY / UNIQUE constraints or exclude hidden SQL triggers.
+# Only databases created by this exact schema are supported, no auto-migration.
+REPORTS_DDL = """CREATE TABLE reports (
+                report_uid TEXT PRIMARY KEY,
+                source_report_id TEXT NOT NULL,
+                engine_version TEXT NOT NULL,
+                source_digest TEXT NOT NULL,
+                findings_digest TEXT NOT NULL,
+                event_count INTEGER NOT NULL,
+                finding_count INTEGER NOT NULL,
+                imported_utc TEXT NOT NULL,
+                UNIQUE(engine_version, source_digest))"""
 
 
 class HistoryV012Error(ValueError):
@@ -78,20 +91,20 @@ def _schema(db, create=False):
         "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
     if version == 0 and not found and create:
         with db:
-            db.execute("""CREATE TABLE reports (
-                report_uid TEXT PRIMARY KEY,
-                source_report_id TEXT NOT NULL,
-                engine_version TEXT NOT NULL,
-                source_digest TEXT NOT NULL,
-                findings_digest TEXT NOT NULL,
-                event_count INTEGER NOT NULL,
-                finding_count INTEGER NOT NULL,
-                imported_utc TEXT NOT NULL,
-                UNIQUE(engine_version, source_digest))""")
+            db.execute(REPORTS_DDL)
             db.execute("PRAGMA user_version=2")
         version, found = 2, {"reports"}
     if version != SCHEMA_VERSION or found != {"reports"}:
         raise HistoryV012Error("INCOMPATIBLE_HISTORY_SCHEMA")
+    # SQLite quick_check detects low-level corruption, not altered constraints
+    # or extra triggers/views/indexes. Refuse lookalike v2 tables and any user
+    # defined schema object outside the one exact, supported reports table.
+    objects = list(db.execute(
+        "SELECT type, name, tbl_name, sql FROM sqlite_master "
+        "WHERE name NOT LIKE 'sqlite_%'"
+    ))
+    if objects != [("table", "reports", "reports", REPORTS_DDL)]:
+        raise HistoryV012Error("INVALID_HISTORY_SCHEMA_OR_INTEGRITY")
     columns = tuple(row[1] for row in db.execute("PRAGMA table_info(reports)"))
     if columns != COLUMNS or db.execute("PRAGMA quick_check").fetchone()[0] != "ok":
         raise HistoryV012Error("INVALID_HISTORY_SCHEMA_OR_INTEGRITY")
