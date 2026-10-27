@@ -132,7 +132,9 @@ def _validate_review(doc, pdf_status):
 def assess(automated, manual):
     pdf = _validate_selfcheck(automated)
     review = _validate_review(manual, pdf)
-    if any(review[k] == "FAIL" for k in REQUIRED_MANUAL_CHECKS):
+    if (any(review[k] == "FAIL" for k in REQUIRED_MANUAL_CHECKS) or
+            review["korean_pdf_visual"] == "FAIL" or
+            pdf == "FAILED_OPTIONAL_PDF"):
         state = "MANUAL_REVIEW_BLOCKED"
     elif any(review[k] == "NOT_CHECKED" for k in REQUIRED_MANUAL_CHECKS):
         state = "MANUAL_REVIEW_PENDING"
