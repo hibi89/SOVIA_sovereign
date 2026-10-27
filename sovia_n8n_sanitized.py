@@ -5,6 +5,8 @@ NOT an n8n API client or a parser for raw n8n execution exports.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
 from importlib.util import module_from_spec, spec_from_file_location
 import json
 import os
@@ -112,12 +114,68 @@ def convert(document, policy_document):
     return canonical
 
 
-def convert_paths(source, policy_path, output):
+ATTESTATION_KEYS = frozenset({
+    "schema_version", "scope", "source_sha256", "policy_sha256",
+    "source_authorized", "fields_reviewed", "retention_plan_documented",
+    "expires_utc",
+})
+
+
+def canonical_sha256(document):
+    """Hash the exact already-parsed content used in the subsequent conversion."""
+    try:
+        data = json.dumps(
+            document, sort_keys=True, ensure_ascii=False,
+            separators=(",", ":"), allow_nan=False,
+        ).encode("utf-8")
+    except (TypeError, ValueError, RecursionError, OverflowError) as exc:
+        raise ContractError("UNHASHABLE_DOCUMENT") from exc
+    return hashlib.sha256(data).hexdigest()
+
+
+def verify_operator_attestation(attestation, source_document, policy_document, *, now=None):
+    """Verify operator *claims* and document binding; not genuine legal authorization."""
+    if type(attestation) is not dict or set(attestation) != ATTESTATION_KEYS:
+        raise ContractError("INVALID_ATTESTATION_FIELDS")
+    if (attestation["schema_version"] != "1.0" or
+            attestation["scope"] != "locally_reviewed_metadata"):
+        raise ContractError("INVALID_ATTESTATION_SCOPE")
+    for field in ("source_authorized", "fields_reviewed", "retention_plan_documented"):
+        if attestation[field] is not True:
+            raise ContractError("MISSING_OPERATOR_ACKNOWLEDGEMENT")
+    for field, document in (("source_sha256", source_document),
+                            ("policy_sha256", policy_document)):
+        digest = attestation[field]
+        if (type(digest) is not str or
+                re.fullmatch(r"[a-f0-9]{64}", digest) is None or
+                not hashlib.compare_digest(digest, canonical_sha256(document))):
+            raise ContractError("ATTESTATION_DIGEST_MISMATCH")
+    expires = attestation["expires_utc"]
+    if (type(expires) is not str or
+            re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", expires) is None):
+        raise ContractError("INVALID_ATTESTATION_EXPIRY")
+    try:
+        until = datetime.fromisoformat(expires.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ContractError("INVALID_ATTESTATION_EXPIRY") from exc
+    instant = datetime.now(timezone.utc) if now is None else now
+    if (not isinstance(instant, datetime) or instant.tzinfo is None or
+            until <= instant.astimezone(timezone.utc)):
+        raise ContractError("ATTESTATION_EXPIRED")
+    return "OPERATOR_CLAIMS_PRESENT_NOT_INDEPENDENTLY_VERIFIED"
+
+
+def convert_paths(source, policy_path, output, *, mode="synthetic", attestation_path=None):
     """Read only explicitly supplied files; publish one NEW output atomically."""
     audit = _audit()
     src, pol = Path(source).resolve(), Path(policy_path).resolve()
     target = Path(os.path.abspath(output))
-    if target.resolve() in (src, pol):
+    if mode not in ("synthetic", "approved-local"):
+        raise ContractError("INVALID_MODE")
+    if (mode == "approved-local") != (attestation_path is not None):
+        raise ContractError("ATTESTATION_REQUIRED_ONLY_FOR_APPROVED_LOCAL")
+    attest = Path(attestation_path).resolve() if attestation_path is not None else None
+    if target.resolve() in tuple(p for p in (src, pol, attest) if p is not None):
         raise ContractError("OUTPUT_ALIASES_INPUT")
     if not target.parent.is_dir():
         raise ContractError("OUTPUT_DIRECTORY_MISSING")
@@ -125,9 +183,12 @@ def convert_paths(source, policy_path, output):
         doc = audit.read_document(src)
         policy_doc = audit.read_document(pol)
         canonical = convert(doc, policy_doc)
+        if attest is not None:
+            manifest = audit.read_document(attest)
+            verify_operator_attestation(manifest, doc, policy_doc)
         payload = json.dumps(canonical, ensure_ascii=False, indent=2)
         audit.write_reports_atomically([(target, payload)])
-    except (ValueError, OSError, TypeError, OverflowError) as exc:
+    except (ValueError, OSError, TypeError, OverflowError, RecursionError) as exc:
         if isinstance(exc, ContractError):
             raise
         raise ContractError("INPUT_OR_OUTPUT_REJECTED") from exc
@@ -139,14 +200,22 @@ def main(argv=None):
     p.add_argument("--input", required=True)
     p.add_argument("--policy", required=True)
     p.add_argument("--output", required=True, help="NEW unused local JSON file")
+    p.add_argument("--mode", choices=("synthetic", "approved-local"), default="synthetic",
+                   help="Default synthetic only; approved-local requires operator attestation")
+    p.add_argument("--attestation", help="Local operator-claim manifest (approved-local only)")
     args = p.parse_args(argv)
     try:
-        count = convert_paths(args.input, args.policy, args.output)
+        count = convert_paths(args.input, args.policy, args.output,
+                              mode=args.mode, attestation_path=args.attestation)
     except ContractError as exc:
         print(json.dumps({"status": "REJECTED", "error_code": str(exc)}), file=sys.stderr)
         return 2
-    print(json.dumps({"status": "CONVERTED_SYNTHETIC_CONTRACT_ONLY",
-                      "events": count, "independent_evidence_verified": False}))
+    print(json.dumps({
+        "status": ("CONVERTED_SYNTHETIC_CONTRACT_ONLY" if args.mode == "synthetic"
+                   else "CONVERTED_WITH_UNVERIFIED_OPERATOR_CLAIMS"),
+        "events": count, "independent_evidence_verified": False,
+        "authorization_independently_verified": False,
+    }))
     return 0
 
 
