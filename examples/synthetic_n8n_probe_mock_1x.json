@@ -1,0 +1,14 @@
+{
+  "schema_version": "sovia.n8n_compatibility_probe.v1",
+  "synthetic_only": true,
+  "source_profile": "mock_n8n_workflow_export",
+  "claimed_n8n_version": "1.0.0",
+  "field_keys": [
+    "name",
+    "nodes",
+    "connections",
+    "settings",
+    "active",
+    "id"
+  ]
+}
