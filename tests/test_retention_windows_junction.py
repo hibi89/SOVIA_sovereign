@@ -93,5 +93,24 @@ class WindowsJunctionIntegrationTests(unittest.TestCase):
         self.assertNotIn("private.html", json.dumps(summary))
 
 
+
+class AncestorSymlinkCrossPlatformTests(unittest.TestCase):
+    def test_ancestor_symlink_refused_before_scanning(self):
+        with tempfile.TemporaryDirectory(prefix="sovia-path-ancestor-") as tmp:
+            root = Path(tmp)
+            external = root / "external"
+            external.mkdir()
+            (external / "child").mkdir()
+            selected = root / "selected"
+            selected.mkdir()
+            link = selected / "redirect"
+            try:
+                link.symlink_to(external, target_is_directory=True)
+            except (NotImplementedError, OSError):
+                self.skipTest("Creating a directory symlink needs elevated Windows privileges")
+            with self.assertRaisesRegex(InventoryError, "INVALID_ROOT"):
+                inventory(link / "child")
+
+
 if __name__ == "__main__":
     unittest.main()
