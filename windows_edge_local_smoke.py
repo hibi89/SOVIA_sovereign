@@ -12,9 +12,25 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from importlib.util import module_from_spec, spec_from_file_location
 
-from build_portable_p2 import DEFAULT_NAME, build
-from verify_portable_p2 import extract_verified, verify_directory
+
+def _adjacent(filename, alias):
+    # -I excludes the script directory from ordinary import lookup; only
+    # load explicit trusted local files, as the packaged builder itself does.
+    source = Path(__file__).resolve().with_name(filename)
+    spec = spec_from_file_location(alias, source)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("LOCAL_SMOKE_HELPER_MISSING")
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_builder = _adjacent("build_portable_p2.py", "_sovia_edge_builder")
+_verifier = _adjacent("verify_portable_p2.py", "_sovia_edge_verifier")
+DEFAULT_NAME, build = _builder.DEFAULT_NAME, _builder.build
+extract_verified, verify_directory = _verifier.extract_verified, _verifier.verify_directory
 
 
 class EdgeSmokeError(RuntimeError):
