@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import hmac
 from importlib.util import module_from_spec, spec_from_file_location
 import json
 import os
@@ -148,7 +149,7 @@ def verify_operator_attestation(attestation, source_document, policy_document, *
         digest = attestation[field]
         if (type(digest) is not str or
                 re.fullmatch(r"[a-f0-9]{64}", digest) is None or
-                not hashlib.compare_digest(digest, canonical_sha256(document))):
+                not hmac.compare_digest(digest, canonical_sha256(document))):
             raise ContractError("ATTESTATION_DIGEST_MISMATCH")
     expires = attestation["expires_utc"]
     if (type(expires) is not str or
