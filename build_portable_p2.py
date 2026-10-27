@@ -15,7 +15,15 @@ import sys
 import tempfile
 import zipfile
 
-import verify_portable_p2 as verify
+from importlib.util import module_from_spec, spec_from_file_location
+
+# Python -I intentionally omits the script directory from import lookup.
+# Load only our adjacent explicit P2 verifier, even in isolated mode.
+_spec = spec_from_file_location("_sovia_bundle_p2_verifier", Path(__file__).resolve().with_name("verify_portable_p2.py"))
+if _spec is None or _spec.loader is None:
+    raise RuntimeError("LOCAL_P2_VERIFIER_UNAVAILABLE")
+verify = module_from_spec(_spec)
+_spec.loader.exec_module(verify)
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_NAME = "SOVIA-Audit-Lite-0.11.0-beta.zip"
