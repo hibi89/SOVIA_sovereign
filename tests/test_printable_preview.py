@@ -78,6 +78,31 @@ class PrintablePreviewTests(unittest.TestCase):
         self.assertNotIn("http://", page)
         self.assertNotIn("https://", page)
 
+    def test_fractional_seconds_timeline_is_chronological(self):
+        report = dict(self.report)
+        report["events"] = [dict(event) for event in self.report["events"]]
+        report["events"][0]["occurred_at_utc"] = "2026-10-25T15:01:00Z"
+        report["events"][1]["occurred_at_utc"] = "2026-10-25T15:01:00.500000Z"
+        report["events"][2]["occurred_at_utc"] = "2026-10-25T15:01:01Z"
+        before = json.dumps(report, sort_keys=True)
+        page = render(report)
+        first = page.index('<td data-label="일시 (UTC)">2026-10-25T15:01:00Z</td>')
+        second = page.index('<td data-label="일시 (UTC)">2026-10-25T15:01:00.500000Z</td>')
+        third = page.index('<td data-label="일시 (UTC)">2026-10-25T15:01:01Z</td>')
+        self.assertLess(first, second)
+        self.assertLess(second, third)
+        self.assertEqual(before, json.dumps(report, sort_keys=True))
+
+    def test_equal_timestamp_timeline_uses_event_id_order(self):
+        report = dict(self.report)
+        report["events"] = [dict(event) for event in reversed(self.report["events"])]
+        for event in report["events"]:
+            event["occurred_at_utc"] = "2026-10-25T15:01:00Z"
+        page = render(report)
+        timeline = page.split("이벤트 타임라인 (UTC)</h2>", 1)[1]
+        self.assertLess(timeline.index('>evt-001</td>'), timeline.index('>evt-002</td>'))
+        self.assertLess(timeline.index('>evt-002</td>'), timeline.index('>evt-003</td>'))
+
     def test_malicious_metadata_escaped(self):
         report = dict(self.report)
         report["events"] = [dict(event) for event in self.report["events"]]

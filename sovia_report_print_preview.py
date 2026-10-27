@@ -7,6 +7,7 @@ bound input reader, and exclusive publication writer without network or JS.
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 from html import escape
 from importlib.util import module_from_spec, spec_from_file_location
 import json
@@ -85,8 +86,16 @@ def render(report):
         copy = dict(finding)
         copy["event_ids"] = ", ".join(str(k) for k in finding["event_ids"])
         findings.append(copy)
-    events = sorted(report["events"],
-                    key=lambda event: (event["occurred_at_utc"], event["event_id"]))
+    # ISO-8601 UTC strings with and without fractions do NOT sort chronologically:
+    # "...00.500000Z" compares before "...00Z" as text.
+    # The canonical evaluator has validated/normalized all timestamp inputs.
+    events = sorted(
+        report["events"],
+        key=lambda event: (
+            datetime.fromisoformat(event["occurred_at_utc"].replace("Z", "+00:00")),
+            event["event_id"],
+        ),
+    )
     limits = "".join("<li>" + escape(_value(x), quote=True) + "</li>"
                      for x in report["coverage_limits"])
     style = (
