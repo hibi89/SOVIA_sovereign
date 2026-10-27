@@ -1,3 +1,10 @@
+## 2026-10-27 R5 A4 print *preview* verified in hosted Edge (PR #49)
+
+- **PROVEN on synthetic 3-event/5-finding case:** downloaded actual GitHub Windows Edge `--print-to-pdf`, A4 595×842 pt, 2 pages after print-only CSS compaction (was 3 with orphaned caveat), text-searchable, Korean and all sections visually intact. [PR #49](https://github.com/hibi89/SOVIA_sovereign/pull/49), [4/4 CI 40502431335](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40502431335), 2 immutable extracted ZIP smokes unchanged.
+- **NOT proven:** owner PC, physical printer, longer/foreign-language data and pagination extremes, independent PII redaction/native authorized n8n integration, contracts/retention/signature/retail release. **Source-only next v0.12 preview only; existing v0.11.2 package HTML is not upgraded.**
+
+---
+
 ## 2026-10-27 R4/R5 alternate report presentation — opt-in preview vs release
 
 **SOURCE_ONLY_SCREEN_PREVIEW_VERIFIED:** [PR #48](https://github.com/hibi89/SOVIA_sovereign/pull/48) alternative HTML renderer merged `061195323638792ed7eafc431267c73743f395ad`; 4/4 CI, 775 tests/job. Actual Edge screenshot of next printable preview independently viewed: Korean cells and old narrow-column issue substantially improved for screen. Separate A4 print-only CSS exists but **no real printer/PDF print rendering or owner physical manual check yet**. Earlier PR #42 frozen package hash break avoided; v0.10/v0.11.2 immutable, no v0.12 distributable. **Owner Windows/Defender/SmartScreen/Korean PDF, authentic authorized n8n source/version/sanitization/privacy, retention/legal/signature/commercial release remain unresolved.**

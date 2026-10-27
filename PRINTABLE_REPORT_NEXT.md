@@ -1,3 +1,11 @@
+## Actual A4 print verification — CI 2026-10-27, PR #49 MERGED
+
+One Windows Edge v155 GitHub-hosted `--print-to-pdf` run on the opt-in `v0.12.0-preview` first produced **3 pages**, a near-empty last page with caveats only. Compacting **print CSS only** then produced **2 A4 portrait pages** (594.96×841.92 PDF points). PDF was downloaded from [CI 40502431335](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40502431335), SHA256 `9c49e874abd73457a4c9dcbcef2eef6be719b6b5ea0b08aae30b16e2e5c0fd88` (illustrative, PDF timestamps affect repeat-build hashes). Independent `pdfinfo`, `pdftotext -layout` and PDF raster review confirm 5 fabricated risk findings, 3 timeline entries, Korean caveats and no observed page clipping. The previous 3-page PDF had a near-empty caveat page and is not the approved preview shape.
+
+This verified **actual PDF file rendering of one fabricated fixture**; it is NOT optional ReportLab Korean PDF, paper printer validation, an owner's Windows/hardware test, all-input/page-break certification, customer authorization, or signed product. Existing packaged v0.10/v0.11.2 reports remain unchanged. See [PR #49](https://github.com/hibi89/SOVIA_sovereign/pull/49).
+
+---
+
 ## 2026-10-27 genuine A4 browser-print validation — source-only candidate
 
 New `--print-a4-pdf` switch on existing `windows_edge_local_smoke.py` prints the opt-in **separate source-only v0.12 preview** with Windows-hosted Microsoft Edge `--print-to-pdf`; the stylesheet has `@page{size:A4 portrait;margin:13mm}` and print-only labeled cards. The optional switch requires `--next-print-preview` and `--screenshot-dir`; the output is exclusively new fabricated `synthetic-next-preview-a4.pdf` in the existing 7-day Actions artifact. Strict upper/lower file size, `%PDF-` header and `%%EOF` trailer detect empty/failed output. These checks alone do NOT verify actual A4 page dimensions or visual text legibility; the printed PDF must be downloaded, independently rasterized and inspected for page count, clipping, missing glyphs and table rows. CI must pass the Windows printer step and full Windows/Ubuntu 3.11/3.13 matrix and both portable ZIP smoke tests before merge. No customer records or output from an owner's PC.
