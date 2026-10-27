@@ -4,7 +4,7 @@
 
 ## What is included
 
-The strictly fixed 18-file payload contains the five-rule offline auditor, CSV parser, optional PDF source, SQLite history, dashboard, strict pre-sanitized n8n-like metadata converter, direct one-command audit, optional PII *pattern* filter, developer-only HTML/JSON budget exporter, aggregate diagnostic without report creation, P2 verifier, P2 synthetic owner selfcheck, Windows launcher, this guide and four **fabricated** examples. There is no raw n8n execution importer, API connector, private data, packaged PDF font or signed binary.
+The strictly fixed 18-file payload contains the five-rule offline auditor, CSV parser, optional PDF source, SQLite history, dashboard, strict pre-sanitized n8n-like metadata converter, direct one-command audit, PII *pattern* screening in both direct audit modes, developer-only HTML/JSON budget exporter, aggregate diagnostic without report creation, P2 verifier, P2 synthetic owner selfcheck, Windows launcher, this guide and four **fabricated** examples. There is no raw n8n execution importer, API connector, private data, packaged PDF font or signed binary.
 
 Python **3.11+** required (stdlib flows need no pip or internet). ReportLab plus locally licensed Korean font are required **only for optional PDF**; CI skips those scenarios without dependencies.
 
@@ -27,7 +27,7 @@ Run **`RUN_P2_SELF_CHECK.cmd`** on Windows; it chooses Python and places newly c
 py -3 -I -B owner_p2_selfcheck.py --output-dir ..\SOVIA_P2_DIAGNOSTICS
 ```
 
-The P2 selfcheck verifies pristine installed files first, runs synthetic 3-event/5-finding standard audit, direct one-command audit, zero-report-file aggregate diagnosis, SQLite history/dedup/dashboard/backup/recovery, and optional PDF where dependencies permit. It **never** marks manual browser, Korean PDF visual, Windows Defender/SmartScreen or commercial approval as PASS. Keep all results outside the verified app folder.
+The P2 selfcheck verifies pristine installed files first, runs synthetic 3-event/5-finding standard audit, direct one-command audit **with PII pattern-screening evidence**, zero-report-file aggregate diagnosis, SQLite history/dedup/dashboard/backup/recovery, and optional PDF where dependencies permit. It **never** marks manual browser, Korean PDF visual, Windows Defender/SmartScreen or commercial approval as PASS. Keep all results outside the verified app folder.
 
 Manually run direct sanitized synthetic audit (choose fresh output paths *outside* install):
 
