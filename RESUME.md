@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #35 guarded local export source tool
+
+Repo PUBLIC hibi89/SOVIA_sovereign. develop active, main docs-only. [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) merged 9d27e3468eb555ed72dfd2229cf414fbe674ebf1: added opt-in sovia_guarded_export.py, 23 synthetic tests and GUARDED_LOCAL_EXPORT.md. Existing audit CLI/source core/v0.10 unsigned 12-file ZIP unchanged by PR #35. New script runs actual audit JSON->HTML+indented JSON with explicit local TEST budget (1/2/4 MiB per output), best-effort grouped disk free-space check and existing staged no-clobber writer/rollback. No external calls, client data, release, production or sold quota.
+
+[PR CI 40478010428](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478010428) feature 10d910ac4ed664cc241abe5ba9e7f6e0d670a73e: Windows/Ubuntu x Python 3.11/3.13 **4/4 SUCCESS**, 671 tests each, 0 fails, old extracted portable beta smoke PASS. First CI mocked shutil.disk_usage as a tuple, produced 2 test errors, corrected mocks with .free and full rerun passed. Docs HEAD CI to verify. Real Windows owner, PDF visual/Defender/browser, sanctioned n8n/privacy/consent, storage failures on production fs and commercial terms all UNVERIFIED.
+
+**NEXT ㄱ:** inspect HANDOFF (10 sections), STATUS, AGENTS, REQUIREMENTS and latest develop SHA, branch PR #34 (separate pending writer ordering fix). Need combined CI when it merges. Continue distinct P2 safe fault tests, owner acceptance handoff, or legal buyer scope; no real data, production, payment, access/visibility changes, release/listing without explicit approval.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #33 synthetic output size budget preflight
 
 PUBLIC `hibi89/SOVIA_sovereign`, code `develop`, main docs-only. Latest implemented [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged SHA `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`. New source-only `sovia_output_budget.py`, 16 tests `tests/test_output_budget.py`, guide `SYNTHETIC_OUTPUT_BUDGET.md` use strict fabricated 10/100/500/1000 event profiles, actual real HTML and indented JSON serializations, and 1/2/4MiB hypothetical output caps to check whether outputs would exceed a limit. No report files written, no real data/API, no customer quota approved, original audit core and v0.10 12-file ZIP unmodified.
