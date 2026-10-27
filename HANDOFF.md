@@ -1,3 +1,18 @@
+# CURRENT SOVIA STOP/PIVOT HANDOFF (10 points, 2026-10-27 KST)
+
+1. **Goal/stack:** P1 offline audit MVP -> original R1-R9 gap checks -> P2 shipping hardening. Python 3.11+ offline source, signed commercial release not present.
+2. **Changes/decision:** Evaluated HTML print usability and attempted print-only card CSS in isolated draft PR #42; chosen approach locally made Korean text readable, but **rejected from integration due fixed historical package provenance mismatch**. Closed PR without merging.
+3. **Tests:** Original develop CI [40489961191](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40489961191) 4/4 PASS. PR #42 CI [40491371943](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40491371943) 4/4 FAIL: Ubuntu 3.13 755 tests, 39 FAIL, 13 ERROR, 11 SKIP; new five HTML print tests PASS. Portable hash old expected 68c05795... versus feature generated 35147f89... rejected as designed.
+4. **Done/pending:** Existing product code/source ZIP unaffected. Print feature CLOSED UNMERGED, not a successful feature. Owner device/browser/Defender/PDF/manual, genuine permitted n8n source/version, release policy and signing pending.
+5. **Failure/stop:** Modifying included `sovia_audit.py` changes immutable historical beta ZIP. Strict owner evidence preflight and tests report `PORTABLE_HASH_MISMATCH`. Do not relax/rebaseline archived hashes; no blind retry. Future alternative requires true versioned package migration with preserved immutable old source or a distinctly versioned renderer.
+6. **Repo/branch/SHA:** `hibi89/SOVIA_sovereign` public; active authoritative `develop` source SHA `e5d91766782f618e052a0b83afb6730f1757a98e` before this docs-only commit. Closed feature `feature/p2-html-print-legibility` docs HEAD c8a71ecc62b3b447be3fbce2635832d032a1c68c; PR #42 never merged. Verify final docs SHA after update.
+7. **Runtime/production:** Zero new product deployments or Vercel URL, no paid charges; static preview only in ephemeral Linux; release not signed.
+8. **Original/backups/privacy:** No customer logs, prompt bodies, credentials or owner machine accessed; preserve unchanged old v0.10/0.11.2 archive identities. Docs-only current update. Existing develop base is recovery point.
+9. **Next/approvals:** Highest priority actual owner Windows acceptance of existing exact v0.11.2 package; sanctioned n8n version & test data only with permission. Do not add more wrapper scripts; defer print feature unless owner separately approves versioned migration.
+10. **Cutoff:** 2026-10-27 KST. PR #42 is CLOSED failed; docs source based on `e5d91766782f618e052a0b83afb6730f1757a98e`, code unchanged; manual/production UNVERIFIED. Check new docs commit and CI separately.
+
+---
+
 # LATEST CHECKPOINT — SOVIA independent packaged artifact acceptance (10 sections, 2026-10-27 KST)
 
 1. **Goal/requirements/stack.** User-approved sequence P1 MVP → original blueprint reconciliation → security/stability/compatibility → shipping review; Python 3.11+ offline Audit Lite, no customer connection.
