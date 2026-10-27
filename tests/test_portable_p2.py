@@ -30,8 +30,8 @@ class P2VersionedPortableTests(unittest.TestCase):
         self.extracted = self.root / "new-install"
 
     def test_distinct_version_fixed_allowlist(self):
-        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.0-beta.zip")
-        self.assertEqual(verify.VERSION, "0.11.0-beta")
+        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.1-beta.zip")
+        self.assertEqual(verify.VERSION, "0.11.1-beta")
         self.assertEqual(verify.FORMAT, "SOVIA_PORTABLE_P2_V1")
         self.assertEqual(len(verify.FILES), 18)
         self.assertNotIn("owner_selfcheck.py", verify.FILES)
@@ -57,7 +57,7 @@ class P2VersionedPortableTests(unittest.TestCase):
             self.assertNotIn("client_logs", "".join(bundle.namelist()).lower())
             self.assertNotIn("private/", "".join(bundle.namelist()).lower())
             manifest = json.loads(bundle.read(verify.PREFIX + verify.MANIFEST))
-            self.assertEqual(manifest["version"], "0.11.0-beta")
+            self.assertEqual(manifest["version"], "0.11.1-beta")
 
     def test_rejects_v010_verifier_and_old_archive_name(self):
         self.assertNotEqual(build.DEFAULT_NAME, legacy.DEFAULT_NAME)
@@ -136,6 +136,59 @@ class P2VersionedPortableTests(unittest.TestCase):
         self.assertEqual(result["status"], "p2_portable_clean_install_pass")
         self.assertEqual(result["release_files"], 18)
         self.assertTrue(result["database_restored"])
+
+
+    def test_replaced_zip_after_validation_never_extracted(self):
+        # Previously the extractor verified one on-disk archive, then opened it
+        # afresh. Replacing its bytes in between could bypass prior validation.
+        build.build(self.zip)
+        real_verify = verify.verify_archive
+        def replace_after_check(archive_path, checksum_path=None):
+            checked = real_verify(archive_path, checksum_path)
+            self.zip.write_bytes(self.zip.read_bytes() + b"REPLACED_POST_CHECK")
+            return checked
+        with patch.object(verify, "verify_archive", side_effect=replace_after_check):
+            with self.assertRaisesRegex(verify.PackageError, "Archive changed after verification"):
+                verify.extract_verified(self.zip, self.extracted, self.checksum)
+        self.assertFalse(self.extracted.exists())
+
+    def test_tampered_install_selfcheck_creates_no_diagnostics(self):
+        build.build(self.zip)
+        verify.extract_verified(self.zip, self.extracted, self.checksum)
+        altered = self.extracted / "P2_PORTABLE_README.md"
+        altered.write_bytes(altered.read_bytes() + b"\nTAMPERED")
+        diagnostics = self.root / "no-diagnostics"
+        check = subprocess.run([
+            sys.executable, "-I", "-B", str(self.extracted / "owner_p2_selfcheck.py"),
+            "--output-dir", str(diagnostics)
+        ], capture_output=True, text=True, timeout=30)
+        self.assertEqual(check.returncode, 2)
+        self.assertFalse(diagnostics.exists())
+        self.assertNotIn(str(self.extracted), check.stderr)
+
+    def test_selfcheck_rejects_results_in_install_before_mutation(self):
+        build.build(self.zip)
+        verify.extract_verified(self.zip, self.extracted, self.checksum)
+        check = subprocess.run([
+            sys.executable, "-I", "-B", str(self.extracted / "owner_p2_selfcheck.py"),
+            "--output-dir", str(self.extracted / "BAD_OUTPUTS")
+        ], capture_output=True, text=True, timeout=30)
+        self.assertEqual(check.returncode, 2)
+        self.assertIn("RESULTS_INSIDE_VERIFIED_INSTALL", check.stderr)
+        self.assertFalse((self.extracted / "BAD_OUTPUTS").exists())
+        self.assertEqual(verify.verify_directory(self.extracted)["files"], 18)
+
+    def test_existing_outer_results_parent_keeps_install_pristine(self):
+        build.build(self.zip)
+        verify.extract_verified(self.zip, self.extracted, self.checksum)
+        output_parent = self.root / "reports"
+        check = subprocess.run([
+            sys.executable, "-I", "-B", str(self.extracted / "owner_p2_selfcheck.py"),
+            "--output-dir", str(output_parent)
+        ], capture_output=True, text=True, timeout=60)
+        self.assertEqual(check.returncode, 0, check.stderr)
+        self.assertEqual(len(list(output_parent.glob("SOVIA_SELF_CHECK_*/SELF_CHECK_RESULT.json"))), 1)
+        self.assertEqual(verify.verify_directory(self.extracted)["status"], "verified_directory")
 
 
 if __name__ == "__main__":

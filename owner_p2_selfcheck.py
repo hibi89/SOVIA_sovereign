@@ -1,4 +1,4 @@
-"""SOVIA offline owner-PC synthetic-only diagnostic (v0.10 beta).
+"""SOVIA offline owner-PC synthetic-only diagnostic (v0.11 beta).
 
 The script never uses customer data, network, or external APIs. It first verifies
 the pristine extracted portable app, then runs subprocesses with Python -I -B
@@ -18,7 +18,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "0.11.0-beta"
+VERSION = "0.11.1-beta"
 MIN_PYTHON = (3, 11)
 JSON_SCHEMA = "1.0"
 
@@ -71,8 +71,13 @@ def _optional_pdf(root, sample, output_dir, checks):
         # Do not leak local font filenames or tracebacks to the diagnostic report.
 
 
-def _new_results_parent(parent):
+def _new_results_parent(parent, install_root=None):
     candidate = Path(parent).absolute()
+    # Creating diagnostics INSIDE pristine installation would invalidate the
+    # package and make repeat verification fail. Enforce this before mkdir.
+    if install_root is not None and candidate.resolve().is_relative_to(
+            Path(install_root).resolve()):
+        raise SelfCheckError("RESULTS_INSIDE_VERIFIED_INSTALL")
     if candidate.is_symlink():
         raise SelfCheckError("OUTPUT_DIRECTORY_SYMLINK")
     if candidate.exists():
@@ -90,7 +95,13 @@ def _new_results_parent(parent):
 
 def check(owner_results):
     root = Path(__file__).resolve().parent
-    result_dir = _new_results_parent(owner_results)
+    # Validate the pristine install BEFORE creating any result directory or
+    # invoking any app command. A corrupt package must leave no output behind.
+    if sys.version_info[:2] < MIN_PYTHON:
+        raise SelfCheckError("PYTHON_3_11_REQUIRED")
+    verify = _local("verify_portable_p2.py", "_sovia_selfcheck_verifier")
+    verify.verify_directory(root)
+    result_dir = _new_results_parent(owner_results, install_root=root)
     report = {
         "schema_version": JSON_SCHEMA,
         "version": VERSION,
@@ -98,7 +109,7 @@ def check(owner_results):
         "status": "AUTOMATED_FAILED",
         "system": {"os": platform.system(), "os_release": platform.release(),
                    "python": platform.python_version()},
-        "checks": {},
+        "checks": {"python": "PASS", "package_integrity": "PASS"},
         "synthetic": {},
         "manual_acceptance": {
             "audit_html_visual": "NOT_CHECKED",
@@ -111,14 +122,6 @@ def check(owner_results):
     }
     failed = None
     try:
-        if sys.version_info[:2] < MIN_PYTHON:
-            raise SelfCheckError("PYTHON_3_11_REQUIRED")
-        report["checks"]["python"] = "PASS"
-        verify = _local("verify_portable_p2.py", "_sovia_selfcheck_verifier")
-        # Fail closed before invoking any bundled app module; package must be
-        # pristine, including this script and Windows launcher.
-        verify.verify_directory(root)
-        report["checks"]["package_integrity"] = "PASS"
         sample = root / "examples" / "demo_five_rules.json"
         out = result_dir
         _cmd(root / "sovia_audit.py", "--input", sample,
