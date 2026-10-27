@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 retention policy review integrated
+
+- **Repository:** `hibi89/SOVIA_sovereign` PUBLIC synthetic-only. Active source `develop`; [PR #24](https://github.com/hibi89/SOVIA_sovereign/pull/24) MERGED SHA `40ed61a7e93d1588a453f27223d688b31d6de5c4`. `main` docs-only and unreleased, no Cloud, Vercel or paid listing.
+- **This unit:** added standalone stdlib `sovia_retention_review.py` and 25 synthetic `tests/test_retention_review.py`, demo retention policy JSON, `RETENTION_REVIEW.md`, updated `RETENTION.md`. Reuses existing metadata-only inventory with strict 5-category per-class review thresholds, operator-claimed legal hold and backup lineage. Categories report HOLD/VERIFY/HUMAN_REVIEW_ONLY. **Never deletes, authorizes disposal, reads customer file contents, outputs names/paths, triggers purge or changes backups.** Clock pinned across 5 repeated nontransactional scans; gross metadata count changes reject output.
+- **Actual CI:** verified exact feature head `4f835648412892a94bcf79db93eebe98f4153efd`, [GitHub Actions 40463702926](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40463702926) Windows+Ubuntu Python 3.11/3.13 **4/4 SUCCESS**; 384 discovered/job, Windows 374 PASS/10 optional PDF SKIP, Ubuntu 373 PASS/11 platform/PDF SKIP, 0 FAIL; unchanged existing extracted 12-file v0.10 ZIP audit/SQLite/dashboard/backup/restore/selfcheck smoke PASS all four. Current documentation HEAD CI unverified.
+- **Trust boundary:** Demo thresholds are NOT lawful retention periods; operator hold/backup claims are unverified. File mtime is not lawful commencement, file extension is not proven artifact type, repeated scanning is not atomic. No genuine customer records, actual n8n raw export, user-PC independent antivirus/PDF/browser checks, verified consent, commercial readiness, or release. New review source is NOT in existing portable ZIP.
+- **Next `ㄱ`:** verify live HEAD and pursue remaining safe P2 synthetic n8n version/field capability checks or retention lineage evidence schema, without deleting real files or accessing customer data. Owner approval required for real logs, external n8n API, destructive retention, permissions/visibility, production, release or sale.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 owner-evidence consistency integrated
 
 - **GitHub:** `hibi89/SOVIA_sovereign` PUBLIC synthetic-only, active `develop`. [PR #23](https://github.com/hibi89/SOVIA_sovereign/pull/23) MERGED SHA `8e120a9db2baa1b490d2ce3987979366185fcf39`; default `main` docs-only, no deployment/Vercel, no commercial release.
