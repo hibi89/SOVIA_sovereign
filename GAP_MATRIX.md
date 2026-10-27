@@ -1,3 +1,9 @@
+## 2026-10-28 — P2 approved-local path provenance hardening (PR #65)
+
+[PR #65](https://github.com/hibi89/SOVIA_sovereign/pull/65) `develop` merge `50625d439107819583f40686024b67f6bc283992`: resolved path handling before approved-local input read could silently accept symbolic links/junctions in source, policy, attestation or output ancestry. New no-follow lexical component preflight rejects these; test coverage includes actual NTFS `mklink /J`, symlink aliases and synthetic backward compatibility. [CI #40542439730](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40542439730) four OS/Python jobs successful, 865 discovered/job, 0 failures. **Remaining:** path replacement race/handle-based confinement, real n8n provenance/consent, customer privacy and retention/legal processes, owner PC acceptance, release signing/commercial authorization. No production or sales. PUBLIC repo synthetic-only, historical ZIPs preserved.
+
+---
+
 ## 2026-10-28 — Privacy heuristic IPv6 false-negative narrowed (PR #64)
 
 [PR #64](https://github.com/hibi89/SOVIA_sovereign/pull/64), `develop` merge `4292fde69c546f596eda5ef029a086aec1e2b67b`, extends existing bounded preflight with IPv6 literal validation (plain, URL bracketed, scoped, IPv4-mapped) and rejects pattern-positive fabricated sanctioned-like and synthetic n8n-like metadata before output. UTC timestamp, colon-coded metadata, incomplete labels remain allowed in focused tests. [CI #40540329408](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40540329408) 4/4 Win/Ubuntu Python3.11/3.13 pass, 861 tests/job, 0 FAIL. **Open** contextual PII, ID schemes, nonliteral IPv6 concatenations, genuine n8n sanctioned source and real privacy review, legal retention/license/support, owner Windows physical/AV/print, signed commercial release, Production. This is not a privacy certification or authorization to ingest customer data. Repo PUBLIC synthetic-only; old version payloads unchanged.
