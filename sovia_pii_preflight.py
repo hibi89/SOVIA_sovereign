@@ -18,6 +18,12 @@ EMAIL = re.compile(r"(?i)(?<![\w.+-])[\w.+-]+@[\w.-]+\.[a-z]{2,}(?![\w-])")
 KR_MOBILE = re.compile(r"(?<!\d)(?:(?:\+?82)[._ -]?)?0?10[._ -]?\d{4}[._ -]?\d{4}(?!\d)")
 KR_RESIDENT_ID = re.compile(r"(?<!\d)\d{6}[._-]?[1-8]\d{6}(?!\d)")
 IPV4 = re.compile(r"(?<!\d)(?:\d{1,3}\.){3}\d{1,3}(?!\d)")
+# IPv6 lexical candidates are validated by ipaddress, never a bare regex
+# match. Require token boundaries so dates, colon-separated evidence codes,
+# URLs, and host labels are not partially interpreted as an address.
+IPV6_CANDIDATE = re.compile(
+    r"(?<![A-Za-z0-9_.:%-])[A-Za-z0-9_.:%-]{3,}(?![A-Za-z0-9_.:%-])"
+)
 UUID = re.compile(r"(?i)(?<![a-f0-9])[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?![a-f0-9])")
 ACCESS_KEY = re.compile(r"(?<![A-Za-z0-9])(?:AKIA|ASIA)[A-Z0-9]{16}(?![A-Za-z0-9])")
 SECRET_TOKEN = re.compile(
@@ -47,6 +53,21 @@ def _luhn(value):
     return checksum % 10 == 0
 
 
+def _contains_ipv6_literal(text):
+    # Only valid IPv6 literals are refused; dots at the end may be prose
+    # punctuation. Brackets in URLs are natural token separators.
+    for match in IPV6_CANDIDATE.finditer(text):
+        candidate = match.group().rstrip(".")
+        if candidate.count(":") < 2:
+            continue
+        try:
+            ipaddress.IPv6Address(candidate)
+        except ipaddress.AddressValueError:
+            continue
+        return True
+    return False
+
+
 def _high_risk_pattern(text):
     # Not user-facing: only an opaque refusal code is returned on match.
     if (EMAIL.search(text) or KR_MOBILE.search(text) or
@@ -59,6 +80,8 @@ def _high_risk_pattern(text):
             ipaddress.IPv4Address(candidate.group())
         except ipaddress.AddressValueError:
             continue
+        return True
+    if _contains_ipv6_literal(text):
         return True
     return any(_luhn(match.group()) for match in CARD_DIGITS.finditer(text))
 

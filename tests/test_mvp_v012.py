@@ -222,6 +222,16 @@ class MVPV012Tests(unittest.TestCase):
             mvp.run(GOLDEN, self.target, synthetic_only=True, policy_path=POLICY)
         self.assertFalse(self.target.exists())
 
+    def test_n8n_rejects_ipv6_metadata_without_any_publication(self):
+        document = json.loads(N8N.read_text("utf-8"))
+        document["steps"][0]["evidence_ref"] = "2001:db8::7"
+        bad = self.root / "ipv6-synthetic.json"
+        bad.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(mvp.MVPError, "MVP_INPUT_OR_OUTPUT_REJECTED"):
+            mvp.run(bad, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized", policy_path=POLICY)
+        self.assertFalse(self.target.exists())
+
     def test_n8n_rejects_raw_node_parameters_without_publishing(self):
         document = json.loads(N8N.read_text("utf-8"))
         document["steps"][0]["parameters"] = {"secret": "SHOULD_NOT_ACCEPT"}

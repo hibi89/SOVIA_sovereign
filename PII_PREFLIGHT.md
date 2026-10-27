@@ -14,10 +14,10 @@
 `sovia_pii_preflight.py` recursively scans decoded source and policy string values (and their keys) before local `approved-local` conversion. It heuristically rejects:
 
 - Email-address patterns, Korean mobile numbers (including common separators), Korean resident registration number-shaped sequences
-- Valid IPv4 literals, UUID-shaped identifiers, payment-card numbers passing Luhn
+- Valid IPv4 and IPv6 literals (including bracketed URLs and scoped IPv6), UUID-shaped identifiers, payment-card numbers passing Luhn
 - AWS-style access keys, common API-token prefixes, JWT-shaped strings and opaque identifiers of 40+ characters
 
-These are **synthetic patterns**, not an exhaustive identification system; contextual names, organization IDs, encoded values, indirect inference, IPv6, arbitrary hashes, and secrets of other shapes may evade it. Some benign addresses, internal IPs, IDs or randomly generated references will be rejected. Inputs should be standardized to short, operator-approved nonpersonal codes *before* being imported, and any risk assessment needs separate human review.
+These are **synthetic patterns**, not an exhaustive identification system; contextual names, organization IDs, encoded values, indirect inference, IPv6-like identifiers embedded in longer tokens, arbitrary hashes, and secrets of other shapes may evade it. Some benign addresses, internal IPs, IDs or randomly generated references will be rejected. Inputs should be standardized to short, operator-approved nonpersonal codes *before* being imported, and any risk assessment needs separate human review.
 
 The scanner returns only a generic code (`PREFLIGHT_REJECTED`) on suspected content, never a matched value, path, token or detailed location. It never modifies or transmits inputs. It has bounded traversal (depth 16, 20,000 nodes, 4,096 characters per string) and no third-party dependencies.
 
