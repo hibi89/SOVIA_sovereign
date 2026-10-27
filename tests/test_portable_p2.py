@@ -30,8 +30,8 @@ class P2VersionedPortableTests(unittest.TestCase):
         self.extracted = self.root / "new-install"
 
     def test_distinct_version_fixed_allowlist(self):
-        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.0-beta.zip")
-        self.assertEqual(verify.VERSION, "0.11.0-beta")
+        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.1-beta.zip")
+        self.assertEqual(verify.VERSION, "0.11.1-beta")
         self.assertEqual(verify.FORMAT, "SOVIA_PORTABLE_P2_V1")
         self.assertEqual(len(verify.FILES), 18)
         self.assertNotIn("owner_selfcheck.py", verify.FILES)
@@ -57,7 +57,7 @@ class P2VersionedPortableTests(unittest.TestCase):
             self.assertNotIn("client_logs", "".join(bundle.namelist()).lower())
             self.assertNotIn("private/", "".join(bundle.namelist()).lower())
             manifest = json.loads(bundle.read(verify.PREFIX + verify.MANIFEST))
-            self.assertEqual(manifest["version"], "0.11.0-beta")
+            self.assertEqual(manifest["version"], "0.11.1-beta")
 
     def test_rejects_v010_verifier_and_old_archive_name(self):
         self.assertNotEqual(build.DEFAULT_NAME, legacy.DEFAULT_NAME)
