@@ -148,9 +148,49 @@ def capture_local_png(edge, file, profile, output):
     return _png_size(output)
 
 
-def smoke(screenshot_dir=None, *, next_print_preview=False):
+def validate_printed_pdf(path):
+    """Check bounded PDF transport structure only, not rendered readability."""
+    try:
+        if not path.is_file() or not 2048 <= path.stat().st_size <= 8_388_608:
+            raise EdgeSmokeError("EDGE_PRINT_PDF_INVALID")
+        with path.open("rb") as stream:
+            if not stream.read(8).startswith(b"%PDF-"):
+                raise EdgeSmokeError("EDGE_PRINT_PDF_INVALID")
+            stream.seek(max(0, path.stat().st_size - 2048))
+            if b"%%EOF" not in stream.read():
+                raise EdgeSmokeError("EDGE_PRINT_PDF_INVALID")
+        return True
+    except OSError as exc:
+        raise EdgeSmokeError("EDGE_PRINT_PDF_INVALID") from exc
+
+
+def print_local_a4(edge, html, profile, output):
+    """Actual Windows Edge print-to-PDF. A4 page geometry comes from CSS @page."""
+    cmd = [
+        str(edge), "--headless=new", "--disable-gpu",
+        "--disable-background-networking", "--disable-component-update",
+        "--disable-extensions", "--disable-default-apps",
+        "--no-first-run", "--no-default-browser-check", "--disable-sync",
+        "--no-proxy-server", "--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE localhost",
+        "--disable-features=MediaRouter,OptimizationHints",
+        "--no-pdf-header-footer", "--user-data-dir=" + str(profile),
+        "--print-to-pdf=" + str(output), html.as_uri(),
+    ]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, timeout=45, check=False)
+    except subprocess.TimeoutExpired as exc:
+        raise EdgeSmokeError("EDGE_PRINT_TIMEOUT") from exc
+    if proc.returncode:
+        raise EdgeSmokeError("EDGE_PRINT_NONZERO_EXIT")
+    validate_printed_pdf(output)
+    return output.stat().st_size
+
+
+def smoke(screenshot_dir=None, *, next_print_preview=False, print_a4_pdf=False):
     edge = locate_edge()
     destination = None
+    if print_a4_pdf and (not next_print_preview or screenshot_dir is None):
+        raise EdgeSmokeError("A4_PREVIEW_OUTPUT_REQUIRED")
     if screenshot_dir is not None:
         destination = Path(screenshot_dir).absolute()
         if (destination.exists() or destination.is_symlink() or
@@ -190,6 +230,11 @@ def smoke(screenshot_dir=None, *, next_print_preview=False):
             preview_dom = open_local_dom(edge, preview, root / "edge-next-print-preview")
             assert_dom(preview_dom, ("SOVIA Audit Lite", "차기 출력 미리보기",
                                      "위험 소견 5건", "data-label=", "이벤트 타임라인"))
+        pdf_bytes = None
+        if print_a4_pdf:
+            pdf_source = root / "synthetic-next-preview-a4.pdf"
+            pdf_bytes = print_local_a4(
+                edge, preview, root / "edge-print-profile", pdf_source)
         dimensions = {}
         if destination is not None:
             images = {
@@ -208,6 +253,10 @@ def smoke(screenshot_dir=None, *, next_print_preview=False):
                 with (root / name).open("rb") as source_file, (
                         destination / name).open("xb") as target:
                     shutil.copyfileobj(source_file, target)
+            if pdf_bytes is not None:
+                with pdf_source.open("rb") as source_file, (
+                        destination / pdf_source.name).open("xb") as target:
+                    shutil.copyfileobj(source_file, target)
         verify_directory(extracted)
         return {
             "status": "SYNTHETIC_EDGE_LOCAL_FILE_DOM_PASS",
@@ -217,6 +266,9 @@ def smoke(screenshot_dir=None, *, next_print_preview=False):
             "synthetic_edge_screenshot_count": len(dimensions),
             "synthetic_edge_screenshot_dimensions": dimensions,
             "screenshot_human_visual_review": False,
+            "synthetic_edge_print_pdf_generated": pdf_bytes is not None,
+            "synthetic_edge_print_pdf_bytes": pdf_bytes,
+            "pdf_a4_pages_and_readability_verified": False,
             "portable_archive_sha256": result["sha256"],
             "offline_html_asset_urls": False,
             "network_absence_independently_verified": False,
@@ -234,10 +286,13 @@ def main(argv=None):
                         help="New empty folder for synthetic Edge screenshot PNGs")
     parser.add_argument("--next-print-preview", action="store_true",
                         help="Include opt-in source-only future print layout for synthetic QA")
+    parser.add_argument("--print-a4-pdf", action="store_true",
+                        help="Actual Edge A4 PDF output of the synthetic next-version preview")
     args = parser.parse_args(argv)
     try:
         from json import dumps
-        print(dumps(smoke(args.screenshot_dir, next_print_preview=args.next_print_preview),
+        print(dumps(smoke(args.screenshot_dir, next_print_preview=args.next_print_preview,
+                          print_a4_pdf=args.print_a4_pdf),
                     ensure_ascii=False, sort_keys=True))
         return 0
     except (EdgeSmokeError, OSError, RuntimeError, ValueError) as exc:
