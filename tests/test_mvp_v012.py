@@ -1,6 +1,5 @@
 """Single-command v0.12 MVP regression: real offline engine/report/ledger path."""
 from __future__ import annotations
-import copy
 import json
 from pathlib import Path
 import subprocess
@@ -25,6 +24,7 @@ class MVPV012Tests(unittest.TestCase):
         self.target = self.root / "fresh-output"
 
     def test_one_command_outputs_reports_and_metadata_ledger(self):
+        pristine_source = GOLDEN.read_bytes()
         result = mvp.run(GOLDEN, self.target, synthetic_only=True)
         self.assertEqual("SYNTHETIC_V012_MVP_COMPLETE", result["status"])
         self.assertEqual((3, 5), (result["events"], result["findings"]))
@@ -36,7 +36,7 @@ class MVPV012Tests(unittest.TestCase):
         status = history.status(self.target / "history.sqlite3")
         self.assertEqual((2, 1, 5), (status["schema_version"],
                                     status["reports"], status["finding_count_total"]))
-        self.assertEqual(GOLDEN.read_bytes(), GOLDEN.read_bytes())
+        self.assertEqual(pristine_source, GOLDEN.read_bytes())
 
     def test_boundary_uses_corrected_utc_engine(self):
         result = mvp.run(BOUNDARY, self.target, synthetic_only=True)
