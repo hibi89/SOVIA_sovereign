@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 pinned n8n execution source research
+
+- **Repository/branch:** `hibi89/SOVIA_sovereign` PUBLIC; code `develop`. [PR #27](https://github.com/hibi89/SOVIA_sovereign/pull/27) merged as `8c321ea8bd701f350d0a711f2544b5f729273251`; `main` remains documentation-only. No Vercel/Production, signed release or paid listing.
+- **New P2:** `sovia_n8n_execution_reference.py` freezes official tagged public n8n `getExecution` response schema names and Git source provenance: `n8n@1.123.88` 12 properties (standalone execution.yml SHA `e20e27a02402563f3904c8b0468d56d32a42196c`) vs `n8n@2.44.7` 23 properties (generated getExecution YAML SHA `329097122a6bfda7410314ff4ca73878c34b6918`). 11 additions, 4 id-type declarations number→string. 2.x GET has `includeData` default false, `redactExecutionData` and size controls but NOT a validated safe import. 27 synthetic tests, two fabricated key lists, `N8N_EXECUTION_PUBLIC_SCHEMA.md`. Always import BLOCKED, data-bearing field names refused, no API/PII compatibility claim, no customer data.
+- **Actual PR CI:** [Actions run 40467364912](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40467364912) on tested source SHA `c269e3df23696e1a0001d9afc5a419d69cb2536b` **4/4 SUCCESS** Windows+Ubuntu Python 3.11/3.13. 469 discovered/job, Windows 459 PASS/10 SKIP; Ubuntu 458 PASS/11 SKIP; **0 FAIL**. Prior 12-file portable ZIP clean audit/history/dashboard/backup/restore/owner synthetic checks PASS all jobs. Post-merge docs SHA CI not yet independently verified.
+- **Open:** actual n8n source/installed version/execution schema behavior and approved sanitized mapping, real owner Windows/browser/Defender/Korean PDF review, customer lawful permission and privacy FP/FN assurance, backup/retention evidence, signed product/commercial approval. Old v0.10 ZIP unchanged and excludes later P2 modules.
+- **Next ㄱ:** verify new `develop` and docs; prototype only safe **synthetic n8n execution metadata-to-canonical contract** with strictly no `data`/`workflowData`/`customData` and no raw customer data. Avoid duplication of PRs #16–#27, avoid production or real data/API without owner approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 official pinned n8n schema key comparison
 
 - **Repo:** `hibi89/SOVIA_sovereign` PUBLIC synthetic-only, active `develop`. [PR #26](https://github.com/hibi89/SOVIA_sovereign/pull/26) merged at `45d8c00ee3a898b599a3a75d2e1b219ae0da72e9`. `main` remains docs-only; NO production/Vercel, release, paid listing or actual customer onboarding.

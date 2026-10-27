@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #27 official public n8n execution key/type reference
+
+Canonical `hibi89/SOVIA_sovereign` PUBLIC synthetic-only repo, active `develop`; default `main` docs-only, unreleased. [PR #27](https://github.com/hibi89/SOVIA_sovereign/pull/27) merged to develop at `8c321ea8bd701f350d0a711f2544b5f729273251`. New `sovia_n8n_execution_reference.py`, 27 tests, two fabricated manifests and `N8N_EXECUTION_PUBLIC_SCHEMA.md` pin official 1.x/2.x `getExecution` public OpenAPI schemas (12→23 properties, 11 additions, four id-type differences). No n8n API client, payload mapping, credentials, real logs, consent proof or actual instance compatibility. Synthetic key manifest is **always IMPORT BLOCKED**, even on recognized public names.
+
+[PR-head CI 40467364912](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40467364912): 4/4 SUCCESS Windows/Ubuntu × Python 3.11/3.13; 469 tests/job; 0 fail, old 12-file portable extracted smoke PASS all. Owner physical Windows/AV/browser/Korean PDF and real customer input NOT VERIFIED. Docs HEAD CI must be fetched after updates.
+
+**On next ㄱ:** inspect latest `develop` HEAD and HANDOFF → STATUS → AGENTS → REQUIREMENTS → GAP_MATRIX → code/tests. Continue safe synthetic-only metadata mapping boundary or commercially relevant safety gate; no raw execution values (`data`/`workflowData`/`customData`), no production/sale/delete/access change/customer upload without approval. Do not redo P1, SQLite/dashboard/portable and PRs #16–#27. No Vercel or production.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #25 synthetic n8n source-version key probe
 
 Canonical repo `hibi89/SOVIA_sovereign` PUBLIC; active source `develop`, default `main` docs-only. [PR #25](https://github.com/hibi89/SOVIA_sovereign/pull/25) **MERGED** SHA `4e25e3b08584d47261b24d3f296be129cdfbc7c7`. New stdlib `sovia_n8n_compatibility.py` strict synthetic-only key-name manifest probe, 30 tests `tests/test_n8n_compatibility.py`, 3 synthetic example profiles, `N8N_VERSION_PROBE.md` and link in `N8N_SANITIZED.md`. It recognizes only SOVIA's four sanitized envelope keys as a **synthetic shape match**. Mock n8n workflow-export/execution API profiles with claimed versions 1.x and 2.x, any raw credential/parameter/data field, unsupported versions and malformed keys are **blocked**; it **does not verify or support actual n8n versions, parse source execution data or convert records**. Prior sanitized adapter/operator claims/PII preflight unchanged.

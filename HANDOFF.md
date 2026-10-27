@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 pinned public n8n execution contract (10 sections)
+
+## 1. Mission / technology / frozen requirements
+SOVIA offline-first retrospective AI-agent risk audit (Python stdlib, zero paid API). P1 five explainable rules, JSON/CSV, optional Korean PDF, SQLite, static dashboard and v0.10 portable self-check are preserved. Continue P2 synthetic/approved-local privacy safeguards. New work is strictly public n8n **getExecution OpenAPI schema research**, NOT native execution import.
+
+## 2. Completed change and design rationale
+Compared actual n8n HTTP execution adapter (potential private prompt/item data, credentials, approval+version+redaction risks) with frozen tag-specific public schema property-name reference (offline, cheap, deterministic, no customer data). Chose key-only. Added `sovia_n8n_execution_reference.py`, `tests/test_n8n_execution_reference.py` (27 tests), 2 fabricated manifests, `N8N_EXECUTION_PUBLIC_SCHEMA.md`. Official n8n 1.123.88 and 2.44.7 `getExecution` schemas have 12 vs 23 top-level names (11 additions) and four declared identifier type differences; v2 includes read-scope/query redaction parameters. Even a recognized synthetic manifest returns IMPORT BLOCKED. Existing adapter/owner privacy gates and portable beta unchanged.
+
+## 3. Reproducible tests, successes and unverified
+[PR #27 feature head CI 40467364912](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40467364912) on `c269e3df23696e1a0001d9afc5a419d69cb2536b` **4/4 SUCCESS** (Windows+Ubuntu, Python 3.11/3.13). Each `python -m unittest discover -s tests -v` discovered 469; Windows **459 PASS / 10 optional SKIP / 0 FAIL**, Ubuntu **458 PASS / 11 optional/platform SKIP / 0 FAIL**. `python portable_smoke.py` clean extracted 12-file beta audit, five findings, SQLite/history, dashboard, backup/restore, owner synthetic self-check PASS all four. Newly integrated docs HEAD independent CI still to be confirmed. Physical owner's Windows/Defender/browser/Korean PDF and live API remain UNVERIFIED.
+
+## 4. Done, pending and exact stop
+DONE source-provenance/field-type research, synthetic-only strict key comparator and regression matrix, [PR #27](https://github.com/hibi89/SOVIA_sovereign/pull/27) merged to develop. PENDING real n8n instance/version and sanctioned execution response, genuine data-controller approval, safe upstream redaction, privacy/retention/backup lineage, owner physical Windows verification, release signing and customer/commercial permission. Stop at verified synthetic research; do not silently build raw importer.
+
+## 5. Error evidence / root / mitigations
+No CI test failure in PR #27 verified run. Documented privacy risk: 2.x schema contains `data`, `customData`, `workflowData`; `redactExecutionData` and `includeData` query parameters are **NOT a guarantee of PII safety**. Source Git blobs do not verify runtime version; 1.x does not declare response required fields (NOT proof of optional real fields). Rejection rather than parsing/transport of customer execution is the present mitigation. `compare_file` reads a bounded local JSON manifest for validation; never sends/stores execution data.
+
+## 6. Repository / branch / exact SHAs / paths
+`hibi89/SOVIA_sovereign` PUBLIC synthetic-only. Default `main` documentation-only. Work from `develop`; tested feature `feature/p2-n8n-execution-public-contract` SHA `c269e3df23696e1a0001d9afc5a419d69cb2536b`; PR #27 merged `develop` SHA `8c321ea8bd701f350d0a711f2544b5f729273251`. New `sovia_n8n_execution_reference.py`, `tests/test_n8n_execution_reference.py`, 2 `examples/n8n_pinned_execution_*_keys.json`, `N8N_EXECUTION_PUBLIC_SCHEMA.md`. After docs commit, retrieve newest HEAD.
+
+## 7. Runtime / production / costs
+No Vercel, Production URL, release, customer install or paid APIs. Offline: `python sovia_n8n_execution_reference.py --show-public-delta` exit 0, `python sovia_n8n_execution_reference.py --input examples/n8n_pinned_execution_2x_keys.json --synthetic-only` exit 3/IMPORT BLOCKED. Portable 12-file v0.10 beta unchanged; new source-only reference not in portable ZIP.
+
+## 8. Original data, permissions and backups
+Synthetic field names only in PUBLIC GitHub; official public upstream YAML inspected through GitHub. No real executions, customer data, credentials, network requests from product, deletion, backup overwrite, repo visibility/access change, `main` promotion or production. Original Audit Lite code and user files unchanged. Hashes are provenance, not identity or consent proof.
+
+## 9. Next priority / approval boundaries
+Next safe unit: add a **synthetic-only mapping boundary/spec** from allowed n8n execution metadata into SOVIA canonical semantics (not live import), or independently review upstream schema drift; retain no raw `data`/`workflowData`/`customData`. For actual n8n connection, customer records, release, sale, deployment, access/visibility change or destructive retention, require explicit owner approval. Owner must test physical Windows/Defender/HTML/PDF acceptance separately.
+
+## 10. Updated KST / evidence boundary
+2026-10-27 KST; verified PR #27 head Actions 40467364912 Windows/Ubuntu 4/4 SUCCESS, 469 discovered/job; merge SHA `8c321ea8bd701f350d0a711f2544b5f729273251`. Post-merge/documentation HEAD test to confirm. Document baseline is `develop` PR #27 integration; final docs commit SHA must be fetched after this change. Customer privacy, real integration and on-device acceptance are NOT VERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic n8n claimed-version key probe (10 sections)
 
 ## 1. Mission, scope, technology
