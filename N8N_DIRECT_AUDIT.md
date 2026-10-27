@@ -1,6 +1,6 @@
 # Direct pre-sanitized n8n-like metadata audit (P2, source-only)
 
-This utility removes an intermediate canonical JSON file and the need for two commands. **It is not a native n8n API connector or a raw n8n execution parser.** It consumes only the `sovia.n8n_sanitized.v1` strict metadata envelope and a separate SOVIA v1 policy. It delegates to the original five-rule evaluator, existing PII-pattern preflight (approved-local only), attestation checker, Korean HTML renderer, and no-clobber report writer.
+This utility removes an intermediate canonical JSON file and the need for two commands. **It is not a native n8n API connector or a raw n8n execution parser.** It consumes only the `sovia.n8n_sanitized.v1` strict metadata envelope and a separate SOVIA v1 policy. It delegates to the original five-rule evaluator, existing PII-pattern preflight (**both** synthetic and approved-local modes), attestation checker, Korean HTML renderer, and no-clobber report writer.
 
 ## Fabricated-data one-command demo
 
@@ -16,7 +16,7 @@ Expected synthetic result is **3 events and 5 findings**. Generates only the two
 python -I -B sovia_n8n_direct_audit.py --mode approved-local --input LOCAL_PRE_SANITIZED.json --policy LOCAL_POLICY.json --attestation LOCAL_REVIEW.json --html-output NEW_REPORT.html --json-output NEW_REPORT.json
 ```
 
-An operator must first independently determine lawful basis, upstream redaction and permissions. The existing unsigned attestation gate checks exact document hashes, scope, asserted flags and expiry. The existing PII heuristic runs before publication. Neither proves source authenticity, legal authorization, completeness of sanitization, or real n8n API compatibility. A forged operator claim remains possible. Never supply real customer data without the owner's separately approved handling conditions.
+An operator must first independently determine lawful basis, upstream redaction and permissions. The existing unsigned attestation gate checks exact document hashes, scope, asserted flags and expiry. The existing PII heuristic runs **in both modes** before publication; the approved-local mode additionally requires an operator review attestation. The `--synthetic-only` flag cannot disable this local heuristic, but does not certify synthetic provenance. Neither proves source authenticity, legal authorization, completeness of sanitization, or real n8n API compatibility. A forged operator claim remains possible. Never supply real customer data without the owner's separately approved handling conditions.
 
 ## Boundaries
 
