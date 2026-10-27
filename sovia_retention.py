@@ -21,6 +21,16 @@ class InventoryError(ValueError):
     """Safe, non-path-bearing inventory failure."""
 
 
+# Python's Windows stat_result exposes FILE_ATTRIBUTE_REPARSE_POINT. Junctions
+# and directory mount points are not consistently represented by S_ISLNK.
+# Treat them like symlinks: their contents are outside a trusted scan boundary.
+_REPARSE_POINT = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+
+
+def _is_reparse_point(metadata):
+    return bool(getattr(metadata, "st_file_attributes", 0) & _REPARSE_POINT)
+
+
 def _category(filename: str) -> str | None:
     name = filename.lower()
     if name.endswith((".sqlite-wal", ".sqlite-shm", ".sqlite-journal", ".db-wal", ".db-shm", ".db-journal")):
@@ -41,7 +51,9 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
     """Summarize *candidates* by extension and mtime, without reading or modifying data.
 
     No filenames, paths, or file content are included in the returned summary.
-    Fail closed on traversal errors/limits; symlinks are never followed.
+    Fail closed on traversal errors/limits; symlinks and reported Windows
+    reparse points (junctions/mounts) are skipped. Concurrent path replacement
+    remains a filesystem TOCTOU caveat: this is no sandbox boundary.
     Optional strict per-category thresholds are evaluated in the SAME scan;
     this is not a transactional filesystem snapshot or disposal authorization.
     """
@@ -59,8 +71,8 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
     try:
         if target.is_symlink() or not target.is_dir():
             raise InventoryError("INVALID_ROOT")
-        root_mode = target.stat(follow_symlinks=False).st_mode
-        if not stat.S_ISDIR(root_mode):
+        root_metadata = target.stat(follow_symlinks=False)
+        if _is_reparse_point(root_metadata) or not stat.S_ISDIR(root_metadata.st_mode):
             raise InventoryError("INVALID_ROOT")
     except OSError as exc:
         raise InventoryError("ROOT_ACCESS_FAILED") from exc
@@ -88,7 +100,7 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
                     if scanned > max_entries:
                         raise InventoryError("ENTRY_LIMIT_EXCEEDED")
                     mode = entry.stat(follow_symlinks=False)
-                    if stat.S_ISLNK(mode.st_mode):
+                    if stat.S_ISLNK(mode.st_mode) or _is_reparse_point(mode):
                         skipped_links += 1
                         continue
                     if stat.S_ISDIR(mode.st_mode):
