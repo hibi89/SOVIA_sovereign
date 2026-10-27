@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 n8n sanitized contract (10 sections)
+
+## 1. Goal, confirmed requirements, technology
+Develop zero-cost offline-first retrospective AI agent behavior audit. P1 audit, P2 CSV/PDF/SQLite/dashboard, v0.10 self-check and previous retention inventory already integrated. This iteration adds **synthetic-only strict n8n-like metadata ingest**, Python stdlib and existing canonical audit engine; NOT n8n raw export ingest or n8n API.
+## 2. Completed changes, decisions and reasons
+Compared raw native n8n execution ingest (high PII exposure/version-specific and maintenance) vs strict pre-sanitized contract (explicit human sanitization, small zero-cost safe surface). Chose latter. Added `sovia_n8n_sanitized.py`, `tests/test_n8n_sanitized.py` (20 new cases), `examples/demo_n8n_sanitized.json`, `N8N_SANITIZED.md`; fail-closed unknown fields, limits 1 MiB/1000 events, source/evidence/permission not trusted, no-clobber canonical JSON. [PR #18](https://github.com/hibi89/SOVIA_sovereign/pull/18) merged; old runtime modules and 12-file portable ZIP untouched.
+## 3. Test commands and actual outcome
+CI [40456761731](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40456761731) on PR-head `76a898e175dfcfce8fa7b188bf9b21a72eb8eeb2` 4/4 success: Ubuntu and Windows, Python 3.11/3.13 each 220 discovered; Windows 210 PASS/10 SKIP, Ubuntu 209 PASS/11 SKIP, failures 0. `python -m unittest discover -s tests -v`, source compile, and `python portable_smoke.py` end-to-end all green incl 3-event/5-finding old ZIP, SQLite/dashboard/restore. Current post-merge/docs HEAD workflow and owner's actual Windows/browser are **UNVERIFIED**. Local container clone failed DNS; not treated as test failure. No real customer data used.
+## 4. Done / in progress / pending / stop
+DONE synthetic contract converter and 20 tests, reviewed PR + develop integration. P2 real n8n adapter, authorization/PII upstream sanitization and legitimate retention/removal remain **OPEN**. Owner Windows self-check and optional PDF/Defender visual inspection **PENDING**. Stopping point after integration and docs update.
+## 5. Errors/evidence/root causes/retry/pivot
+Local unauthenticated container clone could not resolve `github.com` (network DNS unavailable); instead used connected GitHub connector and successful independent Actions CI. No source defect detected by the 4-job matrix. Any unexpected native n8n fields are REJECTED deliberately rather than silently copied or executed. Do not loop on network clone or reimplement existing P1/P2.
+## 6. Repository/branch/SHA/paths
+Repo `hibi89/SOVIA_sovereign` PUBLIC, default `main` docs-only. Source feature `feature/p2-n8n-sanitized-contract` verified CI SHA `76a898e175dfcfce8fa7b188bf9b21a72eb8eeb2`; merge to `develop` SHA `db44dccb81f5d867de47df2797451b69de86d260`. Main changed files `sovia_n8n_sanitized.py`, `tests/test_n8n_sanitized.py`, `examples/demo_n8n_sanitized.json`, `N8N_SANITIZED.md`, `STATUS.md`, `HANDOFF.md`, `GAP_MATRIX.md`. Refresh develop HEAD after docs.
+## 7. Production URL/Vercel/project/commands
+Production URL NONE, Vercel NONE, deployment N/A; no paid usage. Developer CLI: `python sovia_n8n_sanitized.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output NEW_CANONICAL.json`, then `python sovia_audit.py --input NEW_CANONICAL.json --output NEW_REPORT.html`. Existing portable beta v0.10 unchanged, not packaged with converter.
+## 8. Originals, backup, credentials, protected assets
+No real customer logs, secrets, raw prompts or credentials sent to GitHub; all fixtures synthetic. No external APIs, access/visibility changes, destructive backups/retention automation or raw log collection. Output is new-file-only. Sanitized IDs/domain are syntactically restricted but may still be personal/linkable; requires customer authorization and independent review before pilot.
+## 9. Next tasks, acceptance, approvals
+Verify updated develop SHA and workflow if available. Next P2 implement/test strict consent/sanitization guidance and negative synthetic fixtures, then formal retention/privacy, supported n8n version contract and independent owner's Windows/AV/Korean PDF acceptance. Owner approval required for actual data, raw ingestion, privacy setting changes, external API/customer information, deployment, sales, or deletion.
+## 10. KST update/verification scope/document basis
+2026-10-27 KST. Verified live develop merge SHA `db44dccb81f5d867de47df2797451b69de86d260` and PR CI 40456761731 success. Post-document HEAD must be checked separately; no production/end-user/real data verification. This latest section supersedes earlier archived snapshots below.
+
+---
+
 # CURRENT HANDOFF — 2026-10-27 P2 read-only retention inventory integration
 
 ## 1. Goal, requirements, technology
