@@ -1,3 +1,9 @@
+## 2026-10-27 R2/R3 temporal event correctness — preview fix vs core open bug
+
+Source-only v0.12 preview HTML chronology fixed in [PR #51](https://github.com/hibi89/SOVIA_sovereign/pull/51): real UTC datetime ordering handles mixed exact seconds and microseconds, tie breaks by event_id; 4/4 Windows/Linux CI verified (781 tests/job), immutable ZIPs unchanged. **R3 still PARTIAL:** existing frozen v0.10/v0.11.2 core `sovia_audit.evaluate` uses lexicographic UTC timestamp sort for 60-second BURST_TOOLS queue, potentially producing spurious alerts with valid fractional-second records. [Issue #52](https://github.com/hibi89/SOVIA_sovereign/issues/52) is OPEN and requires focused core regression plus separately versioned integrity-safe successor. Do not claim old version corrected, production accuracy, authorized native n8n or sale approval.
+
+---
+
 ## 2026-10-27 R5 A4 print *preview* verified in hosted Edge (PR #49)
 
 - **PROVEN on synthetic 3-event/5-finding case:** downloaded actual GitHub Windows Edge `--print-to-pdf`, A4 595×842 pt, 2 pages after print-only CSS compaction (was 3 with orphaned caveat), text-searchable, Korean and all sections visually intact. [PR #49](https://github.com/hibi89/SOVIA_sovereign/pull/49), [4/4 CI 40502431335](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40502431335), 2 immutable extracted ZIP smokes unchanged.

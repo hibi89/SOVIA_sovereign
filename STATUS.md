@@ -1,3 +1,9 @@
+## 2026-10-27 — real fractional UTC sorting defect in v0.12 preview: PR #51 merged
+
+[PR #51](https://github.com/hibi89/SOVIA_sovereign/pull/51) merge `6487f15248513897f0a2c5c60905b78d3161a770`: datetime chronological sort replaces lexicographic strings in source-only v0.12 print-preview timeline, ties by event ID. 2 regression methods. [CI 40506871208](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40506871208) Win/Ubuntu Python3.11/3.13 **4/4 SUCCESS**, 781 discovered/job, 0 failed, immutable v0.10/v0.11.2 ZIP smoke PASS. **Outstanding correctness bug** [Issue #52](https://github.com/hibi89/SOVIA_sovereign/issues/52): P1 core BURST_TOOLS still lexically sorts fractional normalized UTC timestamps, risking false alert. Needs new versioned core/pinned release design and regression BEFORE commercial delivery; source-only preview fix does not repair it. Final docs SHA CI to check. No customer data/production/service release.
+
+---
+
 ## 2026-10-27 — PR #50 preview security: heuristic PII preflight in source-only printable HTML
 
 [PR #50](https://github.com/hibi89/SOVIA_sovereign/pull/50) MERGED to `develop` SHA `2d5404bf41c32219f98ca9eb5b6757ee8a851357`. Reuses existing no-network bounded `sovia_pii_preflight` to reject recognizable PII/credentials before opt-in v0.12 HTML preview publishes any file. 2 new tests: valid-schema metadata email/credential refusal, source unchanged, no output and CLI non-disclosure. [PR Actions #40505099448](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40505099448) **4/4 PASS**, 779 tests/job, 0 fail, Windows 768 PASS/11 SKIP, Ubuntu 764 PASS/15 SKIP; v0.10/v0.11.2 extracted immutable ZIP smoke PASS all, hosted Windows Edge HTML+A4 synthetic step PASS. Not an exhaustive PII guarantee, owner physical Windows acceptance, supported n8n/live integration or commercial release. Existing packages/engine unaffected; public repo, default main documentation-only. No Vercel/Production. Docs head CI to verify.

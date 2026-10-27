@@ -1,3 +1,11 @@
+## 2026-10-27 PR #51 mixed fractional seconds UTC preview fix merged
+
+[PR #51](https://github.com/hibi89/SOVIA_sovereign/pull/51) merged `6487f15248513897f0a2c5c60905b78d3161a770` into PUBLIC `develop`. Previous v0.12 opt-in source-only HTML preview lexically sorted UTC timestamp strings, incorrectly placing fractional seconds before an earlier exact-second value; datetime comparison and event-ID tie now correct chronological presentation. 2 new focused tests. [Actions 40506871208](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40506871208) **4/4 PASS**, 781 tests discovered/job, Windows 770 PASS/11 SKIP, Ubuntu 766 PASS/15 SKIP, 0 fail; existing pinned ZIP v0.10/v0.11.2 extracted smokes PASS and hosted Windows Edge synthetic browser/A4 step PASS. The source-only preview is NOT in v0.11.2 ZIP and its output this run was not individually raster-inspected.
+
+**Independent unresolved engine defect:** [Issue #52](https://github.com/hibi89/SOVIA_sovereign/issues/52) core BURST_TOOLS deque uses the same lexical normalized UTC sort and can misattribute/false-trigger time-window alerts. PR #51 does NOT fix core. Historical packages frozen; require *explicit versioned engine migration* with targeted rule tests, no historical rebaseline. No real customer incident or deployment is claimed. Physical owner Windows/Defender/print, legitimate n8n source/version/privacy/consent, legal/support/signing/sale remain unverified. NEXT `ㄱ`: verify final docs CI then tackle #52 carefully without silently rewriting v0.10/v0.11.2.
+
+---
+
 ## 2026-10-27 — PR #50 source-only preview shared PII/credential gate MERGED
 
 PUBLIC `hibi89/SOVIA_sovereign`, `develop` active, `main` docs only. [PR #50](https://github.com/hibi89/SOVIA_sovereign/pull/50) merge SHA `2d5404bf41c32219f98ca9eb5b6757ee8a851357`; feature `e2201254846acbd16dfa5d9927a78d9796331828`. Previously opt-in v0.12 printable HTML preview could render schema-valid event email/token-like metadata with no PII-pattern screen, notwithstanding synthetic-only unverified claim. Reuses existing offline `sovia_pii_preflight.assert_no_high_risk_patterns` **before** evaluation/publish; generic refusal, no output, no metadata or local path leakage. 2 new regression methods. Heuristics are NOT sanitization/consent proof.
