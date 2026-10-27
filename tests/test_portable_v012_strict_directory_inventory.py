@@ -27,7 +27,7 @@ class V012DirectoryInventoryTests(unittest.TestCase):
         )
 
     def test_pristine_allowed_directory_succeeds(self):
-        self.assertEqual(10, verify.verify_directory(self.install)["files"])
+        self.assertEqual(13, verify.verify_directory(self.install)["files"])
 
     def test_unlisted_empty_root_directory_is_rejected(self):
         (self.install / "unlisted-empty-directory").mkdir()
