@@ -76,11 +76,14 @@ try {
     if (-not (Invoke-Check "source_syntax" @("-B", "-c", $Syntax))) {
         throw "SOURCE_SYNTAX_CHECK_FAILED"
     }
-    if (-not (Invoke-Check "la_plan_focused" @("-B", "-m", "unittest", "discover", "-s", "tests", "-p", "test_sovia_la_plan_preflight.py", "-v"))) {
+    if (-not (Invoke-Check "la_plan_focused" @("-B", "-m", "unittest", "discover", "-s", "tests", "-p", "test_sovia_la_*.py", "-v"))) {
         throw "LA_FOCUSED_TESTS_FAILED"
     }
     if (-not (Invoke-Check "la_plan_cli" @("-I", "-B", "sovia_la_plan_preflight.py", "--input", "examples/demo_la_plan_review.json", "--policy", "examples/demo_policy.json", "--synthetic-only"))) {
         throw "LA_PLAN_SMOKE_FAILED"
+    }
+    if (-not (Invoke-Check "la_plan_observation_reconcile_cli" @("-I", "-B", "sovia_la_plan_reconcile.py", "--plan", "examples/demo_la_plan_review.json", "--policy", "examples/demo_policy.json", "--observations", "examples/demo_la_observations.json", "--synthetic-only"))) {
+        throw "LA_PLAN_OBSERVATION_SMOKE_FAILED"
     }
     if ($Full) {
         if (-not (Invoke-Check "full_regression" @("-B", "-m", "unittest", "discover", "-s", "tests", "-v"))) {
