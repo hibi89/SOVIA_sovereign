@@ -1,3 +1,28 @@
+# CURRENT HANDOFF — 2026-10-27 P2 heuristic privacy preflight (ten sections)
+
+## 1. Goal and technical direction
+Continue offline, zero-cost SOVIA retrospective agent audit. Preserve proven P1/P2 audit, CSV, optional PDF, SQLite, dashboard, v0.10 portable/self-check, and prior strict synthetic n8n-like metadata contract and operator review claims.
+## 2. Changes, decisions, rationale
+Chose rejection of suspicious patterns in already-allowlisted metadata rather than unsafe automatic redaction of arbitrary raw logs. Implemented sovia_pii_preflight.py, 29 tests in tests/test_pii_preflight.py and PII_PREFLIGHT.md. Approved-local now fails closed before creating a new canonical output; synthetic mode retains compatibility. Scanner does not prove privacy or independently grant consent. PR #20 integrated into develop.
+## 3. Tests, commands and actual outcomes
+At PR head de15214dadec8cfc196af138920a1dc7d2352c4f, GitHub Actions https://github.com/hibi89/SOVIA_sovereign/actions/runs/40459232377 completed four successes on Ubuntu/Windows Python 3.11/3.13. python -m unittest discover -s tests -v discovered 274 tests/job; Windows 264 PASS/10 SKIP, Ubuntu 263 PASS/11 SKIP, zero FAIL. Prior python portable_smoke.py extracted-ZIP audit/history/dashboard/recovery PASS on all jobs. Independent owner-PC tests and post-doc HEAD CI are unverified.
+## 4. Completed, ongoing, pending and stopping point
+DONE safe synthetic-only scan, tests and PR #20 integration. Still OPEN authentic customer authorization, upstream source-field mapping/real n8n support, effective PII review and false positives, retention/deletion contracts, manual Windows visual/Defender/Korean PDF acceptance and paid release readiness. Stop after GitHub documentation SHA verification.
+## 5. Failures, causes, attempts, alternatives
+No PR-head CI failures. A synthetic unit-test mock was refined before the PR to isolate a missing preflight dependency without disabling the existing audit loader. The heuristic can miss disguised values or reject benign codes. This limitation prevents a privacy-complete claim; no real customer incident observed.
+## 6. Repository/branches/SHAs/paths
+Public hibi89/SOVIA_sovereign; PR #20 feature/p2-metadata-pii-preflight tested source head de15214dadec8cfc196af138920a1dc7d2352c4f, MERGED into develop at be1562c520be62d0e5341abe72a48a527b490987. Paths: sovia_pii_preflight.py, sovia_n8n_sanitized.py, tests/test_pii_preflight.py, PII_PREFLIGHT.md, GAP_MATRIX.md, STATUS.md, HANDOFF.md. Default main documentation-only. Refresh latest HEAD after docs.
+## 7. Production URLs, commands and environment
+Production/Vercel URL NONE, no commercial deployment, no paid APIs. Synthetic CLI: python sovia_n8n_sanitized.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output NEW.json. Approved-local additionally needs --mode approved-local --attestation LOCAL_REVIEW.json. New code is not in old 12-file v0.10 beta ZIP.
+## 8. Originals, backup, credentials, protected data
+Only synthetic fixtures committed in PUBLIC repository. No real customer records or credentials processed, exported or deleted. Scanner reads parsed local metadata, returns generic error codes without matched private data; no changes to existing SQLite, history, backups or original documents.
+## 9. Next action, success checks and approvals
+On ㄱ inspect fresh develop HEAD and pursue synthetic controlled field-mapping and false-positive review, or owner-PC manual acceptance when relevant. Retest Windows/Ubuntu CI before integration. Owner approval needed for external customer data, visibility/access edits, deployment, commercial listing or destructive deletion. Do not rebuild completed core.
+## 10. Date and verified scope
+2026-10-27 KST. PR merge be1562c520be62d0e5341abe72a48a527b490987, Actions 40459232377 4/4 success. This new document cannot self-reference its eventual commit. Actual customer/Windows/manual/privacy certification is NOT VERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 operator-review manifest / SHA binding
 
 ## 1. Goal, confirmed scope, technologies
