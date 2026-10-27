@@ -1,5 +1,6 @@
 """Single-command v0.12 MVP regression: real offline engine/report/ledger path."""
 from __future__ import annotations
+from contextlib import closing
 import json
 import os
 import sqlite3
@@ -127,7 +128,7 @@ class MVPV012Tests(unittest.TestCase):
     def test_readonly_verifier_releases_ledger_handle_after_rejection(self):
         mvp.run(GOLDEN, self.target, synthetic_only=True)
         ledger = self.target / "history.sqlite3"
-        with sqlite3.connect(ledger) as db:
+        with closing(sqlite3.connect(ledger)) as db:
             db.execute("UPDATE reports SET finding_count=finding_count+1")
             db.commit()
         with self.assertRaisesRegex(mvp.MVPError, "VERIFY_LEDGER_MISMATCH"):
@@ -174,7 +175,7 @@ class MVPV012Tests(unittest.TestCase):
                 report.write_text(json.dumps(body), encoding="utf-8")
                 code = "VERIFY_INVALID_REPORT"
             else:
-                with sqlite3.connect(folder / "history.sqlite3") as db:
+                with closing(sqlite3.connect(folder / "history.sqlite3")) as db:
                     db.execute("UPDATE reports SET finding_count=finding_count+1")
                     db.commit()
                 code = "VERIFY_LEDGER_MISMATCH"
