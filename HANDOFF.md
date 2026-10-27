@@ -1,3 +1,11 @@
+# CURRENT HANDOFF — 2026-10-28 PR #70 synthetic LA observation reconciliation
+
+- Source `develop`, PUBLIC repository. [PR #70](https://github.com/hibi89/SOVIA_sovereign/pull/70) merged as `51aa103c19d49bf4bc2df428d655743cdc3d6170`. Added `sovia_la_observation_reconcile.py` with offline sanitized synthetic plan→observation advisory reconciliation and five tests (`tests/test_sovia_la_observation_reconcile.py`). Flags unplanned or unseen steps; tool, side effect, target and domain mismatches; unknown observation and missing evidence. Never authorizes execution or authenticates evidence; real LA receipt contract and runtime integration remain absent.
+- [PR CI #40558898260](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40558898260): Windows/Ubuntu Python3.11/3.13 **4/4 SUCCESS**, including full stdlib regression. No live customer metadata, approvals, secrets, deployment, sale or real LA integration tested.
+- Next: coordinate a **versioned, minimal, sanitized synthetic LA observation receipt contract** with LA owner, then complete preflight→reconciliation end-to-end demo. Retain PII heuristic and explicit unknown states, no unverified trust claims. User physical Windows acceptance and commercial gates remain open.
+
+---
+
 # CURRENT HANDOFF — 2026-10-28 PR #67 alternate n8n entrypoint safety parity (10 sections)
 
 1. **Goal / approved constraints / stack:** Accelerate safe P2 implementation on PUBLIC GitHub `hibi89/SOVIA_sovereign`, source `develop` (default `main` intentionally documentation-only); Python 3.11+ offline stdlib, synthetic fabricated fixtures, zero added KRW. No live customer data/API/credentials, unsigned commercial release, Vercel or Production.
