@@ -11,7 +11,7 @@
 
 ## Required inputs
 
-1. `--portable-zip`: **inner** 12-file v0.10.0-beta portable ZIP (not the outer GitHub Actions artifact download). The checker hashes actual local bytes and requires SHA-256 `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. Missing/symlink/oversized/altered ZIP fails closed. It does not extract ZIP or run embedded executables.
+1. `--portable-zip`: **inner** 12-file v0.10.0-beta portable ZIP (not the outer GitHub Actions artifact download). The checker hashes actual local bytes and requires one of **two explicit pinned synthetic beta build hashes**: archived original `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`, or writer-hardening source rebuild `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Both contain 12 files and are unsigned; a matching digest is not trusted provenance or real-PC attestation. Missing/symlink/oversized/altered ZIP fails closed. It does not extract ZIP or run embedded executables.
 2. `--selfcheck`: existing `SELF_CHECK_RESULT.json` produced by unchanged `RUN_SELF_CHECK.cmd` and `owner_selfcheck.py` on a computer. Checks required: v0.10, purpose synthetic only, system label Windows, Python >=3.11, `AUTOMATED_PASS_MANUAL_PENDING`, six automatic PASS checks, 3 events/5 findings/1 report, old five manual fields still `NOT_CHECKED`, and documented optional PDF status.
 3. `--manual-review`: a **separately written local** JSON with only these fields:
 
