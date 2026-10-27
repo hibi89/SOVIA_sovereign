@@ -38,13 +38,15 @@ jobs:
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
         run: |
           python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
-          python -I -B windows_edge_local_smoke.py --screenshot-dir dist/browser-qa --next-print-preview
+          python -I -B windows_edge_local_smoke.py --screenshot-dir dist/browser-qa --next-print-preview --print-a4-pdf
       - name: Publish synthetic Edge screenshots for visual review (NOT acceptance)
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
         with:
           name: sovia-p2-synthetic-edge-visuals
-          path: dist/browser-qa/*.png
+          path: |
+            dist/browser-qa/*.png
+            dist/browser-qa/synthetic-next-preview-a4.pdf
           if-no-files-found: error
           retention-days: 7
       - name: Build distinct downloadable v0.11 P2 candidate

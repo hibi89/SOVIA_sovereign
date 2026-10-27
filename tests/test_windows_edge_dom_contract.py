@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from windows_edge_local_smoke import EdgeSmokeError, assert_dom, locate_edge, _png_size
+from windows_edge_local_smoke import EdgeSmokeError, assert_dom, locate_edge, _png_size, validate_printed_pdf, smoke
 
 
 class EdgeDomContractTests(unittest.TestCase):
@@ -51,6 +51,25 @@ class EdgeDomContractTests(unittest.TestCase):
                 p.write_bytes(payload)
                 with self.assertRaisesRegex(EdgeSmokeError, "EDGE_SCREENSHOT_INVALID"):
                     _png_size(p)
+
+    def test_pdf_transport_header_and_trailer_checks(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "synthetic.pdf"
+            p.write_bytes(b"%PDF-1.7\n" + b"0" * 2048 + b"\n%%EOF\n")
+            self.assertTrue(validate_printed_pdf(p))
+            for body in (b"X" * 4096, b"%PDF-1.7\n" + b"A" * 4096,
+                         b"%PDF-1.7\n%%EOF\n"):
+                p.write_bytes(body)
+                with self.subTest(size=len(body)), self.assertRaisesRegex(
+                        EdgeSmokeError, "EDGE_PRINT_PDF_INVALID"):
+                    validate_printed_pdf(p)
+
+    def test_print_pdf_requires_explicit_preview_and_new_results(self):
+        with patch("windows_edge_local_smoke.locate_edge", return_value=Path("synthetic-edge")):
+            with self.assertRaisesRegex(EdgeSmokeError, "A4_PREVIEW_OUTPUT_REQUIRED"):
+                smoke(None, next_print_preview=True, print_a4_pdf=True)
+            with self.assertRaisesRegex(EdgeSmokeError, "A4_PREVIEW_OUTPUT_REQUIRED"):
+                smoke("any-new-folder", next_print_preview=False, print_a4_pdf=True)
 
     @unittest.skipIf(os.name == "nt", "Real Windows Edge tested only by integration workflow")
     def test_nonwindows_browser_probe_rejected(self):
