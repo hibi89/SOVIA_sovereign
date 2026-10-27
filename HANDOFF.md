@@ -1,3 +1,28 @@
+# SOVIA HANDOFF — 2026-10-27 retention inventory feature (10 mandatory sections)
+
+## 1. Goal/confirmed scope/technology
+Continue SOVIA offline-first Audit Lite P2 commercial gates after v0.10 synthetic Windows self-check. This unit is Python standard-library **read-only aggregate retention inventory**, not real retention enforcement/deletion. Repo public and synthetic only.
+## 2. Completed functions and decision
+Created `sovia_retention.py`, 11 focused synthetic regression tests, `RETENTION.md`. Compared auto-expiry deletion (convenient but destructive and requires consent/legal-hold/backup rules) versus read-only candidate inventory (low-risk); selected read-only. Old P1 five rules, CSV, optional PDF, SQLite, dashboard, portable, self-check untouched; v0.10 shipped ZIP unchanged.
+## 3. Tests and evidence
+Executed local isolated `python -m unittest discover -s /mnt/data/sovia_retention_dev/tests -v`: **11 PASS / 0 FAIL**. `compileall` PASS. One initial test fixture used a future synthetic clock for a subprocess relying on actual time; corrected test fixture and reran green. Exact three GitHub file blob SHAs matched corresponding local `git hash-object`. Full repo CI and owner Windows end-to-end remain **NOT VERIFIED** at this checkpoint; get live GitHub Actions results after PR.
+## 4. Work status/stopping point
+DONE scoped read-only tool + local focused tests; IN PROGRESS PR/CI and handoff docs; PENDING owner PC acceptance and verified authorized n8n data privacy/retention, real customer workflows. Automatic deletion and sales not approved.
+## 5. Errors/root cause/attempt/pivot
+Initial local CLI age threshold test failed because `now=2000000000` test setup made fixtures future-relative to subprocess wall clock; adjusted only CLI test file mtime to actual wall clock minus 40 days. Single improved retry passed all 11. No runtime production incident. Do not reimplement P1/CSV/SQLite/dashboard/self-check.
+## 6. Repository/branch/SHA/paths
+`hibi89/SOVIA_sovereign`, PUBLIC; `feature/p2-retention-inventory` from develop `76d338fd43efa531364c1536fbd3d88ebca594c3`. Code+tests+doc commit (before these status commits) `37204080951451f6ca9bac7936882517b4d9aafd`. Changed `sovia_retention.py`, `tests/test_retention.py`, `RETENTION.md`, `STATUS.md`, `HANDOFF.md`, `GAP_MATRIX.md`. Check latest HEAD and PR before merging.
+## 7. Production/environment/commands
+No Vercel project or production URL; deployment N/A. Developer-only command: `python sovia_retention.py --root PRIVATE_FOLDER --older-than-days 30`, metadata-only aggregated stdout. Local tests above, CI `python -m unittest discover -s tests -v`. Not included in 12-file v0.10 portable ZIP.
+## 8. Originals/backups/credentials
+No real customer files accessed. Script reads only filesystem metadata in user-specified local directory, outputs no filenames/paths, and does not delete/modify anything. No external APIs, secrets, account changes, data uploads, remote storage, or GitHub visibility change.
+## 9. Next priority/acceptance/approval
+Review PR head/test identity and cross-OS full GitHub Actions. If green, integrate to `develop` through normal PR, refresh STATUS/HANDOFF there. Next: controlled synthetic n8n-like sanitized source validation and real ownership/retention rules; manual owner Windows/visual check. Seek owner approval before deletion semantics, repository privacy change, real customer data, sales or deployment.
+## 10. KST verification/scope/document basis
+2026-10-27 KST. Based on GitHub develop `76d338...`, current feature code `3720408...` and local file-level parity/tests; no independent remote full CI or production evidence claimed yet. Verify final doc commit SHA after writing; subsequent CI evidence supersedes this checkpoint.
+
+---
+
 # SOVIA HANDOFF — P2 v0.10 Windows owner self-check (ten sections)
 
 **LATEST VERIFIED INTEGRATION — 2026-10-26 KST:** [PR #16](https://github.com/hibi89/SOVIA_sovereign/pull/16) merged SOVIA v0.10.0-beta Windows one-click synthetic self-check, 12-file portable ZIP and optional Korean PDF/font diagnostic into `develop` at merge SHA `60a2ea28fed91d320211ee8f8ec594c24971d472`. [Post-merge CI run 40218991467](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40218991467) **4/4 SUCCESS**: Windows Python 3.11/3.13 each 189 discovered/179 PASS/10 PDF SKIP/0 FAIL, Ubuntu 3.11/3.13 each 189 discovered/178 PASS/11 SKIP (Windows .cmd test)/0 FAIL; all four include full extracted-ZIP synthetic audit/SQLite/dashboard/recovery/self-check. Same 12-file ZIP SHA256 `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`, unsigned CI artifact `sovia-portable-beta` available. **PR integration DONE; DO NOT repeat.** On `ㄱ` next: verify latest develop HEAD and continue P2 product acceptance/privacy/retention/authorized n8n-like sanitized source or adversarial tests, prioritizing safe offline work. Actual owner's Windows PC, browser visuals, AV/SmartScreen, ReportLab+Korean TTF PDF visual, customer data and commercial/production are **NOT VERIFIED** and need owner/local evidence. `main` remains docs-only and unreleased. Earlier feature-only references are archived.
