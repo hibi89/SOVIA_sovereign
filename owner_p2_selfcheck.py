@@ -135,16 +135,21 @@ def check(owner_results):
         report["checks"]["audit"] = "PASS"
         # Check v0.11's actual integrated direct pre-sanitized workflow
         # from the VERIFIED extracted ZIP, using fabricated fixtures only.
-        _cmd(root / "sovia_n8n_direct_audit.py",
+        direct_result = json.loads(_cmd(root / "sovia_n8n_direct_audit.py",
              "--input", root / "examples" / "demo_n8n_sanitized.json",
              "--policy", root / "examples" / "demo_policy.json",
              "--html-output", out / "synthetic-direct.html",
              "--json-output", out / "synthetic-direct.json",
-             "--synthetic-only", "--local-test-budget-bytes", "1048576")
+             "--synthetic-only", "--local-test-budget-bytes", "1048576"))
         direct = json.loads((out / "synthetic-direct.json").read_text(encoding="utf-8"))
         if (direct.get("event_count"), direct.get("finding_count")) != (3, 5):
             raise SelfCheckError("DIRECT_REPORT_COUNTS")
+        if (direct_result.get("pii_pattern_scan_executed") is not True or
+                direct_result.get("pii_absence_proven") is not False or
+                direct_result.get("source_authorization_independently_verified") is not False):
+            raise SelfCheckError("DIRECT_PATTERN_SCREENING_REQUIRED")
         report["checks"]["direct_sanitized"] = "PASS"
+        report["checks"]["direct_metadata_pattern_scan"] = "PASS"
         # Aggregate mode emits only counts and MUST NOT create a report file.
         summary = json.loads(_cmd(root / "sovia_ephemeral_diagnostic.py",
             "--input", sample, "--ack-sanitized-source"))
