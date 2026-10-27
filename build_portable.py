@@ -97,6 +97,9 @@ def _atomic_publish(items):
         if len({path.resolve() for path, _ in items}) != len(items):
             raise BuildError("Artifact paths must differ")
         for target, data in items:
+            # Reject unexpected payload before opening a stage descriptor.
+            if type(data) is not bytes:
+                raise BuildError("Portable payload must be bytes")
             fd, temp_name = tempfile.mkstemp(prefix=".sovia-portable-", suffix=".tmp",
                                              dir=target.parent)
             tmp = Path(temp_name)
@@ -106,8 +109,10 @@ def _atomic_publish(items):
                 stream.flush()
                 os.fsync(stream.fileno())
         for (target, _), stage in zip(items, stages):
-            os.link(stage, target)
+            # Capture inode BEFORE publishing; a post-link metadata failure
+            # would otherwise leave an untracked published output on rollback.
             st = os.stat(stage)
+            os.link(stage, target)
             published.append((target, st.st_dev, st.st_ino))
     except Exception:
         for target, device, inode in published:
