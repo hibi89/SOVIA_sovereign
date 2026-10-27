@@ -1,3 +1,11 @@
+## 2026-10-27 — v0.12 preview fractional-second timeline correctness (source-only)
+
+Reproducible ordering defect in opt-in preview: lexicographic UTC string sorting puts `15:01:00.500000Z` **before** `15:01:00Z`, contrary to chronological order. The preview now sorts already-validated canonical timestamps as `datetime` values, with `event_id` deterministic tie-breaking. Two regression methods assert fractional/whole-second order, stable equal-time ties and report nonmutation. This is a **real chronology correction**, not a new screenshot variant; all prior immutable ZIPs and `sovia_audit.py` are untouched.
+
+**Important separate core issue:** legacy `sovia_audit.evaluate` currently sorts normalized UTC strings for its BURST_TOOLS sliding window; fractional/whole-second inputs may create misordered findings. This narrow presentation fix does **not** correct old engine risk findings. The engine requires a separately versioned, integrity-preserving migration and focused rule regression before commercial release. Do not silently rebaseline legacy v0.10/v0.11.2 packages. PR CI status pending, no customer data.
+
+---
+
 ## 2026-10-27 source-only v0.12 print preview: heuristic privacy preflight (candidate)
 
 Previously this opt-in preview rendered canonical event metadata without invoking the existing preflight, even though the direct n8n audit path did invoke it. A synthetic-only flag does NOT prove source provenance or PII absence. This scoped patch calls existing `sovia_pii_preflight.assert_no_high_risk_patterns` on the entire bounded canonical document BEFORE evaluation or output. Credential/email-like metadata fails closed with a fixed non-disclosing error code. Two regression tests cover valid-field sensitive values, no output, CLI isolation and path/token non-disclosure. **Heuristics can have false negatives and false positives**; no real customer data or authorization/consent proof. Historical v0.10/v0.11.2 unsigned ZIPs and `sovia_audit.py` are unchanged. Feature CI pending; do not claim a v0.12 product release.
