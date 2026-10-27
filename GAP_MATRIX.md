@@ -1,3 +1,11 @@
+## CURRENT P2 — opt-in guarded real local HTML+JSON export (2026-10-27 KST)
+
+[PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) merged develop SHA 9d27e3468eb555ed72dfd2229cf414fbe674ebf1; new source-only sovia_guarded_export.py validates canonical JSON and real serialized HTML/indented JSON lengths against caller-selected LOCAL TEST 1/2/4MiB per-file limits *before* writing. Checks best-effort free space grouped by filesystem, uses original exclusive no-overwrite staged output writer, and emits redacted metadata only. 23 synthetic regression tests cover no-clobber, overflow, malformed/colliding paths, free-space reject, first/second hardlink injected failure and rollback. [CI 40478010428](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478010428) Windows/Ubuntu × Python 3.11/3.13 4/4 SUCCESS, 671 discovered/job, 0 fail; v0.10 12-file portable beta unchanged by PR #35, isolated smoke PASS.
+
+**Still open:** This opt-in script does not modify the default auditor CLI and is NOT in v0.10 ZIP. The 1/2/4MiB budgets are hypothetical developer test limits, not approved commercial quotas; no CSV/PDF protection, true disk exhaustion/concurrent atomic two-file transaction or crash durability proof. PR #34 independently proposes core writer fault-order changes and could alter portable checksum; coordinate regression after merge. Real owner Windows/Defender/browser/Korean PDF, sanctioned n8n+authorization, privacy/retention, supported volume, release/signing/support and commercial listing all outstanding.
+
+---
+
 ## CURRENT P2 — bounded synthetic HTML/JSON output budget preflight (2026-10-27 KST)
 
 [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged develop SHA `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`. New source-only `sovia_output_budget.py` checks actual audited HTML/indented JSON byte length against strictly hypothetical 1/2/4MiB per-file limits for fixed generated cases 10/100/500/1000 normal/alert_dense. Exit 0 within, 3 simulated exceed, 2 rejected. Metadata only, no report file, secrets or network, no changes to real core/portable ZIP. 16 adversarial tests. [Actions 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308) full 4/4 Windows/Ubuntu Python 3.11/3.13 SUCCESS, 648 discovered each, zero failure, clean portable smoke PASS unchanged SHA.
