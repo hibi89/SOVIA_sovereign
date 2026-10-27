@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic output-budget preflight / PR #33
+
+- **Repo:** PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, default `main` docs-only. [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`.
+- **New:** `sovia_output_budget.py`, 16 regression tests, `SYNTHETIC_OUTPUT_BUDGET.md`. Fixed fabricated 10/100/500/1000 case, normal/alert_dense; actual HTML + indented JSON serialization, hypothetical per-file 1/2/4 MiB size classification only; 0 within simulated cap, 3 above, 2 reject. No report file written, no customer data, API, price or quota commitment.
+- **CI:** [run 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308) feature `37e4775a495ede6870c242087e987149beb39e30` 4/4 SUCCESS, 648 discovered/job, Windows 638 PASS/10 SKIP, Ubuntu 637 PASS/11 SKIP, 0 FAIL. Old 12-file ZIP portable smoke success and checksum unchanged `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`.
+- **Limitations:** NOT integrated with actual `sovia_audit.py` writer or portable ZIP; no disk-free/PDF/CSV/recovery guard; no owner Windows/AV/browser/Korean PDF, sanctioned n8n/PII/privacy, customer support or signed launch. No Vercel/Production.
+- **Next `ㄱ`:** verify docs HEAD CI; separate P2 option for output-writing guard after owner-approved limits or customer scope boundaries. No real customer data, API, publication, access/security changes, paid costs or deployment without authorization.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic workload and resource measurement
 
 - **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC source on `develop`, default `main` docs-only; [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged SHA `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. NO production/listing/live service.
