@@ -1,3 +1,9 @@
+## 2026-10-27 P2 retention review performance — feature candidate, not a commercial gate completion
+
+Offline read-only artifact retention policy previously scanned five times at distinct category thresholds. Source-only feature `feature/p2-retention-single-pass` permits one category-threshold scan, retains original single-threshold inventory and unchanged packaging/source checksums. Directories may still change during the scan, mtime is not legal retention start, hold/backup declarations remain unverified and deletion remains forbidden. Synthetic cross-check to legacy counts and OS/Python CI are required before integration. Owner Windows/manual, authorized native n8n and privacy, support/legal obligations, signing and sale approval remain OPEN.
+
+---
+
 ## CURRENT P2 — one-step strict sanitized envelope→audit reports (2026-10-27 KST)
 
 [PR #37](https://github.com/hibi89/SOVIA_sovereign/pull/37) merged `develop` SHA `6b7896f78005399a608486c93e18020c57c3c52e`. Source-only `sovia_n8n_direct_audit.py` merges two already-existing local commands: sanitized n8n-*like* envelope+SOVIA policy → strict existing canonical converter → actual five-rule evaluator → Korean HTML+JSON output, without creating a separate canonical file. 25 regression tests `tests/test_n8n_direct_audit.py`, guide `N8N_DIRECT_AUDIT.md`, tested feature SHA `0c764855ca96ff9f85b59911110fb9a679193f12`, [4/4 CI 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164) 722 discovered per OS/Python job 0 fail; old v0.10 ZIP unchanged and passing smoke.
