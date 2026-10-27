@@ -48,10 +48,11 @@ def _parse_csv_option(text, allowed, code):
     if type(text) is not str:
         raise CapacityError(code)
     parts = text.split(",")
+    valid_tokens = tuple(str(item) for item in allowed)
     if (not parts or len(set(parts)) != len(parts) or
-            any(part not in allowed for part in parts)):
+            any(part not in valid_tokens for part in parts)):
         raise CapacityError(code)
-    return tuple(int(part) if isinstance(allowed[0], int) else part for part in parts)
+    return tuple(int(part) if type(allowed[0]) is int else part for part in parts)
 
 
 def make_synthetic(count, profile):
@@ -204,7 +205,7 @@ def main(argv=None):
               file=sys.stderr)
         return 2
     try:
-        counts = _parse_csv_option(args.counts, tuple(str(c) for c in COUNTS),
+        counts = _parse_csv_option(args.counts, COUNTS,
                                    "UNSUPPORTED_SYNTHETIC_COUNT")
         profiles = _parse_csv_option(args.profiles, PROFILES,
                                      "UNSUPPORTED_SYNTHETIC_PROFILE")
