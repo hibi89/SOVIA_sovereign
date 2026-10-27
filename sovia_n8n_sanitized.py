@@ -13,6 +13,7 @@ import json
 import os
 from pathlib import Path
 import re
+import stat
 import sys
 
 FORMAT = "sovia.n8n_sanitized.v1"
@@ -170,20 +171,68 @@ def verify_operator_attestation(attestation, source_document, policy_document, *
     return "OPERATOR_CLAIMS_PRESENT_NOT_INDEPENDENTLY_VERIFIED"
 
 
+def _guard_approved_local_path(path, *, output_parent=False):
+    """Reject symlink/reparse ancestors without reading local source contents.
+
+    Checks are best-effort metadata snapshots, NOT race-free confinement.
+    Only the approved-local mode uses this conservative guard.
+    """
+    root = path.parent if output_parent else path
+    reparse = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    try:
+        for component in (root, *root.parents):
+            entry = component.stat(follow_symlinks=False)
+            if (stat.S_ISLNK(entry.st_mode) or
+                    bool(getattr(entry, "st_file_attributes", 0) & reparse)):
+                raise ContractError("LINKED_LOCAL_PATH_REFUSED")
+            if component == root:
+                expected = stat.S_ISDIR if output_parent else stat.S_ISREG
+                if not expected(entry.st_mode):
+                    raise ContractError("INVALID_LOCAL_PATH_TYPE")
+        if output_parent:
+            try:
+                # A leaf file must never be reused (even a dangling link).
+                path.lstat()
+            except FileNotFoundError:
+                pass
+            else:
+                raise ContractError("OUTPUT_ALREADY_EXISTS")
+    except OSError as exc:
+        raise ContractError("LOCAL_PATH_UNAVAILABLE") from exc
+
+
 def convert_paths(source, policy_path, output, *, mode="synthetic", attestation_path=None):
     """Read only explicitly supplied files; publish one NEW output atomically."""
-    audit = _audit()
-    src, pol = Path(source).resolve(), Path(policy_path).resolve()
-    target = Path(os.path.abspath(output))
     if mode not in ("synthetic", "approved-local"):
         raise ContractError("INVALID_MODE")
     if (mode == "approved-local") != (attestation_path is not None):
         raise ContractError("ATTESTATION_REQUIRED_ONLY_FOR_APPROVED_LOCAL")
-    attest = Path(attestation_path).resolve() if attestation_path is not None else None
-    if target.resolve() in tuple(p for p in (src, pol, attest) if p is not None):
-        raise ContractError("OUTPUT_ALIASES_INPUT")
+    try:
+        target = Path(os.path.abspath(output))
+        if mode == "approved-local":
+            # Do NOT resolve input before checking lexical ancestors. Resolve
+            # would hide a junction/symlink which redirected a supposedly
+            # reviewed source, policy or attestation to another location.
+            src, pol = Path(os.path.abspath(source)), Path(os.path.abspath(policy_path))
+            attest = Path(os.path.abspath(attestation_path))
+            same = lambda a, b: os.path.normcase(os.fspath(a)) == os.path.normcase(os.fspath(b))
+            if any(same(target, p) for p in (src, pol, attest)):
+                raise ContractError("OUTPUT_ALIASES_INPUT")
+            for item in (src, pol, attest):
+                _guard_approved_local_path(item)
+            _guard_approved_local_path(target, output_parent=True)
+        else:
+            src, pol = Path(source).resolve(), Path(policy_path).resolve()
+            attest = None
+            if target.resolve() in (src, pol):
+                raise ContractError("OUTPUT_ALIASES_INPUT")
+    except (OSError, TypeError, ValueError, RuntimeError) as exc:
+        if isinstance(exc, ContractError):
+            raise
+        raise ContractError("LOCAL_PATH_UNAVAILABLE") from exc
     if not target.parent.is_dir():
         raise ContractError("OUTPUT_DIRECTORY_MISSING")
+    audit = _audit()
     try:
         doc = audit.read_document(src)
         policy_doc = audit.read_document(pol)

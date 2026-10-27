@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 import json
+import os
 from pathlib import Path
 import socket
 import subprocess
@@ -205,6 +206,73 @@ class OperatorGateTests(unittest.TestCase):
         with self.assertRaises(gate.ContractError):
             self.approved()
         self.assertEqual(b"original", self.output.read_bytes())
+
+    def test_approved_local_rejects_linked_input_policy_and_manifest(self):
+        for name, original in (
+            ("input", self.source), ("policy", self.policy), ("claim", self.claim),
+        ):
+            alias = self.root / ("alias_" + name + ".json")
+            try:
+                alias.symlink_to(original)
+            except (OSError, NotImplementedError):
+                self.skipTest("File symlinks unavailable on this host")
+            kwargs = dict(source=self.source, policy_path=self.policy,
+                          output=self.output, mode="approved-local",
+                          attestation_path=self.claim)
+            kwargs[{"input":"source", "policy":"policy_path",
+                    "claim":"attestation_path"}[name]] = alias
+            with self.subTest(input_kind=name):
+                with self.assertRaisesRegex(
+                    gate.ContractError, "^LINKED_LOCAL_PATH_REFUSED$"
+                ):
+                    gate.convert_paths(**kwargs)
+                self.assertFalse(self.output.exists())
+
+    def test_approved_local_rejects_ancestor_symlink_on_output(self):
+        alias = self.root / "linked_folder"
+        try:
+            alias.symlink_to(self.root, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("Directory symlink unavailable on this host")
+        with self.assertRaisesRegex(
+            gate.ContractError, "^LINKED_LOCAL_PATH_REFUSED$"
+        ):
+            gate.convert_paths(
+                self.source, self.policy, alias / "new.json",
+                mode="approved-local", attestation_path=self.claim,
+            )
+        self.assertFalse((self.root / "new.json").exists())
+
+    @unittest.skipUnless(os.name == "nt", "Real NTFS junction requires Windows")
+    def test_approved_local_refuses_real_ntfs_junction_ancestor(self):
+        external = self.root / "external"
+        external.mkdir()
+        (external / "child").mkdir()
+        junction = self.root / "junction"
+        result = subprocess.run(
+            ["cmd.exe", "/d", "/c", "mklink", "/J",
+             str(junction), str(external)],
+            capture_output=True, text=True, timeout=15,
+        )
+        self.assertEqual(0, result.returncode, result.stderr[:120])
+        with self.assertRaisesRegex(
+            gate.ContractError, "^LINKED_LOCAL_PATH_REFUSED$"
+        ):
+            gate.convert_paths(
+                self.source, self.policy, junction / "child" / "new.json",
+                mode="approved-local", attestation_path=self.claim,
+            )
+        self.assertFalse((external / "child" / "new.json").exists())
+
+    def test_synthetic_mode_keeps_existing_linked_fixture_behavior(self):
+        alias = self.root / "alias_input.json"
+        try:
+            alias.symlink_to(self.source)
+        except (OSError, NotImplementedError):
+            self.skipTest("File symlinks unavailable on this host")
+        self.assertEqual(
+            1, gate.convert_paths(alias, self.policy, self.output, mode="synthetic")
+        )
 
     def test_raw_execution_payload_rejected_even_with_claim(self):
         raw = dict(SOURCE, data={"runData": [{"secret": "not permitted"}]})
