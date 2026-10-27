@@ -1,3 +1,9 @@
+## 2026-10-27 — candidate extracted-directory integrity milestone
+
+Source-only `verify_portable_v012.verify_directory` previously ignored arbitrary unlisted empty directories even when reporting a pristine extraction. [PR #55](https://github.com/hibi89/SOVIA_sovereign/pull/55) on `develop` `ed19d73df8d5563d374125f9e4840e2416cee89e` now refuses unknown ancestor directories and unsupported entries. PR CI [40515324937](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40515324937) 4/4 PASS, 824 discovered/job, 0 FAIL. v0.10/v0.11.2 preserved, v0.12 beta test ZIP new SHA `facd78a00f024138363775c692b6e049bd29b76e4971c68d8f266f5106d35ba2`. Only strict local synthetic ZIP acceptance improved; not commercial/customer/owner acceptance. Remaining gates detailed in STATUS and HANDOFF.
+
+---
+
 ## 2026-10-27 R3/R6/R9 new versioned portability/identity stage — PR #54
 
 Synthetic-only separate 0.12.0-beta ZIP, nine-file strict manifest, verifier and CI artifact produced in [PR #54](https://github.com/hibi89/SOVIA_sovereign/pull/54), four-platform CI 821 tests/job zero fail. New SQLite metadata-only schema v2 prevents silently treating old source report_id from a changed rule version as the same report by using SHA-256(engine version + NUL + full normalized source digest), and stores findings digest to reject same-version conflict. Old v1 DB is refused; no automatic legal/migration assumptions or mixed version read. New CLI HTML uses true UTC sort. Historical v0.10 and v0.11.2 ZIP hash pinned unchanged. **NOT sellable or commercial P2 complete**: only synthetic tests, unsigned ZIP, no genuine approved n8n/PII/consent, owner Windows/Defender/manual Korean PDF/print, license/support/retention approval, Production or real customers. Issue #52 still open for supported-path default and release gates.
