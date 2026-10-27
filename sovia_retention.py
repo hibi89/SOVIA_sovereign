@@ -52,7 +52,8 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
 
     No filenames, paths, or file content are included in the returned summary.
     Fail closed on traversal errors/limits; symlinks and reported Windows
-    reparse points (junctions/mounts) are skipped. Concurrent path replacement
+    reparse points (junctions/mounts) are skipped, including ancestor
+    components of the requested root. Concurrent path replacement
     remains a filesystem TOCTOU caveat: this is no sandbox boundary.
     Optional strict per-category thresholds are evaluated in the SAME scan;
     this is not a transactional filesystem snapshot or disposal authorization.
@@ -67,12 +68,24 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
                 any(type(v) is not int or not 1 <= v <= 36500
                     for v in category_thresholds.values())):
             raise InventoryError("INVALID_CATEGORY_THRESHOLDS")
-    target = Path(root)
+    # Normalize without resolving. Reject malformed caller paths as a
+    # non-path-bearing access error; preserve deliberate INVALID_ROOT refusals.
     try:
-        if target.is_symlink() or not target.is_dir():
-            raise InventoryError("INVALID_ROOT")
-        root_metadata = target.stat(follow_symlinks=False)
-        if _is_reparse_point(root_metadata) or not stat.S_ISDIR(root_metadata.st_mode):
+        target = Path(os.path.abspath(root))
+    except (OSError, ValueError, TypeError) as exc:
+        raise InventoryError("ROOT_ACCESS_FAILED") from exc
+    try:
+        # os.path.abspath normalizes relative paths WITHOUT resolving junctions.
+        # Checking only the terminal directory misses `junction/child` roots:
+        # a reparse point in an ancestor can redirect a whole requested tree.
+        root_metadata = None
+        for component in (target, *target.parents):
+            metadata = component.stat(follow_symlinks=False)
+            if stat.S_ISLNK(metadata.st_mode) or _is_reparse_point(metadata):
+                raise InventoryError("INVALID_ROOT")
+            if component == target:
+                root_metadata = metadata
+        if not stat.S_ISDIR(root_metadata.st_mode):
             raise InventoryError("INVALID_ROOT")
     except OSError as exc:
         raise InventoryError("ROOT_ACCESS_FAILED") from exc
