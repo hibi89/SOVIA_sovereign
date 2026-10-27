@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 unsigned synthetic evidence and metadata privacy gate (10 sections)
+
+## 1. Goal / approved scope / technology
+SOVIA Audit Lite retrospective agent audit, offline-first zero-paid-API Python stdlib. Existing P1 5-rule audit JSON/CSV/optional PDF, SQLite, standalone read-only dashboard and v0.10 12-file portable beta preserved. Increment is a **synthetic-only, read-only evidence integrity and heuristic metadata preflight checker**, not a real n8n importer, signed provenance system, PII compliance certification or commercial release.
+
+## 2. Completed function and design choice
+Compared (A) authenticated remote producer signatures/trust store/real n8n importer (requires real source permissions, key lifecycle, possible private logs) against (B) offline self-consistency of fabricated input+policy+derived canonical digests with pre-existing high-risk metadata pattern scanner. Implemented (B) as `sovia_synthetic_evidence.py`, 35 `tests/test_synthetic_evidence.py`, `SYNTHETIC_EVIDENCE.md`; strict 7-field manifest with version/tag/unsigned origin claim and 3 lowercase SHA256 hashes. Checks SHA256 via constant-time comparison; scans synthetic source/policy before bridge conversion and canonical output after; rejects known sensitive fake patterns and malformed/extra/raw fields; no output files/network. The existing `sovia_n8n_execution_bridge.py`, canonical evaluator, original PII scanner, portable ZIP and default main are **unchanged**.
+
+## 3. Exact testing, pass/fail and limitations
+[PR #29 Actions 40470007830](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40470007830) on tested feature SHA `223d1d80913382af6c418f0960a98e59a23516b6` **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13. `python -m unittest discover -s tests -v`: **535 tests/job** (Windows 525 pass +10 optional skips, Ubuntu 524 pass +11 skips, 0 failures). All four `python portable_smoke.py` old 12-file clean extracted ZIP isolated synthetic 3 events/5 findings, SQLite/history, dashboard, backup/restore, owner self-check PASS. Owner's actual Windows/browser/Defender/Korean PDF, real n8n API/version, legal authority, privacy completeness, production not verified. Final documentation HEAD CI requires check.
+
+## 4. Done, pending, stop point
+DONE synthetic manifest shape/SHA binding, read-only gate and 35 adversarial regression tests, PR #29 integration to `develop`. PENDING authentic origin/signatures/key custody, real customer controller consent, pinned deployed n8n version and upstream sanitizer/PII false negatives, owner PC acceptance, legal retention/backup lineage, signed release/commercial authorization. No original code changes, no rework of earlier PRs #16–#28. Stop after verifying docs HEAD and report truthful status.
+
+## 5. Failure evidence / root cause / retry / do-not-repeat
+Initial [PR CI 40469827503](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40469827503) failed (535 discovered, Ubuntu 8 test errors + 8 failures) because preexisting 40+ character LONG_OPAQUE PII heuristic flagged the **exact internal fixed source_kind constant** as a token. It was not real sensitive data. Minimal correction: omit **only** the exactly matching known synthetic protocol `source_kind` literal from heuristic scan, leaving all other arbitrary/mismatched values and fields inspected; original PII scanner unchanged. Full improved repeat CI 40470007830 4/4 SUCCESS. SHA manifests may be forged by recomputing all three digests and synthetic flag is self-claimed. Therefore results explicitly report `manifest_signature_verified:false`, `provenance_independently_authenticated:false`, `customer_authorization_verified:false`, `pii_absence_proven:false`. No assumption that CI proves device or real privacy.
+
+## 6. Repo/branches/exact SHA/files
+`hibi89/SOVIA_sovereign` PUBLIC synthetic-only repo, active `develop`, default `main` docs-only/unreleased. Feature `feature/p2-synthetic-provenance-gate` tested SHA `223d1d80913382af6c418f0960a98e59a23516b6`; [PR #29](https://github.com/hibi89/SOVIA_sovereign/pull/29) merged SHA `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. New `sovia_synthetic_evidence.py`, `tests/test_synthetic_evidence.py`, `SYNTHETIC_EVIDENCE.md`. Documents `HANDOFF.md`, `STATUS.md`, `GAP_MATRIX.md`, `RESUME.md` must be kept current; fetch final HEAD after docs write.
+
+## 7. Runtime, production, command, costs
+No Vercel/production URL, external API or paid service. CLI read-only: `python sovia_synthetic_evidence.py --input SYNTHETIC_BRIDGE.json --policy SYNTHETIC_POLICY.json --manifest SELF_ASSERTED_SYNTHETIC_MANIFEST.json --synthetic-only`. Existing test suite builds working manifests in memory. All input files max 1 MiB and bounded parsed JSON, no new output. Latest P2 checker **not** in unsigned v0.10 portable ZIP. No production deployment or customer sample processed.
+
+## 8. Originals, backup, secrets, security/access
+Only synthetic fabricated field names and mock PII tokens in public repo; no real secrets/logs/customer source/PII, no network access or deletion and no source, backup or database modification. Previous source and portable archive remain unchanged. SHA digest evidence is deterministic but not a signature/immutable custody. No visibility/access changes, force push, repository main promotion, deployment or paid listing.
+
+## 9. Next steps, approvals, completion criteria
+On next `ㄱ`, inspect current `develop` latest SHA and HANDOFF→STATUS→AGENTS→REQUIREMENTS→GAP_MATRIX, then choose **distinct** P2 owner Windows portable manual acceptance support or safe simulated security case; avoid duplicate synthetic digest checks. For real customer n8n API/logs, independent privacy analysis, signing and genuine source onboarding, require explicit owner authorization and data controller scope before any use. Similarly require approval for real release/listing, access change, payment, deletion or production. Sale-ready proof requires physical-device acceptance and real authorized data/legal/backups.
+
+## 10. Update time, exact confidence boundary
+2026-10-27 KST, tested PR feature SHA `223d1d80913382af6c418f0960a98e59a23516b6`, Actions 40470007830 4/4 success, merge `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. Post-document HEAD and CI check afterward. No independently authenticated source/actual n8n/owner physical Windows/real privacy or production. Document source basis = merged PR #29 plus measured CI.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic execution summary-to-steps bridge (10 sections)
 
 ## 1. Goal, confirmed product requirements, technology

@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #29 read-only synthetic integrity/privacy QA
+
+Canonical repo `hibi89/SOVIA_sovereign` PUBLIC synthetic-only, development on `develop`, `main` docs-only. [PR #29](https://github.com/hibi89/SOVIA_sovereign/pull/29) merged SHA `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. Source module `sovia_synthetic_evidence.py`, 35 tests `tests/test_synthetic_evidence.py`, `SYNTHETIC_EVIDENCE.md`. Read-only local gate verifies SHA256 self-consistency of fabricated n8n-bridge document, example policy and recomputed SOVIA canonical events, checks heuristic metadata patterns before/after conversion. It cannot authenticate origin, prove consent/privacy or import raw real n8n data; no changes to original converter/core/main/portable ZIP.
+
+[Actions 40470007830](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40470007830) tested feature head `223d1d80913382af6c418f0960a98e59a23516b6` **4/4 success** Windows/Ubuntu × Python 3.11/3.13; 535 discovered each, 0 fail, old 12-file portable smoke all PASS. Initial [CI 40469827503](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40469827503) failed because strict PII heuristic matched one known fixed 40+ character `source_kind` constant; only this exact marker was exempted in the new gate and full CI passed. Preserve full scan for all remaining fields. Final docs HEAD CI must be checked after update.
+
+**On ㄱ**: read latest `develop` SHA and HANDOFF→STATUS→AGENTS→REQUIREMENTS→GAP_MATRIX; continue a **different** safe P2 task such as real owner Windows acceptance facilitation without false PASS or safe synthetic security case. Do NOT redo already merged PRs #16–#29. Owner physical PC/Defender/browser/PDF, real n8n instance/customer lawful logs, independently verified PII absence, signature/release and production all UNVERIFIED. Owner approval required before any real API, data, external transfer, access/visibility change, deployment, payment, release or destruction.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #28 synthetic execution summary bridge
 
 Canonical `hibi89/SOVIA_sovereign` PUBLIC, active source `develop`, `main` docs-only. [PR #28](https://github.com/hibi89/SOVIA_sovereign/pull/28) merged `d065dd2834ecc7499a0c551220ba5950ff7effed`. New `sovia_n8n_execution_bridge.py`, 31 synthetic regression cases `tests/test_n8n_execution_bridge.py`, two fabricated 1x/2x examples and `N8N_SYNTHETIC_EXECUTION_BRIDGE.md`. Strict synthetic-only summary plus **explicit pre-sanitized steps** feeds existing canonical SOVIA evaluator; never manufactures tool events from execution `status/startedAt`, never imports raw n8n execution or calls API. Old P1 5 rules and beta ZIP preserved.
