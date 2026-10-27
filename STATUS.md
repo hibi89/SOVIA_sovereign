@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 optional guarded source export / PR #35
+
+- **GitHub:** PUBLIC hibi89/SOVIA_sovereign; active develop; default main docs-only. [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) MERGED SHA 9d27e3468eb555ed72dfd2229cf414fbe674ebf1; no production URL/Vercel/release/sales.
+- **Implemented:** sovia_guarded_export.py opt-in source-only real canonical JSON to Korean HTML+JSON, mandatory LOCAL TEST per-file 1/2/4MiB size budget, no-clobber dual output and disk free-space snapshot grouped per device, using original write_reports_atomically and original audit parser/evaluator/HTML+JSON serializers. **Not included** in existing 12-file v0.10 beta ZIP. No default CLI or customer-supported quota change.
+- **Tests:** 23 new tests; [CI 40478010428](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478010428), feature head 10d910ac4ed664cc241abe5ba9e7f6e0d670a73e, Win/Ubuntu 3.11/3.13 4/4 SUCCESS, 671 discovered/job, Windows 661 pass/10 skip, Ubuntu 660 pass/11 skip, 0 failed; old isolated portable beta smoke unchanged sha256 894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b. Initial CI had 2 test-mock wrong shape errors, fixed in test and fully reverified.
+- **Limitations:** No promise of atomic multi-file transaction, low-disk race safety, actual hardware Windows/Defender/browser/Korean PDF or network fs. Real sanctioned n8n, PII/consent/legal retention, signed release, commercial quota/support and Production remain UNKNOWN. PR #34 (report writer ordering) separate pending at checkpoint and may change core/ZIP SHA if merged later.
+- **Next ㄱ:** verify live HEAD/PR34+CI then continue distinct safe P2 fault-injection/regression or consent-gated owner acceptance; do not repeat PRs #16–#35. Source-only, no real customer data/API or security settings change without permission.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic output-budget preflight / PR #33
 
 - **Repo:** PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, default `main` docs-only. [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`.
