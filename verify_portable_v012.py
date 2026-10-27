@@ -136,15 +136,25 @@ def verify_directory(root_path):
     if not root.is_dir() or root.is_symlink():
         raise PackageError("Extraction directory absent or symlinked")
     expected = set(FILES) | {MANIFEST}
+    allowed_directories = {
+        "/".join(filename.split("/")[:depth])
+        for filename in expected
+        for depth in range(1, len(filename.split("/")))
+    }
     found = set()
     for entry in root.rglob("*"):
+        name = entry.relative_to(root).as_posix()
         if entry.is_symlink():
             raise PackageError("Symlink in extracted payload")
         if entry.is_file():
-            name = entry.relative_to(root).as_posix()
-            found.add(name)
             if name not in expected:
-                raise PackageError("Unexpected extracted file: " + name)
+                raise PackageError("Unexpected extracted file")
+            found.add(name)
+        elif entry.is_dir():
+            if name not in allowed_directories:
+                raise PackageError("Unexpected extracted directory")
+        else:
+            raise PackageError("Unsupported extracted entry")
     if found != expected:
         raise PackageError("Extracted payload missing files")
     manifest = root / MANIFEST
