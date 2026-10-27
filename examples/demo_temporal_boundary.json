@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "policy": {
+    "allowed_tools": [
+      "approved_lookup"
+    ],
+    "approved_destinations": [
+      "internal.example"
+    ],
+    "sensitive_targets": [
+      "client_records"
+    ],
+    "max_tool_calls_per_minute": 2
+  },
+  "events": [
+    {
+      "event_id": "e1",
+      "occurred_at_utc": "2026-10-25T15:01:00Z",
+      "agent_id": "synthetic-agent",
+      "run_id": "run-1",
+      "tool_name": "approved_lookup",
+      "target": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome": "ok",
+      "source_pointer": "synthetic:1"
+    },
+    {
+      "event_id": "e2",
+      "occurred_at_utc": "2026-10-25T15:01:00.500000Z",
+      "agent_id": "synthetic-agent",
+      "run_id": "run-1",
+      "tool_name": "approved_lookup",
+      "target": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome": "ok",
+      "source_pointer": "synthetic:2"
+    },
+    {
+      "event_id": "e3",
+      "occurred_at_utc": "2026-10-25T15:02:00.300000Z",
+      "agent_id": "synthetic-agent",
+      "run_id": "run-1",
+      "tool_name": "approved_lookup",
+      "target": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome": "ok",
+      "source_pointer": "synthetic:3"
+    }
+  ]
+}
