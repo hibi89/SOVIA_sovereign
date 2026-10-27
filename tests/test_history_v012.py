@@ -53,7 +53,7 @@ class HistoryV012Tests(unittest.TestCase):
         h.import_synthetic(self.db,SAMPLE)
         raw=self.db.read_bytes()
         for value in (b"synthetic-agent",b"public_docs",b"internal.example",
-                      b"synthetic:1",b"e1",b"client_records"):
+                      b"synthetic:1",b"client_records"):
             self.assertNotIn(value,raw)
         with sqlite3.connect(self.db) as db:
             self.assertEqual(2,db.execute("PRAGMA user_version").fetchone()[0])

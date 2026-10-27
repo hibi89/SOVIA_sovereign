@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile source/tests
-        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py owner_selfcheck.py sovia_capacity_benchmark.py build_portable_p2.py verify_portable_p2.py owner_p2_selfcheck.py portable_smoke_p2.py sovia_n8n_direct_audit.py sovia_n8n_sanitized.py sovia_guarded_export.py sovia_ephemeral_diagnostic.py windows_edge_local_smoke.py tests
+        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py owner_selfcheck.py sovia_capacity_benchmark.py build_portable_p2.py verify_portable_p2.py owner_p2_selfcheck.py portable_smoke_p2.py sovia_n8n_direct_audit.py sovia_n8n_sanitized.py sovia_guarded_export.py sovia_ephemeral_diagnostic.py sovia_audit_v012.py sovia_history_v012.py build_portable_v012.py verify_portable_v012.py portable_smoke_v012.py windows_edge_local_smoke.py tests
       - name: Run stdlib regression (optional PDF cases may skip)
         run: python -m unittest discover -s tests -v
 
@@ -34,6 +34,8 @@ jobs:
         run: python portable_smoke.py
       - name: Verify extracted v0.11 P2 candidate end-to-end (isolated Python)
         run: python portable_smoke_p2.py
+      - name: Verify v0.12 separate ZIP fresh extraction and SQLite v2 recovery
+        run: python portable_smoke_v012.py
       - name: Windows Edge real local-file DOM and screenshot smoke (extracted P2 synthetic ZIP)
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
         run: |
@@ -63,6 +65,22 @@ jobs:
           path: |
             dist/SOVIA-Audit-Lite-0.11.2-beta.zip
             dist/SOVIA-Audit-Lite-0.11.2-beta.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
+      - name: Build distinct v0.12 synthetic candidate (NOT a release)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: |
+          python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
+          python -I -B build_portable_v012.py --output dist/SOVIA-Audit-Lite-0.12.0-beta.zip
+          python -I -B verify_portable_v012.py --archive dist/SOVIA-Audit-Lite-0.12.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.12.0-beta.zip.sha256
+      - name: Upload distinct v0.12 synthetic CI artifact (NOT a release)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovia-portable-v012-synthetic
+          path: |
+            dist/SOVIA-Audit-Lite-0.12.0-beta.zip
+            dist/SOVIA-Audit-Lite-0.12.0-beta.zip.sha256
           if-no-files-found: error
           retention-days: 14
       - name: Build downloadable synthetic portable beta
