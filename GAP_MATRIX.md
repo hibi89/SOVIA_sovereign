@@ -1,3 +1,9 @@
+## 2026-10-27 P2 browser compatibility evidence (PR #46)
+
+**CI_BROWSER_DOM_PROVEN (synthetic):** Microsoft Edge on GitHub-hosted Windows Python 3.11 actually opened pristine extracted P2 ZIP's generated `file://` audit report and SQLite HTML dashboard; parsed Korean DOM labels/5 findings/CSP and exact inner ZIP SHA; 4/4 CI matrix with 766 tests/job and old/current clean ZIP smoke. **Still UNVERIFIED:** image/pixel/print layout, user's physical Windows/Defender/Korean font and optional PDF, comprehensive Edge background network absence, authenticated source provenance, native approved n8n version/PII redaction/consent, contracts/retention/support/quotas/signing/production or sale. Added tests do not edit protected v0.10/v0.11.2 release. [PR #46](https://github.com/hibi89/SOVIA_sovereign/pull/46) merged `6a72245db4ec3227958416b9812a1d1d99c7d370`.
+
+---
+
 ## 2026-10-27 SOVIA P2 Windows NTFS junction proof vs commercial gate
 
 **Verified via real GitHub-hosted Windows runner**: NTFS `mklink /J` child/direct-root/ancestor-root and review metadata refusal/exclusion, Python 3.11 & 3.13 Windows tests actually executed (not skipped), [PR #45](https://github.com/hibi89/SOVIA_sovereign/pull/45) merged at `a7bf1ae5b25b08c30801423e414d3615b8502eb5`; feature CI [40495478721](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40495478721) 4/4 success 762 tests/job, historic package smoke green. **Unverified**: adversarial TOCTOU race resistance, owner's own PC/install/Defender/visual Korean HTML/PDF, native authorized n8n/version/PII upstream, data-controller legal consent, privacy false negatives, retention legal obligations, signing/support/sale permission. Archive and core unchanged; no production.
