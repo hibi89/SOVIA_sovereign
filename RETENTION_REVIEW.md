@@ -1,3 +1,11 @@
+## P2 improvement — single-pass metadata scan (2026-10-27, feature proposal)
+
+Existing reviewed category thresholds formerly made **five full directory traversals** with the same pinned clock. This raises I/O linearly with category count and permits changes between traversals to cause spurious metadata disagreement. Two choices were compared: **(A)** keep five scans and compare coarse counters (zero development effort, five directory passes and inconsistent sample windows); **(B)** accept strict per-category thresholds in the existing offline inventory and evaluate all candidates in **one** bounded directory pass (small additive source-only change, fewer I/O operations, shared sample window). Option B selected for review; it does **not** make a transactional/atomic filesystem snapshot. The original single-age inventory CLI and injected fault-test inventory compatibility path are preserved.
+
+New regression `tests/test_retention_single_pass.py` checks that 5 independently computed legacy category thresholds produce exactly the same counts/bytes as a *single* scan, verifies one `os.scandir` for a flat fixture (two for a nested directory), no file/content changes, strict thresholds and no local path/filename leakage. `sovia_retention.py` and `sovia_retention_review.py` are source-only helpers outside old v0.10 and v0.11.2 18-file portable archives. Existing immutable release provenance must stay identical. This remains a review queue, not legal retention period, secure erase, permission to delete or sale readiness. **CI and integration pending** at feature creation.
+
+---
+
 # SOVIA P2 — read-only artifact retention governance dry-run
 
 **Development-stage review tool, NOT automatic retention enforcement or deletion approval.** No real customer artifacts were used to build or test this feature.
