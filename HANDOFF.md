@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 guarded local export / PR #35 (10 required sections)
+
+## 1. Mission, confirmed requirements, technology
+SOVIA Sovereign Audit Lite is a local-first read-only retrospective 5-rule AI agent auditor (Python 3.11+, stdlib JSON/CSV/HTML, optional PDF, SQLite metadata history, static dashboard). This P2 addition mitigates output report expansion/failure while preserving default CLI behavior; no Cloud/Private deployment, buyer SLA or real data approval.
+
+## 2. Implemented change and design decision
+Compared (A) modifying shipped sovia_audit.py CLI and portable v0.10 in place (changes established behavior/artifact identity, requires owner-approved quotas) vs (B) independent opt-in guarded source CLI using original audit engine/serializer/writer (selected). [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) added sovia_guarded_export.py, tests/test_guarded_export.py (23 synthetic tests), GUARDED_LOCAL_EXPORT.md. Only explicit --local-test-budget-bytes 1/2/4 MiB per file; canonical structured JSON input, HTML+JSON output. Measures real report bytes BEFORE write, checks a best-effort available-free-space snapshot grouped by filesystem, then reuses existing exclusive hardlink staging+fsync and best-effort rollback. No default CLI, portable beta ZIP, core, main or customer data changes by PR #35.
+
+## 3. Reproducible tests, counts, outcomes, verified/unverified
+Source tested feature SHA 10d910ac4ed664cc241abe5ba9e7f6e0d670a73e, [GitHub Actions run 40478010428](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478010428) Windows/Ubuntu × Python 3.11/3.13, **4/4 SUCCESS, 671 tests discovered/job**, Windows 661 PASS/10 SKIP, Ubuntu 660 PASS/11 SKIP, 0 failure. Existing 12-file v0.10 extracted portable selfcheck/SQLite/HTML/dashboard backup-restore PASS all 4, old zip SHA 894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b. Tests: python -m unittest discover -s tests -v; python portable_smoke.py; Python -I -B sovia_guarded_export.py --input examples/demo_five_rules.json --html-output NEW_REPORT.html --json-output NEW_REPORT.json --local-test-budget-bytes 1048576. No actual owner's PC/browser/Defender/PDF tests, no authorized real source or production.
+
+## 4. DONE, pending, blocked, stop point
+DONE optional source CLI, 23 tests, failure-injected mock ENOSPC stages/second hardlink, size-deny-before-stage, collision/overwrite rejection, disk space grouping check, inherited writer rollback tested, CI and PR #35 merge. PENDING real OS disk-full or ACL/network-fs behavior, race/partial multi-file visibility, true Windows owner use/Defender/Korean glyph/PDF, privacy false negatives/consent/approved real n8n source and version, supported environment, signed commercial release. PR #34 independently OPEN at writing: report writer fault-order fix proposed on a separate branch; do not conflate or overwrite.
+
+## 5. Failures, causes, fixes, forbidden repeats
+First feature [CI run 40477906006](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40477906006) had **2 errors out of 671 tests**: two mocks returned plain tuple for shutil.disk_usage while code reads named .free; fixed only test mocks to provide .free via mock.Mock, repeated **full 4-job CI green** at 10d910ac. No change to production logic for this correction. No tested customer SLA or streaming budget; render buffers remain in memory. Free-space check is a best-effort snapshot, no atomic multi-file guarantee or crash-consistent transaction. Do not rerun earlier PRs #16–#35 work by accident.
+
+## 6. Repo, branch, SHA, primary paths
+PUBLIC repo hibi89/SOVIA_sovereign, active develop, default main documentation-only. PR #35 merged SHA 9d27e3468eb555ed72dfd2229cf414fbe674ebf1; tested feature 10d910ac4ed664cc241abe5ba9e7f6e0d670a73e. Added sovia_guarded_export.py, tests/test_guarded_export.py, GUARDED_LOCAL_EXPORT.md. Docs STATUS.md, HANDOFF.md, RESUME.md and GAP_MATRIX.md follow; their writes advance develop, so refresh final HEAD after completion.
+
+## 7. Production, URL, commands, runtime, cost
+Production/Vercel: NOT APPLICABLE (no deployment or Production URL). Offline Python 3.11+ source only, no API calls, LLM, paid packages, hosted billing, public release or app listing. Existing v0.10 unsigned zip intentionally does not include new utility; no quoted customer volume or delivery commitment.
+
+## 8. Originals, backups, secrets, access, no-modify boundaries
+Old original CLI, audit core, source fixtures, owner backups and portable archive unchanged by PR #35. GitHub merge parent is intact as source rollback reference; no force push/main change, repo access/visibility alterations or storage cleanup. No real customer log, credentials, private paths, screenshot, PDF font, .env or tokens committed. Public repo caution applies. The tested guarded output JSON would contain event metadata, therefore future local users must supply sanitized authorized inputs and safely handle resulting files.
+
+## 9. Next action priority, exact completion gates, approvals
+1) Refresh latest develop and PR #34 state; after any independent writer changes, rerun combined full regression and compare new portable hash (PR #34 can alter core/ZIP). 2) Synthetic fault and rollback tests for staging write/fsync and concurrent collision with opt-in CLI; owner Windows/browser/AV/Korean PDF acceptance later. 3) Define approved support quotas, supported n8n version/source consent, retention and customer contract before any commercial listing. No unapproved pricing, access/visibility changes, real customer data/API, signed releases, destructive history or deployment.
+
+## 10. Last update KST, evidence and verification boundary
+2026-10-27 KST: starting develop 6b858d8b75fc2b01b4161b7990943575cf11c0bb (CI 40476992465 SUCCESS). PR #35 tested head 10d910ac4ed664cc241abe5ba9e7f6e0d670a73e (Actions 40478010428 4/4 SUCCESS) and merged at 9d27e3468eb555ed72dfd2229cf414fbe674ebf1. Final docs HEAD CI must be checked separately. Owner device, real data, commercial release and production status remain UNVERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic output size preflight / PR #33
 
 ## 1. Goal, approved scope, stack
