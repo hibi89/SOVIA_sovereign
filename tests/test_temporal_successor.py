@@ -131,6 +131,17 @@ class TemporalRuleTests(unittest.TestCase):
             self.assertEqual(saved, (html.read_bytes(), data.read_bytes()))
             self.assertNotIn(str(source), second.stderr)
 
+    def test_independent_cli_html_timeline_is_chronological(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source, html, data = (Path(tmp)/"input.json", Path(tmp)/"result.html",
+                                  Path(tmp)/"result.json")
+            source.write_text(json.dumps(self.fixture), encoding="utf-8")
+            newer.run_synthetic(source, html, data)
+            page = html.read_text(encoding="utf-8")
+            self.assertLess(page.index("2026-10-25T15:01:00Z"),
+                            page.index("2026-10-25T15:01:00.500000Z"))
+            self.assertEqual(0, json.loads(data.read_text(encoding="utf-8"))["finding_count"])
+
     def test_missing_synthetic_ack_makes_no_files(self):
         with tempfile.TemporaryDirectory() as tmp:
             a, b = Path(tmp)/"a.html", Path(tmp)/"b.json"

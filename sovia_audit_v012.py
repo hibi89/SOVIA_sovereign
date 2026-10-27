@@ -97,7 +97,7 @@ def run_synthetic(input_path, html_output, json_output):
         document = core.read_document(source)
         _sibling("sovia_pii_preflight.py", "_sovia_v012_pii").assert_no_high_risk_patterns(document)
         result = evaluate(document, legacy_audit=core)
-        data = (core.render_html(result).encode("utf-8"),
+        data = (_sibling("sovia_report_print_preview.py", "_sovia_v012_view").render(result).encode("utf-8"),
                 json.dumps(result, ensure_ascii=False, sort_keys=True,
                            indent=2, allow_nan=False).encode("utf-8"))
         if any(len(payload) > MAX_OUTPUT_BYTES for payload in data):
