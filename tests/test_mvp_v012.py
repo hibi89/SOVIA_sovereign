@@ -49,8 +49,11 @@ class MVPV012Tests(unittest.TestCase):
         observed = []
 
         def inspecting_link(src, dst, *args, **kwargs):
-            self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).is_file())
-            observed.append(Path(dst).name)
+            # The audit renderer uses os.link inside its staging folder too.
+            # Only inspect the MVP's final publish destination.
+            if Path(dst).parent == self.target:
+                self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).is_file())
+                observed.append(Path(dst).name)
             return original_link(src, dst, *args, **kwargs)
 
         with patch("sovia_mvp_v012.os.link", side_effect=inspecting_link):
@@ -64,7 +67,7 @@ class MVPV012Tests(unittest.TestCase):
         original_link = os.link
 
         def failing_second_link(src, dst, *args, **kwargs):
-            if Path(dst).name == "report.json":
+            if Path(dst).parent == self.target and Path(dst).name == "report.json":
                 self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).exists())
                 self.assertTrue((self.target / "report.html").exists())
                 raise OSError("synthetic fault after first link")
@@ -81,7 +84,7 @@ class MVPV012Tests(unittest.TestCase):
         original_link = os.link
 
         def interrupted_link(src, dst, *args, **kwargs):
-            if Path(dst).name == "report.json":
+            if Path(dst).parent == self.target and Path(dst).name == "report.json":
                 raise KeyboardInterrupt()
             return original_link(src, dst, *args, **kwargs)
 
