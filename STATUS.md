@@ -1,3 +1,9 @@
+## 2026-10-28 — PR #63 output interruption classification merged into develop
+
+[PR #63](https://github.com/hibi89/SOVIA_sovereign/pull/63) merged code `d76dd635dd7c75181e5f6e74c37db48ce8869b79`; local v0.12 synthetic output now uses `.SOVIA_INCOMPLETE` marker until HTML/JSON/SQLite all publish. Normal writer errors remove own files/marker; nonstandard interruption can leave a clearly invalid partial folder. [Final PR CI #40538279613](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40538279613) Windows/Ubuntu × Python3.11/3.13 **4/4 SUCCESS** (857 tests discovered per job, no failures). Initial PR CI #40538063103 failed from overly broad test mocks intercepting internal stage links; fixed by constraining to final output directory; do not repeat. This mitigates *recognition* of interrupted outputs but does not make multi-file publication crash-atomic, prove power-loss durability, or authorize customer use. Existing v0.12 Windows one-click synthetic demo preserved, old v0.10/v0.11.2 snapshots unchanged. Next: owner Windows physical/manual acceptance and permissioned real n8n provenance, privacy, retention and commercial gates; no Production/Vercel or signed sale.
+
+---
+
 ## 2026-10-28 — P2 Windows one-click synthetic demo PR #62 MERGED
 
 - [PR #62](https://github.com/hibi89/SOVIA_sovereign/pull/62) merged code SHA `40dc7f5c137b2259b72bf4cc382af75563db86e9`. New portable `RUN_V012_DEMO.cmd` double-click entrypoint verifies extracted package integrity, runs the existing fabricated five-rule v0.12 CLI, produces HTML/JSON/SQLite in a new sibling output folder, then requests local browser opening (normal interactive mode). `--ci` suppresses browser/pause; no network, real n8n, auto-overwrite or installer.

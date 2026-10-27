@@ -1,3 +1,9 @@
+## 2026-10-28 — P2 interrupted output identification implemented (PR #63)
+
+PR [#63](https://github.com/hibi89/SOVIA_sovereign/pull/63), merged code `d76dd635dd7c75181e5f6e74c37db48ce8869b79`: v0.12 reports/SQLite publication marks a newly created destination `.SOVIA_INCOMPLETE` until all three artifacts have been linked, then removes the marker. Synthetic normal completion, injected writer failure rollback, and interrupted publish cases have focused regressions; [CI #40538279613](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40538279613) **4/4 PASS** Windows/Ubuntu 3.11/3.13. **Remaining** crash-atomic guarantee, power-loss metadata durability, owner physical Windows/AV/PDF, actual authorized n8n integration and provenance/PII/retention/legal/support/signature/commercial approval. Repo PUBLIC synthetic-only, no production. Do not equate folder existence with a complete result.
+
+---
+
 ## 2026-10-28 — P2 local Windows launch friction reduced (PR #62)
 
 [PR #62](https://github.com/hibi89/SOVIA_sovereign/pull/62) merged source `40dc7f5c137b2259b72bf4cc382af75563db86e9`: installed v0.12 **14-file** synthetic beta ZIP now has `RUN_V012_DEMO.cmd` for Windows synthetic-only one-click launch, full directory integrity preflight and no-overwrite sibling HTML/JSON/SQLite results. Python3.11+ prerequisite, auto-open local HTML in interactive mode; hosted Windows tested `--ci` mode. [CI #40535209040](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40535209040) 4/4 success, 854 tests/job, zero failures including real Windows cmd special-character path/re-run/tamper cases; distinct new ZIP SHA256 `937c2fa0c5c90a5d17c9ca4b3aa63c665680fe2a1b818a25b9094e1c9279fe03`, old frozen ZIPs unchanged. **Still open** owner actual Windows/Defender/browser/print, approved real native n8n source, privacy/license/retention/support/signature, sale and production. No frontend redesign or claim of customer clearance.
