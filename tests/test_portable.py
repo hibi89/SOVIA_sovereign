@@ -274,5 +274,63 @@ class PortableTests(unittest.TestCase):
         self.assertEqual("portable_clean_install_pass", result["status"])
         self.assertTrue(result["database_restored"])
 
+
+class PortablePublisherRollbackTests(unittest.TestCase):
+    """Protect output artifacts when filesystem metadata is unavailable."""
+
+    def setUp(self):
+        self.t = tempfile.TemporaryDirectory(prefix="sovia-build-publish-")
+        self.addCleanup(self.t.cleanup)
+        self.root = Path(self.t.name)
+        self.zip = self.root / build.DEFAULT_NAME
+        self.check = self.root / (build.DEFAULT_NAME + ".sha256")
+
+    def test_stage_stat_failure_occurs_before_any_destination_link(self):
+        original_stat = os.stat
+        stage_calls = []
+        def fail_stage_stat(path, *args, **kwargs):
+            if Path(path).name.startswith(".sovia-portable-"):
+                stage_calls.append(str(path))
+                raise OSError("injected stage stat failure")
+            return original_stat(path, *args, **kwargs)
+        with patch.object(build.os, "stat", side_effect=fail_stage_stat):
+            with self.assertRaises(OSError):
+                build._atomic_publish([(self.zip, b"ZIP"), (self.check, b"CHECK")])
+        self.assertTrue(stage_calls)
+        self.assertFalse(self.zip.exists())
+        self.assertFalse(self.check.exists())
+        self.assertEqual(list(self.root.glob(".sovia-portable-*")), [])
+
+    def test_second_publish_link_failure_rolls_back_first(self):
+        actual_link = os.link
+        calls = []
+        def fail_second(src, dst, *args, **kwargs):
+            calls.append(str(dst))
+            if len(calls) == 2:
+                raise OSError("synthetic disk full")
+            return actual_link(src, dst, *args, **kwargs)
+        with patch.object(build.os, "link", side_effect=fail_second):
+            with self.assertRaises(OSError):
+                build._atomic_publish([(self.zip, b"ZIP"), (self.check, b"CHECK")])
+        self.assertEqual(len(calls), 2)
+        self.assertFalse(self.zip.exists())
+        self.assertFalse(self.check.exists())
+        self.assertEqual(list(self.root.glob(".sovia-portable-*")), [])
+
+    def test_reject_wrong_payload_before_opening_stage(self):
+        with self.assertRaisesRegex(build.BuildError, "^Portable payload must be bytes$"):
+            build._atomic_publish([(self.zip, object())])
+        self.assertFalse(self.zip.exists())
+        self.assertEqual(list(self.root.glob(".sovia-portable-*")), [])
+
+    def test_old_build_reproducible_and_same_bytes(self):
+        one = build.package_bytes()
+        two = build.package_bytes()
+        self.assertEqual(one, two)
+        result = build.build(self.zip)
+        self.assertEqual(result["sha256"], hashlib.sha256(one).hexdigest())
+        self.assertEqual(result["files"], 12)
+
+
 if __name__ == "__main__":
     unittest.main()
