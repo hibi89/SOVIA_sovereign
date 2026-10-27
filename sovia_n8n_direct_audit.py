@@ -53,7 +53,8 @@ def _paths(source, policy, html_output, json_output, attestation):
 
 
 def direct_audit(source, policy, html_output, json_output, *,
-                 mode="synthetic", synthetic_only=False, attestation=None):
+                 mode="synthetic", synthetic_only=False, attestation=None,
+                 local_test_budget_bytes=None):
     """Read, validate, classify, render, and publish; no canonical temp file."""
     if mode not in ("synthetic", "approved-local"):
         raise DirectAuditError("INVALID_MODE")
@@ -63,6 +64,10 @@ def direct_audit(source, policy, html_output, json_output, *,
     elif synthetic_only is not False or attestation is None:
         raise DirectAuditError("OPERATOR_ATTESTATION_REQUIRED")
 
+    if local_test_budget_bytes is not None and (
+            type(local_test_budget_bytes) is not int or
+            local_test_budget_bytes not in (1_048_576, 2_097_152, 4_194_304)):
+        raise DirectAuditError("INVALID_LOCAL_TEST_BUDGET")
     sources, targets = _paths(source, policy, html_output, json_output, attestation)
     audit = _module("_sovia_direct_audit_core", "sovia_audit.py")
     adapter = _module("_sovia_direct_n8n_contract", "sovia_n8n_sanitized.py")
@@ -82,11 +87,23 @@ def direct_audit(source, policy, html_output, json_output, *,
     except (ValueError, TypeError, KeyError, OSError, UnicodeError,
             RecursionError, OverflowError) as exc:
         raise DirectAuditError("CONTRACT_OR_REVIEW_REJECTED") from exc
+    items = list(zip(targets, (html, machine)))
+    # This optional source-only local test setting does NOT establish a customer
+    # quota. Reuse the already tested best-effort budget/storage gate; measure
+    # actual serialized bytes before creating any report file.
+    if local_test_budget_bytes is not None:
+        if any(len(data) > local_test_budget_bytes for _, data in items):
+            raise DirectAuditError("OUTPUT_EXCEEDS_SELECTED_LOCAL_TEST_BUDGET")
+        guard = _module("_sovia_direct_budget_gate", "sovia_guarded_export.py")
+        try:
+            guard._check_storage(items)
+        except (guard.GuardedExportError, OSError, TypeError, ValueError) as exc:
+            raise DirectAuditError("OUTPUT_STORAGE_PREFLIGHT_FAILED") from exc
     # Reject aliases again immediately before publication; the original writer
     # also uses exclusive hardlinks and never intentionally overwrites a file.
     _paths(source, policy, html_output, json_output, attestation)
     try:
-        audit.write_reports_atomically(list(zip(targets, (html, machine))))
+        audit.write_reports_atomically(items)
     except (OSError, ValueError, TypeError, RecursionError) as exc:
         raise DirectAuditError("REPORT_PUBLISH_FAILED") from exc
     return {
@@ -102,6 +119,9 @@ def direct_audit(source, policy, html_output, json_output, *,
         "source_authorization_independently_verified": False,
         "n8n_native_api_compatibility_verified": False,
         "customer_delivery_approved": False,
+        "local_test_budget_per_file_bytes": local_test_budget_bytes,
+        "best_effort_free_space_checked": local_test_budget_bytes is not None,
+        "full_multi_file_transaction_guaranteed": False,
     }
 
 
@@ -117,12 +137,15 @@ def main(argv=None):
                    help="required for synthetic mode; asserts fixed fabricated source")
     p.add_argument("--attestation",
                    help="operator review-claim file; required for approved-local only")
+    p.add_argument("--local-test-budget-bytes", type=int,
+                   help="optional per-file developer test ceiling: 1048576, 2097152 or 4194304 (NOT a customer quota)")
     args = p.parse_args(argv)
     try:
         result = direct_audit(
             args.input, args.policy, args.html_output, args.json_output,
             mode=args.mode, synthetic_only=args.synthetic_only,
-            attestation=args.attestation)
+            attestation=args.attestation,
+            local_test_budget_bytes=args.local_test_budget_bytes)
     except DirectAuditError as exc:
         print(json.dumps({"status": "REJECTED", "error_code": str(exc)}),
               file=sys.stderr)
