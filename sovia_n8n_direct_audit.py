@@ -38,6 +38,13 @@ def _paths(source, policy, html_output, json_output, attestation, *,
         sources.append(Path(os.path.abspath(attestation)))
     targets = [Path(os.path.abspath(html_output)), Path(os.path.abspath(json_output))]
     if approved_local:
+        # Preserve the established collision refusal contract without touching
+        # file contents or resolving potentially linked ancestor directories.
+        source_names = {os.path.normcase(str(p)) for p in sources}
+        target_names = [os.path.normcase(str(p)) for p in targets]
+        if (len(set(target_names)) != len(target_names) or
+                any(name in source_names for name in target_names)):
+            raise DirectAuditError("INPUT_OUTPUT_PATH_COLLISION")
         # Reuse the operator-claim converter's lexical no-follow guard BEFORE
         # resolving anything, for both inputs and proposed output parents.
         # The guard is intentionally conservative, not a race-free sandbox.
