@@ -1,3 +1,9 @@
+## 2026-10-28 — Privacy heuristic IPv6 false-negative narrowed (PR #64)
+
+[PR #64](https://github.com/hibi89/SOVIA_sovereign/pull/64), `develop` merge `4292fde69c546f596eda5ef029a086aec1e2b67b`, extends existing bounded preflight with IPv6 literal validation (plain, URL bracketed, scoped, IPv4-mapped) and rejects pattern-positive fabricated sanctioned-like and synthetic n8n-like metadata before output. UTC timestamp, colon-coded metadata, incomplete labels remain allowed in focused tests. [CI #40540329408](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40540329408) 4/4 Win/Ubuntu Python3.11/3.13 pass, 861 tests/job, 0 FAIL. **Open** contextual PII, ID schemes, nonliteral IPv6 concatenations, genuine n8n sanctioned source and real privacy review, legal retention/license/support, owner Windows physical/AV/print, signed commercial release, Production. This is not a privacy certification or authorization to ingest customer data. Repo PUBLIC synthetic-only; old version payloads unchanged.
+
+---
+
 ## 2026-10-28 — P2 interrupted output identification implemented (PR #63)
 
 PR [#63](https://github.com/hibi89/SOVIA_sovereign/pull/63), merged code `d76dd635dd7c75181e5f6e74c37db48ce8869b79`: v0.12 reports/SQLite publication marks a newly created destination `.SOVIA_INCOMPLETE` until all three artifacts have been linked, then removes the marker. Synthetic normal completion, injected writer failure rollback, and interrupted publish cases have focused regressions; [CI #40538279613](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40538279613) **4/4 PASS** Windows/Ubuntu 3.11/3.13. **Remaining** crash-atomic guarantee, power-loss metadata durability, owner physical Windows/AV/PDF, actual authorized n8n integration and provenance/PII/retention/legal/support/signature/commercial approval. Repo PUBLIC synthetic-only, no production. Do not equate folder existence with a complete result.
