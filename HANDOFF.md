@@ -1,3 +1,18 @@
+# DRAFT PR #42 — PRINT USABILITY FEATURE HANDOFF (10 items; 2026-10-27 KST)
+
+1. **Mission/stack:** Existing Python 3.11+ offline audit MVP verified; original blueprint followed by final safety/compatibility, no new Cloud/Private. Narrow-scope report print usability only.
+2. **Change/decision:** Compare landscape-only CSS versus print-only labeled cards; choose labeled cards. `sovia_audit.render_html` now retains screen tables and scroll wrappers while printing as labeled cards, with constant trusted labels. JSON/CSV/evaluation/output writer unchanged.
+3. **Tests:** Local synthetic fixture 3 events/5 findings; original two HTML tables' cell content matched; escaped-injection and empty-finding fallbacks PASS; static WeasyPrint A4 PDF visual preview readable (3 pages). 5 new stdlib unit cases. Feature [CI 40491371943](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40491371943) outcome needs refreshed check before merge. Browser actual/owner Windows NOT_VERIFIED.
+4. **Stage:** Draft PR #42 open; no develop integration. Original P1 and v0.11.2 verified package unaffected. Real Windows, genuine native n8n, release privacy/commercial gates pending.
+5. **Attempt/pivot:** Chromium headless screenshot retried with materially changed launch flags and timed out (exit 124); switched to static WeasyPrint preview and labeled the remaining browser gate unverified. Do not keep retrying same browser path without new capability.
+6. **Repo/branch:** PUBLIC `hibi89/SOVIA_sovereign`, PR branch `feature/p2-html-print-legibility` initial source/test SHA `8938eb5080afd563128b4d0fe766a85813afb4fe`, base `develop e5d91766782f618e052a0b83afb6730f1757a98e`. Check new SHA after docs commit.
+7. **Deploy:** No Vercel, Production URL or signed installer; historic v0.11.2 portable remains unchanged.
+8. **Data and backup:** Only GitHub synthetic fixture and temporary assistant Linux render; no customer/owner originals, PII, tokens or repo access settings changed. Existing develop commit is safe rollback/restore base.
+9. **Next/approval:** Verify four CI OS/Python jobs; if clean, leave draft for owner approval of print changes before merge. Need physical Windows browser print/Defender/PDF and approved real n8n source before sale. No repeat wrappers.
+10. **Cutoff:** 2026-10-27 KST, source/test SHA `8938eb5080afd563128b4d0fe766a85813afb4fe`, local synthetic/static preview complete, CI/manual pending, final documentation SHA to refresh.
+
+---
+
 # LATEST CHECKPOINT — SOVIA independent packaged artifact acceptance (10 sections, 2026-10-27 KST)
 
 1. **Goal/requirements/stack.** User-approved sequence P1 MVP → original blueprint reconciliation → security/stability/compatibility → shipping review; Python 3.11+ offline Audit Lite, no customer connection.
