@@ -70,20 +70,37 @@ def validate_policy(document):
 def dry_run(root, policy, *, now=None, inventory_module=None):
     """Group candidate metadata only; never return a deletion plan.
 
-    The inventory helper is invoked once per threshold at a pinned clock.
+    Normal review traverses metadata ONCE with strict per-category cutoffs.
+    Injected legacy test inventories retain the old five-call behavior.
     This is NOT a transactionally consistent filesystem snapshot. Metadata
-    changes during scanning can cause a safe rejection or go undetected.
+    changes during scanning can still go undetected.
     """
     rules = validate_policy(policy)
     scan = _module("sovia_retention.py", "_sovia_review_inventory") if inventory_module is None else inventory_module
     fixed_now = time.time() if now is None else now
     grouped = {}
     baseline = None
-    for category, (days, hold, backup) in rules.items():
+    # Ordinary review: one bounded metadata traversal with category-specific
+    # thresholds. Preserve the injected legacy inventory hook for existing
+    # fault-injection tests; neither mode is a transactional filesystem snapshot.
+    if inventory_module is None:
         try:
-            summary = scan.inventory(root, older_than_days=days, now=fixed_now)
+            single_summary = scan.inventory(
+                root, now=fixed_now,
+                category_thresholds={category: entry[0]
+                                     for category, entry in rules.items()})
         except (OSError, TypeError, ValueError, OverflowError) as exc:
             raise ReviewError("REVIEW_INVENTORY_FAILED") from exc
+    else:
+        single_summary = None
+    for category, (days, hold, backup) in rules.items():
+        if single_summary is not None:
+            summary = single_summary
+        else:
+            try:
+                summary = scan.inventory(root, older_than_days=days, now=fixed_now)
+            except (OSError, TypeError, ValueError, OverflowError) as exc:
+                raise ReviewError("REVIEW_INVENTORY_FAILED") from exc
         shared = (
             summary.get("entries_scanned"),
             summary.get("symlinks_skipped"),
@@ -127,7 +144,7 @@ def dry_run(root, policy, *, now=None, inventory_module=None):
             "FILE_EXTENSION_DOES_NOT_PROVE_CONTENT_OR_ORIGIN",
             "REVIEW_THRESHOLD_IS_NOT_A_DELETION_DEADLINE",
             "OPERATOR_POLICY_ASSERTIONS_ARE_NOT_AUTHENTICATED",
-            "FILESYSTEM_CAN_CHANGE_BETWEEN_METADATA_SCANS",
+            "FILESYSTEM_CAN_CHANGE_DURING_METADATA_SCAN",
             "NO_FILES_READ_OR_MODIFIED_OR_DELETED",
         ],
     }
