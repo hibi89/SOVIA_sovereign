@@ -15,6 +15,13 @@ import re
 import sys
 
 EXPECTED_INNER_ZIP_SHA256 = "894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b"
+# Two explicitly pinned, reproducible synthetic v0.10 beta source builds:
+# the archived original, and the report-publisher ordering fix. Neither is signed.
+REPORT_WRITER_FIXED_INNER_ZIP_SHA256 = "68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9"
+EXPECTED_VERIFIED_BETA_SHA256 = frozenset({
+    EXPECTED_INNER_ZIP_SHA256,
+    REPORT_WRITER_FIXED_INNER_ZIP_SHA256,
+})
 MAX_ZIP_BYTES = 32 * 1024 * 1024
 REVIEW_SCHEMA = "sovia.owner_windows_review.v1"
 REQUIRED_AUTOCHECKS = (
@@ -62,7 +69,7 @@ def hash_expected_portable(path):
                 if not chunk:
                     break
                 digest.update(chunk)
-        if digest.hexdigest() != EXPECTED_INNER_ZIP_SHA256:
+        if digest.hexdigest() not in EXPECTED_VERIFIED_BETA_SHA256:
             raise EvidenceError("PORTABLE_HASH_MISMATCH")
     except OSError as exc:
         raise EvidenceError("PORTABLE_FILE_UNAVAILABLE") from exc
