@@ -2,6 +2,7 @@
 from __future__ import annotations
 import json
 import os
+import sqlite3
 from pathlib import Path
 import subprocess
 import sys
@@ -95,6 +96,105 @@ class MVPV012Tests(unittest.TestCase):
         self.assertTrue((self.target / "report.html").is_file())
         self.assertFalse((self.target / "report.json").exists())
         self.assertFalse((self.target / "history.sqlite3").exists())
+
+    def test_readonly_verifier_matches_json_html_and_single_ledger(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        files = {p.name: (p.read_bytes(), p.stat().st_mtime_ns)
+                 for p in self.target.iterdir()}
+        result = mvp.verify_output_dir(self.target)
+        self.assertEqual("SYNTHETIC_V012_OUTPUT_CONSISTENT_NOT_AUTHENTICATED",
+                         result["status"])
+        self.assertEqual((3, 5), (result["events"], result["findings"]))
+        self.assertTrue(result["read_only"])
+        self.assertFalse(result["source_authorization_verified"])
+        self.assertEqual(files, {
+            p.name: (p.read_bytes(), p.stat().st_mtime_ns)
+            for p in self.target.iterdir()
+        })
+        self.assertEqual(set(mvp.OUTPUTS), set(files))
+
+    def test_readonly_verifier_accepts_synthetic_n8n_metadata(self):
+        mvp.run(N8N, self.target, synthetic_only=True,
+                source_format="n8n-sanitized", policy_path=POLICY)
+        result = mvp.verify_output_dir(self.target)
+        self.assertEqual((3, 5), (result["events"], result["findings"]))
+
+    def test_readonly_verifier_refuses_missing_and_extra_inventory(self):
+        self.target.mkdir()
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_INCOMPLETE"):
+            mvp.verify_output_dir(self.target)
+        self.target.rmdir()
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        (self.target / "unexpected.txt").write_text("synthetic", encoding="utf-8")
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_UNEXPECTED_ENTRY"):
+            mvp.verify_output_dir(self.target)
+
+    def test_readonly_verifier_refuses_forced_interruption_marker(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        (self.target / mvp.INCOMPLETE_MARKER).write_text("synthetic interruption",
+                                                         encoding="utf-8")
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_INCOMPLETE"):
+            mvp.verify_output_dir(self.target)
+
+    def test_readonly_verifier_refuses_changed_html_json_and_ledger(self):
+        for kind in ("html", "json", "ledger"):
+            folder = self.root / ("artifact-" + kind)
+            mvp.run(GOLDEN, folder, synthetic_only=True)
+            if kind == "html":
+                with (folder / "report.html").open("ab") as stream:
+                    stream.write(b"x")
+                code = "VERIFY_HTML_MISMATCH"
+            elif kind == "json":
+                report = folder / "report.json"
+                body = json.loads(report.read_text("utf-8"))
+                body["finding_count"] += 1
+                report.write_text(json.dumps(body), encoding="utf-8")
+                code = "VERIFY_INVALID_REPORT"
+            else:
+                with sqlite3.connect(folder / "history.sqlite3") as db:
+                    db.execute("UPDATE reports SET finding_count=finding_count+1")
+                    db.commit()
+                code = "VERIFY_LEDGER_MISMATCH"
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(mvp.MVPError, code):
+                    mvp.verify_output_dir(folder)
+
+    def test_readonly_verifier_rejects_symlink_and_linked_folder(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        original = self.target / "report.html"
+        linked = self.root / "linked.html"
+        linked.write_bytes(original.read_bytes())
+        original.unlink()
+        try:
+            original.symlink_to(linked)
+        except (OSError, NotImplementedError):
+            self.skipTest("File symlinks unavailable")
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_INVALID_ENTRY"):
+            mvp.verify_output_dir(self.target)
+        alias = self.root / "folder-link"
+        try:
+            alias.symlink_to(self.target, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            return
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_LINKED_PATH_REFUSED"):
+            mvp.verify_output_dir(alias)
+
+    def test_readonly_verifier_isolated_cli_success_and_failure(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        command = [sys.executable, "-I", "-B", str(ROOT / "sovia_mvp_v012.py"),
+                   "--verify-output-dir", str(self.target)]
+        proc = subprocess.run(command, capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, proc.returncode, proc.stderr)
+        obj = json.loads(proc.stdout)
+        self.assertTrue(obj["read_only"])
+        self.assertNotIn(str(self.target), proc.stdout)
+        (self.target / mvp.INCOMPLETE_MARKER).touch()
+        denied = subprocess.run(command, capture_output=True, text=True, timeout=30)
+        self.assertEqual(2, denied.returncode)
+        self.assertEqual("VERIFY_INCOMPLETE",
+                         json.loads(denied.stderr)["error_code"])
+        self.assertNotIn(str(self.target), denied.stderr)
+        self.assertFalse(denied.stdout)
 
     def test_boundary_uses_corrected_utc_engine(self):
         result = mvp.run(BOUNDARY, self.target, synthetic_only=True)
