@@ -1,3 +1,9 @@
+## 2026-10-27 SOVIA P2 Windows NTFS junction proof vs commercial gate
+
+**Verified via real GitHub-hosted Windows runner**: NTFS `mklink /J` child/direct-root/ancestor-root and review metadata refusal/exclusion, Python 3.11 & 3.13 Windows tests actually executed (not skipped), [PR #45](https://github.com/hibi89/SOVIA_sovereign/pull/45) merged at `a7bf1ae5b25b08c30801423e414d3615b8502eb5`; feature CI [40495478721](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40495478721) 4/4 success 762 tests/job, historic package smoke green. **Unverified**: adversarial TOCTOU race resistance, owner's own PC/install/Defender/visual Korean HTML/PDF, native authorized n8n/version/PII upstream, data-controller legal consent, privacy false negatives, retention legal obligations, signing/support/sale permission. Archive and core unchanged; no production.
+
+---
+
 ## 2026-10-27 P2 Windows reparse point scan gate
 
 **DONE_VERIFIED synthetic CI:** separate retention metadata inventory now rejects root and skips child NTFS reparse-point markers, preventing normal traversal of simulated junction/file/mount entries while retaining 1-pass category thresholds. [PR #44](https://github.com/hibi89/SOVIA_sovereign/pull/44) merged, 4/4 OS/Python CI success 757 tests/job, portable v0.10 and v0.11.2 ZIP smoke untouched. **PARTIAL_NOT_CERTIFIED:** Actual Windows junctions on owner device, concurrent path swaps (TOCTOU), native n8n supported source and consent, real PII sanitization, browser/Defender/PDF acceptance, legal retention/contract/signing/commercial release. No legal deletion permission created.
