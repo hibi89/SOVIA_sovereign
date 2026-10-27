@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "policy": {
+    "allowed_tools": [
+      "approved_lookup"
+    ],
+    "approved_destinations": [
+      "internal.example"
+    ],
+    "sensitive_targets": [
+      "client_records"
+    ],
+    "max_tool_calls_per_minute": 2
+  },
+  "events": [
+    {
+      "event_id": "lookup",
+      "occurred_at_utc": "2026-10-28T01:00:00Z",
+      "agent_id": "synthetic_agent",
+      "run_id": "synthetic_run",
+      "tool_name": "approved_lookup",
+      "target": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome": "ok",
+      "source_pointer": "synthetic:lookup"
+    },
+    {
+      "event_id": "write",
+      "occurred_at_utc": "2026-10-28T01:00:05Z",
+      "agent_id": "synthetic_agent",
+      "run_id": "synthetic_run",
+      "tool_name": "sqlite_put",
+      "target": "client_records",
+      "destination_domain": null,
+      "permission_asserted": false,
+      "outcome": "ok",
+      "source_pointer": "synthetic:write"
+    }
+  ]
+}
