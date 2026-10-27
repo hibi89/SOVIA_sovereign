@@ -53,13 +53,33 @@ def smoke():
         call(history,"restore","--input",snap,"--db",clone)
         if call(history,"status","--db",clone)!=before:
             raise RuntimeError("versioned history recovery mismatch")
+        # Minimum working unit: one command, three usable outputs.
+        mvp_directory = root / "one-command-result"
+        mvp = call(extracted / "sovia_mvp_v012.py",
+                   "--input", golden, "--output-dir", mvp_directory,
+                   "--synthetic-only")
+        if ((mvp["events"], mvp["findings"]) != (3, 5) or
+                mvp["status"] != "SYNTHETIC_V012_MVP_COMPLETE" or
+                sorted(mvp["files"]) !=
+                sorted(("report.html", "report.json", "history.sqlite3"))):
+            raise RuntimeError("v0.12 one-command MVP result mismatch")
+        if sorted(p.name for p in mvp_directory.iterdir()) != sorted(mvp["files"]):
+            raise RuntimeError("v0.12 MVP output inventory mismatch")
+        machine = json.loads((mvp_directory / "report.json").read_text("utf-8"))
+        if machine["engine_version"] != "0.12.0-preview" or machine["finding_count"] != 5:
+            raise RuntimeError("v0.12 MVP report mismatch")
+        indexed = call(history, "status", "--db", mvp_directory / "history.sqlite3")
+        if (indexed["schema_version"], indexed["reports"],
+                indexed["finding_count_total"]) != (2, 1, 5):
+            raise RuntimeError("v0.12 MVP ledger mismatch")
         verify_directory(extracted)
         return {"status":"v012_portable_clean_install_pass",
                 "version":"0.12.0-beta","files":result["files"],
                 "zip_sha256":result["sha256"],"boundary_events":3,
                 "boundary_findings":0,"five_rule_findings":5,
                 "history_schema_version":2,"history_backup_restored":True,
-                "legacy_history_migrated":False,"owner_manual_acceptance":False,
+                "legacy_history_migrated":False,"mvp_one_command_pass":True,
+                "mvp_outputs":3,"owner_manual_acceptance":False,
                 "commercial_release_approved":False}
 
 if __name__=="__main__":
