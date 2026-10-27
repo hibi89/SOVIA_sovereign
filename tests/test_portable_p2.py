@@ -30,8 +30,8 @@ class P2VersionedPortableTests(unittest.TestCase):
         self.extracted = self.root / "new-install"
 
     def test_distinct_version_fixed_allowlist(self):
-        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.1-beta.zip")
-        self.assertEqual(verify.VERSION, "0.11.1-beta")
+        self.assertEqual(build.DEFAULT_NAME, "SOVIA-Audit-Lite-0.11.2-beta.zip")
+        self.assertEqual(verify.VERSION, "0.11.2-beta")
         self.assertEqual(verify.FORMAT, "SOVIA_PORTABLE_P2_V1")
         self.assertEqual(len(verify.FILES), 18)
         self.assertNotIn("owner_selfcheck.py", verify.FILES)
@@ -57,7 +57,7 @@ class P2VersionedPortableTests(unittest.TestCase):
             self.assertNotIn("client_logs", "".join(bundle.namelist()).lower())
             self.assertNotIn("private/", "".join(bundle.namelist()).lower())
             manifest = json.loads(bundle.read(verify.PREFIX + verify.MANIFEST))
-            self.assertEqual(manifest["version"], "0.11.1-beta")
+            self.assertEqual(manifest["version"], "0.11.2-beta")
 
     def test_rejects_v010_verifier_and_old_archive_name(self):
         self.assertNotEqual(build.DEFAULT_NAME, legacy.DEFAULT_NAME)
@@ -125,6 +125,7 @@ class P2VersionedPortableTests(unittest.TestCase):
         report = json.loads(files[0].read_text(encoding="utf-8"))
         self.assertEqual(report["status"], "AUTOMATED_PASS_MANUAL_PENDING")
         self.assertEqual(report["checks"]["direct_sanitized"], "PASS")
+        self.assertEqual(report["checks"]["direct_metadata_pattern_scan"], "PASS")
         self.assertEqual(report["checks"]["aggregate_no_report"], "PASS")
         self.assertTrue(all(value == "NOT_CHECKED"
                             for value in report["manual_acceptance"].values()))

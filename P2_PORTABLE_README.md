@@ -1,10 +1,10 @@
-# SOVIA Audit Lite v0.11.1-beta — P2 offline portable CANDIDATE
+# SOVIA Audit Lite v0.11.2-beta — P2 offline portable CANDIDATE
 
 **Not signed. Not a customer release, security certification, native n8n integration, or production distribution.** This candidate packages already-developed P2 opt-in source tools in a separately versioned strict allowlist ZIP. v0.10 remains unchanged. No phone-home, service daemon, installer, credentials, source customer logs, or extra files.
 
 ## What is included
 
-The strictly fixed 18-file payload contains the five-rule offline auditor, CSV parser, optional PDF source, SQLite history, dashboard, strict pre-sanitized n8n-like metadata converter, direct one-command audit, optional PII *pattern* filter, developer-only HTML/JSON budget exporter, aggregate diagnostic without report creation, P2 verifier, P2 synthetic owner selfcheck, Windows launcher, this guide and four **fabricated** examples. There is no raw n8n execution importer, API connector, private data, packaged PDF font or signed binary.
+The strictly fixed 18-file payload contains the five-rule offline auditor, CSV parser, optional PDF source, SQLite history, dashboard, strict pre-sanitized n8n-like metadata converter, direct one-command audit, PII *pattern* screening in both direct audit modes, developer-only HTML/JSON budget exporter, aggregate diagnostic without report creation, P2 verifier, P2 synthetic owner selfcheck, Windows launcher, this guide and four **fabricated** examples. There is no raw n8n execution importer, API connector, private data, packaged PDF font or signed binary.
 
 Python **3.11+** required (stdlib flows need no pip or internet). ReportLab plus locally licensed Korean font are required **only for optional PDF**; CI skips those scenarios without dependencies.
 
@@ -13,8 +13,8 @@ Python **3.11+** required (stdlib flows need no pip or internet). ReportLab plus
 Create the target `dist` folder in advance. Use fresh filenames; existing artifacts are never overwritten.
 
 ```powershell
-py -3 -I -B build_portable_p2.py --output dist\SOVIA-Audit-Lite-0.11.1-beta.zip
-py -3 -I -B verify_portable_p2.py --archive dist\SOVIA-Audit-Lite-0.11.1-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.11.1-beta.zip.sha256 --extract-to NEW-SOVIA-P2-INSTALL
+py -3 -I -B build_portable_p2.py --output dist\SOVIA-Audit-Lite-0.11.2-beta.zip
+py -3 -I -B verify_portable_p2.py --archive dist\SOVIA-Audit-Lite-0.11.2-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.11.2-beta.zip.sha256 --extract-to NEW-SOVIA-P2-INSTALL
 ```
 
 **Provenance warning:** SHA256 plus manifest check detect accidental/unauthorized changes relative to the trusted expected value; if both archive and checksum are replaced, a detached checksum does *not* prove publisher identity. No digital signature or Windows SmartScreen approval is claimed.
@@ -27,7 +27,7 @@ Run **`RUN_P2_SELF_CHECK.cmd`** on Windows; it chooses Python and places newly c
 py -3 -I -B owner_p2_selfcheck.py --output-dir ..\SOVIA_P2_DIAGNOSTICS
 ```
 
-The P2 selfcheck verifies pristine installed files first, runs synthetic 3-event/5-finding standard audit, direct one-command audit, zero-report-file aggregate diagnosis, SQLite history/dedup/dashboard/backup/recovery, and optional PDF where dependencies permit. It **never** marks manual browser, Korean PDF visual, Windows Defender/SmartScreen or commercial approval as PASS. Keep all results outside the verified app folder.
+The P2 selfcheck verifies pristine installed files first, runs synthetic 3-event/5-finding standard audit, direct one-command audit **with PII pattern-screening evidence**, zero-report-file aggregate diagnosis, SQLite history/dedup/dashboard/backup/recovery, and optional PDF where dependencies permit. It **never** marks manual browser, Korean PDF visual, Windows Defender/SmartScreen or commercial approval as PASS. Keep all results outside the verified app folder.
 
 Manually run direct sanitized synthetic audit (choose fresh output paths *outside* install):
 

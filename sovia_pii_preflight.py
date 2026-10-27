@@ -1,6 +1,7 @@
 """Offline metadata-only PII/credential *pattern* preflight (not de-identification).
 
-Conservative fail-closed heuristic gate for SOVIA's approved-local pathway.
+Conservative fail-closed heuristic gate for SOVIA direct audit's two modes
+and the existing approved-local sanitized converter pathway.
 No source values, matches, field names or paths are logged or returned.
 No claim of comprehensive PII detection, consent, or legal compliance.
 """

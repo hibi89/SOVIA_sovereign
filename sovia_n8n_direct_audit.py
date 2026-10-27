@@ -75,9 +75,13 @@ def direct_audit(source, policy, html_output, json_output, *,
         document = audit.read_document(sources[0])
         policy_doc = audit.read_document(sources[1])
         canonical = adapter.convert(document, policy_doc)
+        # Run the same local metadata-pattern safety floor in BOTH modes:
+        # a self-declared --synthetic-only flag must not disable PII checks.
+        # This is heuristic screening only, NOT real-source authorization or
+        # proof that the data is free of private information.
+        pii = _module("_sovia_direct_pii", "sovia_pii_preflight.py")
+        pii.assert_no_high_risk_patterns(document, policy_doc)
         if mode == "approved-local":
-            pii = _module("_sovia_direct_pii", "sovia_pii_preflight.py")
-            pii.assert_no_high_risk_patterns(document, policy_doc)
             review = audit.read_document(sources[2])
             adapter.verify_operator_attestation(review, document, policy_doc)
         report = audit.evaluate(canonical)
@@ -114,7 +118,7 @@ def direct_audit(source, policy, html_output, json_output, *,
         "html_bytes": len(html),
         "json_bytes": len(machine),
         "intermediate_canonical_file_created": False,
-        "pii_pattern_scan_executed": mode == "approved-local",
+        "pii_pattern_scan_executed": True,
         "pii_absence_proven": False,
         "source_authorization_independently_verified": False,
         "n8n_native_api_compatibility_verified": False,

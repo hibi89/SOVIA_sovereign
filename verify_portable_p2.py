@@ -1,4 +1,4 @@
-"""Offline, strict allowlist verifier/extractor for SEPARATE SOVIA v0.11.1-beta candidate.
+"""Offline, strict allowlist verifier/extractor for SEPARATE SOVIA v0.11.2-beta candidate.
 
 No network, package installer, customer data, permission changes or code execution.
 A matching .sha256 beside an archive is a transport checksum, NOT a signature.
@@ -17,7 +17,7 @@ import shutil
 import sys
 import zipfile
 
-VERSION = "0.11.1-beta"
+VERSION = "0.11.2-beta"
 FORMAT = "SOVIA_PORTABLE_P2_V1"
 PREFIX = "SOVIA-P2/"
 FILES = (
