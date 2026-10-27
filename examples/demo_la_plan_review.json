@@ -1,0 +1,24 @@
+{
+  "schema_version": "sovia.plan_review.v1",
+  "plan_ref": "synthetic_plan_v1",
+  "steps": [
+    {
+      "step_id": "lookup",
+      "tool_code": "approved_lookup",
+      "side_effect": "none",
+      "target_code": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "approval_ref": "synthetic_claim"
+    },
+    {
+      "step_id": "write",
+      "tool_code": "sqlite_put",
+      "side_effect": "local_write",
+      "target_code": "client_records",
+      "destination_domain": null,
+      "permission_asserted": false,
+      "approval_ref": null
+    }
+  ]
+}
