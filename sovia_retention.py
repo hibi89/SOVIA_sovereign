@@ -1,0 +1,137 @@
+"""Offline, read-only retention inventory. Never deletes or reads file contents."""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+import json
+import os
+from pathlib import Path
+import stat
+import sys
+import time
+
+MAX_ENTRIES = 10_000
+MAX_DEPTH = 8
+SKIP_DIRECTORIES = frozenset({".git", ".venv", "venv", "__pycache__", "node_modules"})
+
+
+class InventoryError(ValueError):
+    """Safe, non-path-bearing inventory failure."""
+
+
+def _category(filename: str) -> str | None:
+    name = filename.lower()
+    if name.endswith((".sqlite-wal", ".sqlite-shm", ".sqlite-journal", ".db-wal", ".db-shm", ".db-journal")):
+        return "history_sidecar"
+    if name.endswith((".sqlite", ".sqlite3", ".db")):
+        return "history_or_backup"
+    if name.endswith((".json", ".csv")):
+        return "source_or_export"
+    if name.endswith((".html", ".htm", ".pdf")):
+        return "rendered_report"
+    if name.endswith((".zip", ".sha256")):
+        return "package_or_checksum"
+    return None
+
+
+def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
+    """Summarize *candidates* by extension and mtime, without reading or modifying data.
+
+    No filenames, paths, or file content are included in the returned summary.
+    Fail closed on traversal errors/limits; symlinks are never followed.
+    """
+    if type(older_than_days) is not int or not 1 <= older_than_days <= 36500:
+        raise InventoryError("INVALID_AGE")
+    if type(max_entries) is not int or not 1 <= max_entries <= MAX_ENTRIES:
+        raise InventoryError("INVALID_LIMIT")
+    target = Path(root)
+    try:
+        if target.is_symlink() or not target.is_dir():
+            raise InventoryError("INVALID_ROOT")
+        root_mode = target.stat(follow_symlinks=False).st_mode
+        if not stat.S_ISDIR(root_mode):
+            raise InventoryError("INVALID_ROOT")
+    except OSError as exc:
+        raise InventoryError("ROOT_ACCESS_FAILED") from exc
+    when = time.time() if now is None else now
+    if not isinstance(when, (int, float)) or not (0 < when < float("inf")):
+        raise InventoryError("INVALID_CLOCK")
+    cutoff = when - older_than_days * 86400
+    scanned = 0
+    skipped_links = 0
+    ignored = 0
+    categories = Counter()
+    candidates = Counter()
+    candidate_bytes = Counter()
+    stack = [(target, 0)]
+    try:
+        while stack:
+            folder, depth = stack.pop()
+            with os.scandir(folder) as scan:
+                entries = list(scan)
+            # Bounded before processing the batch, including irrelevant entries.
+            if scanned + len(entries) > max_entries:
+                raise InventoryError("ENTRY_LIMIT_EXCEEDED")
+            for entry in entries:
+                scanned += 1
+                mode = entry.stat(follow_symlinks=False)
+                if stat.S_ISLNK(mode.st_mode):
+                    skipped_links += 1
+                    continue
+                if stat.S_ISDIR(mode.st_mode):
+                    if entry.name in SKIP_DIRECTORIES:
+                        ignored += 1
+                        continue
+                    if depth >= MAX_DEPTH:
+                        raise InventoryError("DEPTH_LIMIT_EXCEEDED")
+                    stack.append((Path(entry.path), depth + 1))
+                    continue
+                if not stat.S_ISREG(mode.st_mode):
+                    ignored += 1
+                    continue
+                category = _category(entry.name)
+                if category is None:
+                    ignored += 1
+                    continue
+                categories[category] += 1
+                if mode.st_mtime <= cutoff:
+                    candidates[category] += 1
+                    candidate_bytes[category] += mode.st_size
+    except InventoryError:
+        raise
+    except OSError as exc:
+        raise InventoryError("TRAVERSAL_FAILED") from exc
+    return {
+        "status": "READ_ONLY_CANDIDATES_NOT_DELETION_AUTHORIZATION",
+        "older_than_days": older_than_days,
+        "entries_scanned": scanned,
+        "symlinks_skipped": skipped_links,
+        "unrecognized_or_skipped": ignored,
+        "files_by_category": dict(sorted(categories.items())),
+        "age_candidates_by_category": dict(sorted(candidates.items())),
+        "age_candidate_bytes_by_category": dict(sorted(candidate_bytes.items())),
+        "limitations": [
+            "MTIME_IS_NOT_CREATION_OR_LEGAL_RETENTION_DATE",
+            "EXTENSION_IS_NOT_VERIFIED_CONTENT_TYPE",
+            "FILES_MAY_BE_REQUIRED_OR_BACKED_UP_ELSEWHERE",
+            "NO_FILES_READ_MODIFIED_OR_DELETED",
+        ],
+    }
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description="SOVIA private local read-only retention inventory")
+    p.add_argument("--root", required=True, help="Explicit local directory; nothing is transmitted")
+    p.add_argument("--older-than-days", type=int, default=30)
+    args = p.parse_args(argv)
+    try:
+        summary = inventory(args.root, older_than_days=args.older_than_days)
+    except InventoryError as exc:
+        print(json.dumps({"status": "INVENTORY_FAILED", "error_code": str(exc)}), file=sys.stderr)
+        return 2
+    print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
