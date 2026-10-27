@@ -25,14 +25,6 @@ class ReportWriterFaultTests(unittest.TestCase):
     def _no_stages(self):
         self.assertEqual([], list(self.root.glob(".sovia-staging-*")))
 
-    def test_temporary_ci_checksum_diagnostic(self):
-        import hashlib
-        import build_portable
-        # Diagnostic removed after pinning the actual newly built package.
-        print("SOVIA_CURRENT_INNER_SHA256=" +
-              hashlib.sha256(build_portable.package_bytes()).hexdigest(),
-              flush=True)
-
     def test_no_post_link_staging_stat_can_orphan_new_destination(self):
         """A late metadata read must not happen after the final link exists."""
         actual_stat = os.stat
