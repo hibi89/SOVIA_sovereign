@@ -1,3 +1,14 @@
+# CURRENT SOVIA STATUS — 2026-10-27 PR #34 writer failure-safe merge after PR #35
+
+- **Repo:** PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, main docs-only. [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) MERGED `60f9bc8cfb95012428f36064f0c29c1a54c93a40`; parallel prior [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) (guarded source-only export) also merged and preserved.
+- **Fixed actual existing publisher:** validate payload before staging fd allocation; obtain inode stat before hardlink publication so a post-link stat failure cannot orphan an unregistered output. Exclusive no-overwrite, fsync and best-effort rollback remain. Added 10 synthetic disk-full/EIO/stat/race/unsupported hardlink/success tests. Does not make ordinary files a multi-file transaction or add an approved quota.
+- **Beta compatibility:** archived inner ZIP SHA256 `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b` remains recognized; current hardened source ZIP SHA256 `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9` explicitly pinned in source-only owner-evidence checker. Unknown digests rejected. Both unsigned, no release claim.
+- **CI:** [40478529065](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478529065) feature `19da0d7919efb3b0708138f644afdd5a5fdd19e9` 4/4 SUCCESS, 681 discovered/job, Windows 671 PASS/10 SKIP, Ubuntu 670 PASS/11 SKIP, zero failed. Extracted portable synthetic audit/SQLite/dashboard/recovery smoke PASS all four. Initial pinned-checksum failure 40477881434, checksum diagnostic 40478291808 corrected and removed; re-run green. Combined merge HEAD CI separately verify.
+- **Open:** actual Windows owner physical browser/Defender/Korean PDF/manual, legally authorized real n8n/PII and privacy, output disk-race recovery and storage/support contract, signed release/commercial/production. No Vercel or Production.
+- **Next `ㄱ`:** check final develop CI/docs, do not repeat PR #34/#35 or overwrite other authors. Distinct P2 owner acceptance or guarded exporter hardening. External data, pricing, deploy, permissions and sale need explicit owner approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 optional guarded source export / PR #35
 
 - **GitHub:** PUBLIC hibi89/SOVIA_sovereign; active develop; default main docs-only. [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) MERGED SHA 9d27e3468eb555ed72dfd2229cf414fbe674ebf1; no production URL/Vercel/release/sales.
