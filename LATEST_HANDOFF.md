@@ -1,3 +1,37 @@
+# LATEST SOVIA HANDOFF — 2026-10-27 P2 v0.11.1-beta safety patch (10 sections)
+
+## 1. Goal
+P1 MVP done synthetically. Follow initial blueprint gaps, then security/stability/compatibility and owner real-world acceptance. No sale or production authority.
+
+## 2. Changes
+[PR #40](https://github.com/hibi89/SOVIA_sovereign/pull/40) merged `92297cb1bc0b62bba0df5d14d3cdc485415924b9` on `develop`. In `verify_portable_p2.extract_verified`, ZIP bytes are now SNAPSHOTTED after verify, hash-matched against the verified archive digest and extracted from `io.BytesIO` (prevents locally substituted ZIP between validation and extraction). `owner_p2_selfcheck.check` now verifies pristine installation before ANY result directory creation and rejects output resolving within the installation. All default core/report functionality retained. Modified candidate bumped from v0.11.0-beta to separate v0.11.1-beta filename, manifest, selfcheck and CI paths; historical older artifacts not overwritten.
+
+## 3. Verification
+[CI 40485607132](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40485607132) PR #40 feature SHA `5c646953f2b88d0179da977cad2af4bf27bb644b`: **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13, **746 tests/job; 0 FAIL**; four new regressions for swapped archive, tampered installed source with zero diagnostics, inside-install diagnostic refusal, normal sibling results. New v0.11.1-beta ZIP SHA256 `a31073a4fec63916ffa0b5f18fcb577bccaad7fc453bc644df939c3ab8aabf27`. v0.10 ZIP unchanged SHA256 `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Prior v0.11.0-beta historic SHA `a15ce8bebcb894c991fcb6e2b4fdc793e6460c31fb5067b97f73acf820cd1d70`. v0.11.1 is an unsigned CI artifact `sovia-portable-p2-beta`, NOT released to customers. Recheck post-doc HEAD CI.
+
+## 4. DONE vs pending
+DONE source extraction snapshot, owner selfcheck no contamination, source and extracted-portable CI smoke. PENDING genuine owner hardware Windows/browser/Defender/SmartScreen/Korean PDF, independently permitted real n8n version/source mapping and PII assessment, signing and paid support/privacy/retention contract.
+
+## 5. Risks and limits
+TOCTOU is narrowed by pinning in-memory extraction bytes, but local trusted verifier source, authentic publisher signature and crash-atomic filesystem guarantees are not supplied. CI hosted Windows differs from owner's actual machine. No claim of legal consent, customer quota, n8n native API, 24/7 SOC, zero PII leakage or commercial security certification.
+
+## 6. Repo identity
+PUBLIC `hibi89/SOVIA_sovereign`, source `develop`, default `main` docs-only. Key changed `verify_portable_p2.py`, `owner_p2_selfcheck.py`, `build_portable_p2.py`, `P2_PORTABLE_README.md`, `tests/test_portable_p2.py`, CI, and `P2_PORTABLE_SECURITY_0111.md`. No force push, secrets, visibility or access changes.
+
+## 7. Commands / runtime
+From trusted source: `python -m unittest discover -s tests -v`, `python portable_smoke_p2.py`. To build, first create `dist`, then `python -I -B build_portable_p2.py --output dist/SOVIA-Audit-Lite-0.11.1-beta.zip`. Verify separately and extract to a new folder with `verify_portable_p2.py`. P2 self-check results MUST be outside installation. No Vercel, Production URL, paid dependencies or customer data.
+
+## 8. Original inputs / backups
+No customer or local owner source files, credentials, PDF fonts, screenshots or real logs handled. Existing historical v0.10 and v0.11.0 source provenance available by previous commits; avoid silently replacing historical ZIPs. Synthetic-only workspace artifacts used.
+
+## 9. NEXT `ㄱ`
+**STOP new wrapper tooling**. Owner must run v0.11.1 extracted `RUN_P2_SELF_CHECK.cmd` on actual Windows and confirm browser report/optional Korean PDF/Defender (manual gates remain NOT_CHECKED) before real release. If physical access unavailable, prioritize actual product bug discovered in user acceptance or verifiable integration specs, not more synthetic breadth. Native n8n/API and customer consent/privacy remain blocked on owner-approved real source/version. Commercial release requires explicit approval. Do not duplicate PRs #16–#40.
+
+## 10. Cutoff
+2026-10-27 KST. [PR #40](https://github.com/hibi89/SOVIA_sovereign/pull/40) merged `92297cb1bc0b62bba0df5d14d3cdc485415924b9`; PR CI 40485607132 4/4 SUCCESS. Final docs commit & CI check separately.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 v0.11.0-beta packaged P2 candidate (10 sections)
 
 ## 1. Goal / stack
