@@ -84,7 +84,11 @@ class OwnerEvidenceTests(unittest.TestCase):
     def test_known_v010_zip_digest_is_verified_from_bytes(self):
         self.assertTrue(evidence.hash_expected_portable(self.portable))
         digest = hashlib.sha256(self.portable.read_bytes()).hexdigest()
-        self.assertEqual(evidence.EXPECTED_INNER_ZIP_SHA256, digest)
+        self.assertEqual(evidence.REPORT_WRITER_FIXED_INNER_ZIP_SHA256, digest)
+        self.assertIn(digest, evidence.EXPECTED_VERIFIED_BETA_SHA256)
+        self.assertIn(evidence.EXPECTED_INNER_ZIP_SHA256,
+                      evidence.EXPECTED_VERIFIED_BETA_SHA256)
+        self.assertNotEqual(evidence.EXPECTED_INNER_ZIP_SHA256, digest)
 
     def test_default_manual_not_checked_remains_pending(self):
         result = evidence.assess_files(self.portable, self.auto, self.manual)
