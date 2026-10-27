@@ -1,3 +1,8 @@
+## 2026-10-27 P2 browser visual evidence added (PR #47)
+
+**Verified CI image:** GitHub-hosted real Windows Edge rendered *actual v0.11.2-beta synthetic local audit and dashboard* into two 1440×1600 PNGs and uploaded them; independently downloaded and viewed. Korean visible and dashboard 1/3/5/1; narrow audit evidence line-wrap and below-fold dashboard observed. **NOT VERIFIED:** complete print/viewport/responsive/accessibility, owner physical Windows/Defender/PDF, actual n8n native source authorization + PII redaction false-negatives, legal data/retention and signed commercial release. [PR #47](https://github.com/hibi89/SOVIA_sovereign/pull/47) merge `f21b5f58b0286fcdf45f8af2c2d5136eae629753`; artifact 12730803796 expires Nov 3 11:45 UTC. Existing versioned packages immutable.
+
+---
 ## 2026-10-27 P2 browser compatibility evidence (PR #46)
 
 **CI_BROWSER_DOM_PROVEN (synthetic):** Microsoft Edge on GitHub-hosted Windows Python 3.11 actually opened pristine extracted P2 ZIP's generated `file://` audit report and SQLite HTML dashboard; parsed Korean DOM labels/5 findings/CSP and exact inner ZIP SHA; 4/4 CI matrix with 766 tests/job and old/current clean ZIP smoke. **Still UNVERIFIED:** image/pixel/print layout, user's physical Windows/Defender/Korean font and optional PDF, comprehensive Edge background network absence, authenticated source provenance, native approved n8n version/PII redaction/consent, contracts/retention/support/quotas/signing/production or sale. Added tests do not edit protected v0.10/v0.11.2 release. [PR #46](https://github.com/hibi89/SOVIA_sovereign/pull/46) merged `6a72245db4ec3227958416b9812a1d1d99c7d370`.
