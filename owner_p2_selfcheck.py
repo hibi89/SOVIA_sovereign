@@ -18,7 +18,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "0.11.0-beta"
+VERSION = "0.11.1-beta"
 MIN_PYTHON = (3, 11)
 JSON_SCHEMA = "1.0"
 
