@@ -1,3 +1,9 @@
+## Executable synthetic triage (development addendum — 2026-10-27)
+
+See [PRIVACY_TRIAGE.md](PRIVACY_TRIAGE.md) and `sovia_privacy_triage.py` for an aggregate TP/TN/FP/FN comparison over **fabricated labeled cases only**. The deliberate review-queue example returns exit code 3 when an internal-IP-looking code is blocked but human-labeled benign and when a sensitive-looking descriptive code is missed. It **does not change any rejection rules or grant overrides**. For the owner's Windows beta evidence gates see [OWNER_WINDOWS_ACCEPTANCE.md](OWNER_WINDOWS_ACCEPTANCE.md); all manual statuses are initially NOT_CHECKED.
+
+---
+
 # SOVIA P2 — false-positive triage procedure (not an allowlist bypass)
 
 **This is a review process specification and synthetic test protocol, not an independent security or privacy clearance.**
