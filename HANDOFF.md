@@ -1,3 +1,28 @@
+# CURRENT HANDOFF — 2026-10-27 P2 read-only retention inventory integration
+
+## 1. Goal, requirements, technology
+Continue SOVIA offline-first retrospective agent evidence audit. P1/P2 Audit Lite base already developed. This checkpoint closes only a safe P2 inventory subgap with stdlib Python read-only metadata traversal; no auto-delete, live client input or cloud.
+## 2. Completed work and decisions
+Compared automatic expiration/deletion (potentially irreversible without approval and legal-hold rules) vs read-only candidates summary (non-destructive). Implemented latter as `sovia_retention.py` + `tests/test_retention.py` + `RETENTION.md`; fixed directory scanning to streaming under max-entry cap. PR #17 merged to develop SHA `c462f480eb2fee35e5830ceb807c9cf2396f31d4`. Existing 12-file portable ZIP unchanged; prior audit modules untouched.
+## 3. Tests and scope
+Local 11/11 pass, compileall pass; reviewed matching GitHub SHA blobs. PR-head GitHub [Actions 40454869234](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40454869234) 4/4 successful, each 200 tests discovered / zero fails; Windows 190 passed, 10 optional PDF skipped, Ubuntu 189 passed, 11 skipped. Extracted 12-file ZIP smoke 3 events/5 findings + SQLite/dashboard/recovery passed all jobs. Actual owner machine and post-merge/docs CI not independently verified.
+## 4. Done, active, pending, stop point
+DONE P2 inventory synthetic integration; IN PROGRESS privacy/retention/customer adapter gates; PENDING owner-device visual acceptance, sanctioned real data, policy deletion safeguards and commercial readiness. Stop after verified PR #17 merge and document refresh; do not re-merge #17.
+## 5. Failures, cause, retries, alternatives
+First local test failed because synthetic fixture timestamp `now=2000000000` was ahead of actual subprocess time. Fixed CLI-only test timestamp and retested 11 green. Review identified memory scaling issue in directory listing; changed to streaming and retested 11 green, PR matrix 4 green. No production failure observed. Alternatives compared in `RETENTION.md`.
+## 6. Repo, refs, SHAs, paths
+GitHub `hibi89/SOVIA_sovereign` PUBLIC; working integration `develop` merged `c462f480eb2fee35e5830ceb807c9cf2396f31d4`; source PR head `deb8b941d0e65d314a8ef728e5321278116de9b0`; default `main` docs-only/unreleased. Modified `sovia_retention.py`, `tests/test_retention.py`, `RETENTION.md`, `STATUS.md`, `HANDOFF.md`, `GAP_MATRIX.md`. Check freshest develop HEAD after docs.
+## 7. Production URL, Vercel, commands
+Production NONE, Vercel NONE, pricing/payment NONE (N/A). Development command `python sovia_retention.py --root PRIVATE_FOLDER --older-than-days 30`; tests `python -m unittest discover -s tests -v`. Read-only code not yet packaged for owner.
+## 8. Originals, backup, credentials
+No private customer data read or uploaded, no secrets committed; GitHub PUBLIC, no visibility/access/security settings modified. Inventory never opens file contents, never returns file names/paths, never deletes or mutates files. Metadata candidates do not prove lawful expiration; backups/sidecars/exports need independent retention policy. No backup loss.
+## 9. Next action, acceptance and approvals
+Verify latest develop SHA and any post-merge workflow; next implement supported authorized *synthetic n8n-like* sanitized adapter and PII/retention review tests without customer logs, preserve prior work. Require owner permission for repo privacy, deletion, external transfer, commercial listing and deployment. Owner must independently accept Windows/browser/AV/font PDF behavior before sale.
+## 10. Updated date/time, scope, basis
+2026-10-27 KST, verified live repository PR #17 merge and PR-head Actions matrix (4/4). This handoff is documentation after code merge, so source merge SHA above is the baseline; latest documentation HEAD must be fetched after commit. Not a production or owner-client acceptance. Newest current section supersedes older dated snapshots below.
+
+---
+
 # SOVIA HANDOFF — 2026-10-27 retention inventory feature (10 mandatory sections)
 
 ## 1. Goal/confirmed scope/technology
