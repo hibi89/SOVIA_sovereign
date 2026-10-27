@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 synthetic n8n execution summary bridge integrated
+
+- **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC, active `develop`. [PR #28](https://github.com/hibi89/SOVIA_sovereign/pull/28) merged SHA `d065dd2834ecc7499a0c551220ba5950ff7effed`; `main` documentation-only. Vercel/Production/sale/release NONE.
+- **New implementation:** `sovia_n8n_execution_bridge.py` strict fabricated 1.x/2.x summary `id/workflowId/status/startedAt` + explicit `sanitized_steps`, converted only through existing sanitized adapter and SOVIA audit. 1.x synthetic numeric IDs vs 2.x digit strings, bounded, exact allowlists and 1–1000 steps. Raw `data`/`workflowData`/`customData`, parameters, credentials, item/prompt fields are blocked. Summary status/time never invent per-tool evidence. 2 synthetic fixtures; `tests/test_n8n_execution_bridge.py` **31 tests**, `N8N_SYNTHETIC_EXECUTION_BRIDGE.md`. Existing code/12-file v0.10 ZIP unchanged. Real API/source import, independent version, consent and PII clearance NOT VERIFIED.
+- **Tests:** [Actions 40468563493](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40468563493) tested feature `381d7af46f29efb28e60bec608feece934e97de3`, Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**; 500 discovered/job, Windows 490 pass/10 skip, Ubuntu 489 pass/11 skip, **0 fail**; existing 12-file portable isolated smoke all 4 PASS. Earlier [failed run 40468488849](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40468488849) had one incorrect timezone test expectation; fixed and entire suite rerun. Post-document final SHA CI to verify.
+- **Open:** actual owner Windows/Defender/browser/Korean PDF manual acceptance, legitimate customer n8n source/version authorization, independent upstream redaction/PII, operator authentication, retention/backups, signed release and sale approval. There is no current commercial/production compatibility claim.
+- **Next ㄱ:** verify HEAD/docs and choose safe **different** P2 task, focusing synthetic-only privacy/provenance gates or owner device acceptance. Do not redo merged audit/history/dashboard/portable or PRs #16–#28. No actual customer data, API, deployment, deletion or access changes without approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 pinned n8n execution source research
 
 - **Repository/branch:** `hibi89/SOVIA_sovereign` PUBLIC; code `develop`. [PR #27](https://github.com/hibi89/SOVIA_sovereign/pull/27) merged as `8c321ea8bd701f350d0a711f2544b5f729273251`; `main` remains documentation-only. No Vercel/Production, signed release or paid listing.

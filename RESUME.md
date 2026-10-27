@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #28 synthetic execution summary bridge
+
+Canonical `hibi89/SOVIA_sovereign` PUBLIC, active source `develop`, `main` docs-only. [PR #28](https://github.com/hibi89/SOVIA_sovereign/pull/28) merged `d065dd2834ecc7499a0c551220ba5950ff7effed`. New `sovia_n8n_execution_bridge.py`, 31 synthetic regression cases `tests/test_n8n_execution_bridge.py`, two fabricated 1x/2x examples and `N8N_SYNTHETIC_EXECUTION_BRIDGE.md`. Strict synthetic-only summary plus **explicit pre-sanitized steps** feeds existing canonical SOVIA evaluator; never manufactures tool events from execution `status/startedAt`, never imports raw n8n execution or calls API. Old P1 5 rules and beta ZIP preserved.
+
+[Actions 40468563493](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40468563493), feature SHA `381d7af46f29efb28e60bec608feece934e97de3`, **4/4 SUCCESS** Windows/Ubuntu x Python 3.11/3.13, 500 tests discovered each, zero failed, prior 12-file portable smoke passed. Initial run failed **one test expectation** about when UTC normalization occurs; fixed and rerun, not a converter failure. Final docs HEAD CI verify after update. No real n8n installed instance, customer authorization/PII guarantee, physical owner Windows acceptance, release or production.
+
+On `ㄱ`: verify latest develop SHA, read HANDOFF→STATUS→AGENTS→REQUIREMENTS→GAP_MATRIX→actual code, then work on **distinct** P2 safe synthetic evidence/privacy or device acceptance gate. Do not redo PRs #16–#28 or alter existing package. Real API/customer data, access/visibility, production/release/sale and deletion require explicit owner approval. `main` remains documentation-only.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #27 official public n8n execution key/type reference
 
 Canonical `hibi89/SOVIA_sovereign` PUBLIC synthetic-only repo, active `develop`; default `main` docs-only, unreleased. [PR #27](https://github.com/hibi89/SOVIA_sovereign/pull/27) merged to develop at `8c321ea8bd701f350d0a711f2544b5f729273251`. New `sovia_n8n_execution_reference.py`, 27 tests, two fabricated manifests and `N8N_EXECUTION_PUBLIC_SCHEMA.md` pin official 1.x/2.x `getExecution` public OpenAPI schemas (12→23 properties, 11 additions, four id-type differences). No n8n API client, payload mapping, credentials, real logs, consent proof or actual instance compatibility. Synthetic key manifest is **always IMPORT BLOCKED**, even on recognized public names.

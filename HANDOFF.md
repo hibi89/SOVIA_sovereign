@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic execution summary-to-steps bridge (10 sections)
+
+## 1. Goal, confirmed product requirements, technology
+SOVIA Audit Lite offline retrospective AI-agent audit: Python stdlib, 5 deterministic risk rules, JSON/CSV, optional PDF, SQLite history, read-only dashboard and unsigned 12-file v0.10 portable beta remain integrated. This P2 increment covers **only synthetic n8n execution summary metadata paired with explicitly pre-sanitized step observations**, NOT actual n8n API/exports or private logs.
+
+## 2. Completed implementation and chosen design
+Compared (A) inventing one tool event from a n8n execution summary (`status`/`startedAt`) with (B) never inferring a tool event and requiring explicit already-sanitized steps. Selected (B) for accuracy/privacy. New `sovia_n8n_execution_bridge.py`: strict exact synthetic envelope, two pinned source-spec release tags, release-specific fabricated ID types, bounded IDs/steps/UTC/status, rejects any raw `data`/`workflowData`/`customData`/credentials/nodes/item values; reuses existing `sovia_n8n_sanitized.convert` and canonical evaluator; output is new-file-only via prior atomic writer. `status` cannot override tool outcomes, `startedAt` cannot fabricate step times. Two entirely synthetic 1x/2x fixtures, 31 new tests and `N8N_SYNTHETIC_EXECUTION_BRIDGE.md`. Old modules, beta ZIP, default main unchanged.
+
+## 3. Executed tests / counts / verification boundary
+[PR #28 feature-head Actions 40468563493](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40468563493) at `381d7af46f29efb28e60bec608feece934e97de3` **4/4 SUCCESS**: Windows/Ubuntu × Python 3.11/3.13. Each `python -m unittest discover -s tests -v` discovers **500** tests; Windows 490 pass/10 optional skip, Ubuntu 489 pass/11 optional/platform skip, **0 fail**. `python portable_smoke.py` unchanged 12-file v0.10 clean isolated install/audit (3 events/5 findings)/SQLite/dashboard/backup restore/owner synthetic selfcheck PASS on four jobs. Real Windows owner's device, Defender, browser and Korean PDF visual; real n8n API; customer's consent/PII absence remain **NOT VERIFIED**. Post-doc HEAD CI requires independent verification.
+
+## 4. Completion states / active work / stopping point
+DONE feature branch, tests, synthetic examples, offline canonical CLI, documentation and [PR #28](https://github.com/hibi89/SOVIA_sovereign/pull/28) merged to develop. IN PROGRESS broader P2 gate closure, NOT real integration. PENDING authorized customer specimen and specific running n8n version, upstream sanitization proof, privacy/legal review, backup/retention/erase handling, physical owner Windows acceptance and signed release. Stop after documentation/HEAD QA; next ㄱ should select distinct P2 commercial readiness gap and avoid reimplementing this bridge or earlier PRs #16-#28.
+
+## 5. Failures / root cause / corrected retry
+Initial PR-head CI run 40468488849 had **one failing test assertion** in `test_summary_start_time_does_not_replace_step_times`: assertion wrongly assumed converter itself rewrites UTC; it preserves source timezone until `evaluate()` canonicalizes for report. Corrected the test to assert both preservation and later UTC normalization at feature SHA `381d7af4...`; full repeat Actions 40468563493 succeeded 4/4. No runtime converter defect from this issue. The synthetic flag is operator-supplied and **does not prove** source data are fabricated; maliciously mislabeled data are outside intended use. Never treat synthetic fixture success as privacy clearance.
+
+## 6. Repository / branches / commits / important paths
+`hibi89/SOVIA_sovereign` **PUBLIC synthetic-only**. `develop` source branch, default `main` docs-only. Feature `feature/p2-n8n-synthetic-summary-bridge`, tested HEAD `381d7af46f29efb28e60bec608feece934e97de3`. [PR #28](https://github.com/hibi89/SOVIA_sovereign/pull/28) merged at `d065dd2834ecc7499a0c551220ba5950ff7effed`. New paths: `sovia_n8n_execution_bridge.py`, `tests/test_n8n_execution_bridge.py`, `examples/synthetic_n8n_bridge_1x.json`, `examples/synthetic_n8n_bridge_2x.json`, `N8N_SYNTHETIC_EXECUTION_BRIDGE.md`, updated HANDOFF/STATUS/GAP_MATRIX/RESUME. Refresh latest develop HEAD after docs commit.
+
+## 7. Production URL / deployment / commands
+Production NONE; Vercel NONE; paid APIs NONE. Offline example: `python sovia_n8n_execution_bridge.py --input examples/synthetic_n8n_bridge_2x.json --policy examples/demo_policy.json --output UNIQUE_NEW_OUTPUT.json --synthetic-only`, then `python sovia_audit.py --input UNIQUE_NEW_OUTPUT.json --output UNIQUE_NEW_REPORT.html`. Output must be new non-aliased local file. No n8n network call; latest source-only features **not in** unchanged unsigned 12-file portable v0.10 ZIP.
+
+## 8. Originals / backups / authentication / no-touch boundaries
+Only fabricated synthetic metadata IDs and pre-sanitized synthetic tool codes committed to PUBLIC GitHub. No personal or real n8n source, API keys, tokens, prompt contents, node parameters, customer backups/DB touched. Existing original source and beta archive preserved; no permission/visibility change, deployment or deletion. GitHub connected user `hibi89` verified on prior commit; verify identity/commit match for final docs.
+
+## 9. Next priority / approvals / completion criterion
+Next safe unit: a distinct P2 **independent input provenance or privacy-negative test design** with simulated data only, or practical owner Windows acceptance tooling that does not imply manual PASS. True n8n upstream sanitizer/real API/customer data and release or sale require explicit owner approval; likewise any paid services, destructive retention, external transfer, change in repo visibility/access or production. Commercial completion requires independent permissions, sanitization, local acceptance, backup and support evidence.
+
+## 10. KST update / evidence cutoff
+2026-10-27 KST. Tested feature SHA `381d7af46f29efb28e60bec608feece934e97de3`, Actions `40468563493` 4/4 success, merge `d065dd2834ecc7499a0c551220ba5950ff7effed`. This document update is anchored to that merged develop source. Retrieve final docs commit SHA, linked identity and post-doc CI before completion claims. Manual device/actual API/customer/legal and commercial validations remain UNVERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 pinned public n8n execution contract (10 sections)
 
 ## 1. Mission / technology / frozen requirements
