@@ -1,3 +1,9 @@
+## 2026-10-27 R4/R5 alternate report presentation — opt-in preview vs release
+
+**SOURCE_ONLY_SCREEN_PREVIEW_VERIFIED:** [PR #48](https://github.com/hibi89/SOVIA_sovereign/pull/48) alternative HTML renderer merged `061195323638792ed7eafc431267c73743f395ad`; 4/4 CI, 775 tests/job. Actual Edge screenshot of next printable preview independently viewed: Korean cells and old narrow-column issue substantially improved for screen. Separate A4 print-only CSS exists but **no real printer/PDF print rendering or owner physical manual check yet**. Earlier PR #42 frozen package hash break avoided; v0.10/v0.11.2 immutable, no v0.12 distributable. **Owner Windows/Defender/SmartScreen/Korean PDF, authentic authorized n8n source/version/sanitization/privacy, retention/legal/signature/commercial release remain unresolved.**
+
+---
+
 ## 2026-10-27 P2 browser visual evidence added (PR #47)
 
 **Verified CI image:** GitHub-hosted real Windows Edge rendered *actual v0.11.2-beta synthetic local audit and dashboard* into two 1440×1600 PNGs and uploaded them; independently downloaded and viewed. Korean visible and dashboard 1/3/5/1; narrow audit evidence line-wrap and below-fold dashboard observed. **NOT VERIFIED:** complete print/viewport/responsive/accessibility, owner physical Windows/Defender/PDF, actual n8n native source authorization + PII redaction false-negatives, legal data/retention and signed commercial release. [PR #47](https://github.com/hibi89/SOVIA_sovereign/pull/47) merge `f21b5f58b0286fcdf45f8af2c2d5136eae629753`; artifact 12730803796 expires Nov 3 11:45 UTC. Existing versioned packages immutable.
