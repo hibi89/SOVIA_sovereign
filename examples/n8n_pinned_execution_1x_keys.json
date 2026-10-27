@@ -1,0 +1,13 @@
+{
+  "schema_version": "sovia.n8n_pinned_execution_keys.v1",
+  "synthetic_only": true,
+  "source_kind": "public_api_get_execution_response_keyset_only",
+  "pinned_release_tag": "n8n@1.123.88",
+  "field_keys": [
+    "id",
+    "status",
+    "mode",
+    "startedAt",
+    "workflowId"
+  ]
+}
