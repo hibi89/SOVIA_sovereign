@@ -146,7 +146,7 @@ class CodeRegistryTests(unittest.TestCase):
             registry.standardize(*self.data)
 
     def test_raw_n8n_execution_export_rejected(self):
-        self.data[0] = {"id": "execution", "data": {"resultData": {}}}
+        self.data = ({"id": "execution", "data": {"resultData": {}}}, self.data[1], self.data[2])
         with self.assertRaises(registry.RegistryError):
             registry.standardize(*self.data)
 
