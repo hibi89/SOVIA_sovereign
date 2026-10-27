@@ -68,11 +68,16 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
                 any(type(v) is not int or not 1 <= v <= 36500
                     for v in category_thresholds.values())):
             raise InventoryError("INVALID_CATEGORY_THRESHOLDS")
+    # Normalize without resolving. Reject malformed caller paths as a
+    # non-path-bearing access error; preserve deliberate INVALID_ROOT refusals.
+    try:
+        target = Path(os.path.abspath(root))
+    except (OSError, ValueError, TypeError) as exc:
+        raise InventoryError("ROOT_ACCESS_FAILED") from exc
     try:
         # os.path.abspath normalizes relative paths WITHOUT resolving junctions.
         # Checking only the terminal directory misses `junction/child` roots:
         # a reparse point in an ancestor can redirect a whole requested tree.
-        target = Path(os.path.abspath(root))
         root_metadata = None
         for component in (target, *target.parents):
             metadata = component.stat(follow_symlinks=False)
@@ -82,7 +87,7 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
                 root_metadata = metadata
         if not stat.S_ISDIR(root_metadata.st_mode):
             raise InventoryError("INVALID_ROOT")
-    except (OSError, ValueError) as exc:
+    except OSError as exc:
         raise InventoryError("ROOT_ACCESS_FAILED") from exc
     when = time.time() if now is None else now
     if not isinstance(when, (int, float)) or not (0 < when < float("inf")):
