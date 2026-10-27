@@ -1,3 +1,9 @@
+## 2026-10-27 — P2 SQLite metadata idempotency integrity closure PR #56
+
+[PR #56](https://github.com/hibi89/SOVIA_sovereign/pull/56) merged `develop` code SHA `bf435408b628817cc678bc8312e5fa68379390f6`. Repeat import checks persisted audit identity and count columns as well as findings digest, preventing silent `already_present` on altered metadata. Two tests / five synthetic subcases and [CI #40517663166](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40517663166) Win/Ubuntu Python 3.11/3.13 4/4 successful (826 discovered/job, 0 FAIL). Schema unchanged, old packages unchanged. This is local consistency, NOT cryptographic DB integrity against complete tampering and NOT permission to store real customer data. Sale gates remain user hardware/n8n provenance/PII/consent/licensing/retention/support/signing. No Vercel/Production.
+
+---
+
 ## 2026-10-27 — candidate extracted-directory integrity milestone
 
 Source-only `verify_portable_v012.verify_directory` previously ignored arbitrary unlisted empty directories even when reporting a pristine extraction. [PR #55](https://github.com/hibi89/SOVIA_sovereign/pull/55) on `develop` `ed19d73df8d5563d374125f9e4840e2416cee89e` now refuses unknown ancestor directories and unsupported entries. PR CI [40515324937](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40515324937) 4/4 PASS, 824 discovered/job, 0 FAIL. v0.10/v0.11.2 preserved, v0.12 beta test ZIP new SHA `facd78a00f024138363775c692b6e049bd29b76e4971c68d8f266f5106d35ba2`. Only strict local synthetic ZIP acceptance improved; not commercial/customer/owner acceptance. Remaining gates detailed in STATUS and HANDOFF.

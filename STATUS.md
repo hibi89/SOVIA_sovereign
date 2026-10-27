@@ -1,3 +1,12 @@
+## 2026-10-27 — PR #56 v0.12 SQLite repeat-import identity and count integrity FIXED
+
+- [PR #56](https://github.com/hibi89/SOVIA_sovereign/pull/56) merged `develop` code SHA `bf435408b628817cc678bc8312e5fa68379390f6`. Previously an existing versioned report UID with matching findings digest but modified event/finding counts or identity metadata was silently treated as `already_present`. Now strict six-field equality is mandatory on repeat import; conflicts reject and preserve existing row. SQLite schema v2 and old releases unchanged; two new regression tests with five corruption scenarios.
+- [PR Actions 40517663166](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40517663166) **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13: 826 discovered each, Windows 815 passed/11 optional skipped, Ubuntu 811 passed/15 optional skipped, 0 failures. Isolated extracted ZIP smoke PASS for pinned v0.10/v0.11.2 and new v0.12. Current v0.12 test artifact hash `c4cea992fd97d27feadbbf6bec21e40f5e12e6926fc852012873cda0e9903db4` (PR #55 prior candidate `facd78a00f024138363775c692b6e049bd29b76e4971c68d8f266f5106d35ba2` is historical).
+- Merge SHA CI [40519423518](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40519423518) triggered; check its final conclusion and docs-HEAD CI separately. No actual owner Windows, n8n authorized data or release/customer test. `main` docs only, Vercel/Production N/A, repo PUBLIC synthetic-only. Legacy burst temporal defect still affects old default engine, issue #52 open.
+- Next `ㄱ`: verify latest HEAD Actions. Prioritize owner physical Windows/Defender/visual acceptance, documented sanitized n8n version/consent, and privacy/retention/signing/commercial approval; do not reimplement completed features or alter frozen ZIPs.
+
+---
+
 ## 2026-10-27 — v0.12 extracted-folder allowlist integrity FIXED (PR #55)
 
 - [PR #55](https://github.com/hibi89/SOVIA_sovereign/pull/55) merged into `develop` at `ed19d73df8d5563d374125f9e4840e2416cee89e`. Found and fixed real strict-verification gap: extra empty directories were ignored by `verify_portable_v012.verify_directory`, which previously verified only file inventory. Now only derived allowlisted ancestor directories are accepted; unsupported entries denied with non-disclosing messages. Three new tests added.
