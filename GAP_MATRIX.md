@@ -1,3 +1,11 @@
+## CURRENT MVP→ORIGINAL BLUEPRINT RECONCILIATION (2026-10-27 KST)
+
+[PR #36](https://github.com/hibi89/SOVIA_sovereign/pull/36) merged `0fab78dacf35c2048f329df882d6b76b16df7d57`: `MVP_BLUEPRINT_RECONCILIATION.md` records R1–R9 actual code path versus missing real acceptance; P1 functional MVP is **synthetically VERIFIED** already, not a reason to rebuild. Added source-only `sovia_ephemeral_diagnostic.py` with 16 regression tests covering R6 aggregate no-report-file diagnostic, local input acknowledgement, known rule counts and no input details stdout. `--ack-sanitized-source` does not prove real consent or cleaning. [CI 40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 697 tests/job, 0 FAIL, portable smoke PASS.
+
+**Actual top P2 gaps (not synthetic tooling deficits):** real sanctioned installed n8n version/source fields/consent and pre-ingestion PII false-negative review; owner physical Windows clean-install/HTML browser, optional Korean PDF and Defender/SmartScreen manual acceptance; commercial support/retention/backup/output quota, package version/installer signing and owner launch approval. Cloud/Private/tenancy/billing are later gates. Existing source beta ZIP after PR #34 has new pinned inner hash `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`; old historical hash is not the new build. No sale or Production claims.
+
+---
+
 ## CURRENT P2 — actual report writer rollback error path repaired (2026-10-27 KST)
 
 [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) merged `60f9bc8cfb95012428f36064f0c29c1a54c93a40` after concurrently merged guarded source-only exporter [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35). Previously `write_reports_atomically()` created a published hardlink before recording inode stat; if post-link stat raised, output might be orphaned despite overall failure. Writer now validates payload before allocating staging fd and stats before linking, preserving no-overwrite and best-effort rollback. Ten injected ENOSPC/stat/EIO/race tests. Old beta archive SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`; current hardened source-build SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`; BOTH explicitly pinned, unknown refused, neither signed.

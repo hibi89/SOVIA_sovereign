@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 MVP-to-blueprint acceleration (10 sections)
+
+## 1. Mission / confirmed requirements / stack
+Complete a working offline SOVIA Audit Lite MVP first, compare implemented features against original REQUIREMENTS.md/ARCHITECTURE.md, then fill true functionality gaps and perform security/stability/compatibility gates. Python 3.11+ stdlib core, 5 deterministic rules, strict JSON/CSV, Korean HTML/JSON/CSV, optional local-font ReportLab PDF, SQLite history and read-only static dashboard. No Cloud/Private/customer release at this checkpoint.
+
+## 2. Delivered features / design decisions
+**P1 functional MVP is SYNTHETIC VERIFIED**, not a new task to rebuild. PR #34 already merged core writer fault-order fix; PR #35 added optional guarded report output; this step PR #36 added separate source-only aggregate no-report-file CLI `sovia_ephemeral_diagnostic.py`, 16 regression tests `tests/test_ephemeral_diagnostic.py`, and `MVP_BLUEPRINT_RECONCILIATION.md` mapping original R1–R9 against current files/unknowns. Selected a separate offline read-only diagnostic instead of changing default auditor and v0.10 archive: no report/database files and no raw event strings in stdout. Acknowledgement `--ack-sanitized-source` is mandatory but does NOT verify actual consent or sanitization.
+
+## 3. Test commands, counts, success/failure
+`python -m unittest discover -s tests -v`; `python portable_smoke.py`; `python -I -B sovia_ephemeral_diagnostic.py --input examples/demo_five_rules.json --ack-sanitized-source`. PR #36 Actions [40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) feature SHA `892044ed6e09f269541902b1dd88472f0d3d7cda` **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13; 697 discovered/job, Windows 687 pass/10 optional skip, Ubuntu 686 pass/11 skip, **0 failures**. Full portable ZIP isolated smoke PASS; inner unsigned 12-file v0.10 rebuilt after writer fix SHA256 `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Historical prior source ZIP SHA256 `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b` must not be confused with new source. Final docs-commit CI separately pending at this checkpoint.
+
+## 4. DONE / IN PROGRESS / PENDING / BLOCKED
+DONE: reproducible P1 offline synthetic end-to-end with 5 rules, evidence, report, packaged smoke; initial R1-R9 mapping and source-only no-persist aggregate path; PR #36 merged. PENDING: real independently authorized installed n8n source/field mapping and PII false negatives (requires consent/fixtures), owner actual Windows browser/Defender/Korean PDF visual (human manual), commercial support terms, reproducible signed release, false positive calibration and output crash-consistency. Cloud/Private are future gated products, NOT P1 tasks.
+
+## 5. Errors, causes, attempts, don't repeat
+PR #36 green on first CI attempt; 0 failed jobs. Previous PR #35 first run had two test-mock disk_usage shape errors then fixed; PR #34 fixed an actual post-link stat rollback gap; both already merged and verified. Never redo PRs #16–#36 or mark synthetic CI as customer acceptance. 'No report files created' is script scope only: redirected stdout, OS/shell logging and forensic traces are NOT excluded. Reportlab/PDF optional cases skip on CI; real Windows Korean visual unverified.
+
+## 6. Repo/branch/SHA/paths
+Repository `hibi89/SOVIA_sovereign` **PUBLIC** (do not upload private data); source branch `develop`, default `main` docs-only. PR #34 merged `60f9bc8cfb95012428f36064f0c29c1a54c93a40`; PR #36 feature tested `892044ed6e09f269541902b1dd88472f0d3d7cda`, merged `0fab78dacf35c2048f329df882d6b76b16df7d57`. Prior to branch parent `d9820a61fe5db0b0b4624ee816bf0d59096114bb`. Key: `sovia_audit.py`, `sovia_ephemeral_diagnostic.py`, `MVP_BLUEPRINT_RECONCILIATION.md`, `REQUIREMENTS.md`, `ARCHITECTURE.md`, `STATUS.md`, `HANDOFF.md`, `GAP_MATRIX.md`, `RESUME.md`. Documentation consolidation commit advances HEAD; refresh before next work.
+
+## 7. Production URL/Vercel/commands/environment
+Vercel and Production URL **NOT APPLICABLE**. Offline source tools without network/mandatory subscriptions; optional PDF ReportLab/font requires user local licensing. Existing unsigned portable 12-file v0.10 beta not a signed EXE or commercial release; source-only aggregate CLI is NOT packaged there. Run Python 3.11+ and documented demos. No paid APIs, billing or client data.
+
+## 8. Originals / backups / access / prohibited changes
+Original source inputs and local databases untouched in this task; source-only changes and public-safe synthetic tests; original Git history preserved without force push; merge parent provides code history rollback. No tokens, customer prompts, screenshots, local paths, fonts, `.env` or secrets committed. Never change GitHub visibility/access/production, delete real customer material, or publish commercial offer without owner's explicit approval. Protect real generated HTML/JSON locally; they may contain event metadata.
+
+## 9. Next priority, verification and approval needs
+1) **MVP evidence complete**: don't re-build MVP or add repetitive synthetic test wrappers. Confirm fresh HEAD CI and use `MVP_BLUEPRINT_RECONCILIATION.md` as implementation queue. 2) Biggest real P2 blocker is authorized real-world *sanitized n8n* source/version/data-lineage/consent and PII controls. Cannot bypass owner approval or fabricate an authorized log; first decide a safe real installed source candidate or clearly mark blocked. 3) Parallel owner actual Windows clean install/report/browser/PDF/Defender acceptance and current source beta packaging review; user action only where tools cannot inspect physical PC. 4) Commercial policies (storage/output size, signed release, deletion/support, price) need owner approval. Complete when actual supported customer fixture/version/manual acceptance + privacy/recovery/contract gates pass; do not claim 100% until then.
+
+## 10. KST update, evidence cutoff, document baseline
+2026-10-27 KST. Source PR #36 tested `892044ed6e09f269541902b1dd88472f0d3d7cda` CI 40479432652 4/4 and merged `0fab78dacf35c2048f329df882d6b76b16df7d57`; 697 discovered per job. Final doc baseline commit and its own CI must be checked after single consolidated update. Actual owner's local device, real n8n/customer provenance, data protection certification, production and sales remain UNVERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 PR #34 report publisher failure-safety integration (10 sections)
 
 ## 1. Goals, confirmed scope, stack

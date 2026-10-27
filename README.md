@@ -1,5 +1,20 @@
 # SOVIA Sovereign — local-first AI agent evidence audit
 
+## Verified working baseline — 2026-10-27 (active `develop`)
+
+**P1 offline functional MVP is implemented and synthetically verified**: canonical JSON/CSV, five explainable risk rules, evidence/unknown limits, Korean HTML/JSON/CSV, optional PDF, SQLite metadata history, dashboard, portable 12-file offline beta and owner synthetic self-check. The latest regression at [GitHub Actions 40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) succeeded across Windows/Ubuntu × Python 3.11/3.13 (697 discovered/job, zero failures). Do not confuse GitHub-runner checks with actual owner Windows/browser/Defender/Korean PDF review, sanctioned real n8n integration or customer readiness.
+
+**New source-only, not in v0.10 ZIP:** `sovia_ephemeral_diagnostic.py` offers aggregate read-only counts without generating report/DB files:
+
+```sh
+python -I -B sovia_ephemeral_diagnostic.py --input examples/demo_five_rules.json --ack-sanitized-source
+```
+
+The declaration is an operator acknowledgement, not authenticated consent. Shell/OS logs are not excluded. Read [MVP_BLUEPRINT_RECONCILIATION.md](MVP_BLUEPRINT_RECONCILIATION.md) and [HANDOFF.md](HANDOFF.md) for accurate R1–R9 state and next commercial gates. **No production service or signed commercial release exists.** Older paragraphs below are historical milestones and may describe features as missing that are now implemented.
+
+---
+
+
 SOVIA Audit Lite is a **retrospective** (not real-time blocking) deterministic risk audit of supplied agent events. This repository is currently PUBLIC; only synthetic inputs and public-safe code are committed.
 
 ## Working prototype (2026-10-26 KST)

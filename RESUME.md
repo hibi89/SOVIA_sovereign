@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 MVP→blueprint acceleration / PR #36
+
+Active source PUBLIC `hibi89/SOVIA_sovereign` `develop`; default `main` docs-only. PR [#36](https://github.com/hibi89/SOVIA_sovereign/pull/36) merged at `0fab78dacf35c2048f329df882d6b76b16df7d57`: added source-only `sovia_ephemeral_diagnostic.py`, 16 synthetic tests, and `MVP_BLUEPRINT_RECONCILIATION.md`. New opt-in JSON aggregate no-report-file mode uses real 5-rule evaluator, masks paths/event content, no network, no DB/report writes, cannot exclude OS/shell traces or verify consent. Source-only; unchanged old 12-file package with existing writer fix introduced by PR #34.
+
+Actions [40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) feature `892044ed6e09f269541902b1dd88472f0d3d7cda` **4/4 SUCCESS**, Windows+Ubuntu Python 3.11/3.13, **697 tests discovered per job**, 0 failure, existing portable smoke PASS, new-source 12-file ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Final docs HEAD CI to check separately.
+
+**On next ㄱ:** read HANDOFF 10 sections → STATUS → AGENTS → REQUIREMENTS → `MVP_BLUEPRINT_RECONCILIATION.md` → latest actual code and Actions. **P1 MVP minimum already synthetically verified**, don't repeat it. Prioritize P2 real n8n sanitized source/version/consent+PII gate and actual owner Windows/browser/Korean PDF/Defender acceptance; then honest quota/output/support terms. Real customer source and sale/deployment/access/security changes require explicit owner approval. No customer Production/Vercel or certified release.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #34 hardened report publisher merged with PR #35
 
 Canonical PUBLIC `hibi89/SOVIA_sovereign`, `develop` code, `main` docs-only. [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) merged `60f9bc8cfb95012428f36064f0c29c1a54c93a40` after parallel [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) guarded offline HTML/JSON source-only export merged `9d27e3468eb555ed72dfd2229cf414fbe674ebf1`. Changed existing audit writer: validate bytes BEFORE staging file descriptor, obtain staging stat BEFORE published hardlink, preserving fsync/exclusive no-overwrite/best-effort rollback. Ten synthetic injected errors/success tests plus owner evidence hash compatibility test updated. Existing archived ZIP SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`; current hardened ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`; strict source-only checker explicitly accepts only these two (both unsigned).

@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 MVP complete (synthetic) → original blueprint gap fill
+
+- **Current source:** PUBLIC `hibi89/SOVIA_sovereign` `develop` (default `main` docs-only). Functional P1 minimum offline JSON→5 deterministic rules→evidence/unknown→Korean HTML/JSON→CLI tests **synthetically verified**; initial R1–R9 reconciliation now in `MVP_BLUEPRINT_RECONCILIATION.md`. Do not rebuild already complete P1.
+- **New PR #36:** `sovia_ephemeral_diagnostic.py` source-only read-only JSON aggregate counts/no report files (operator sanitized-input acknowledgement, no network, no echo of event details) with 16 tests; PR [#36](https://github.com/hibi89/SOVIA_sovereign/pull/36) merged at `0fab78dacf35c2048f329df882d6b76b16df7d57`. OS logs, redirected stdout and actual consent NOT verified. Old v0.10 ZIP unchanged by #36.
+- **Verified CI:** [40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) at feature SHA `892044ed6e09f269541902b1dd88472f0d3d7cda` **4/4 SUCCESS** Windows/Ubuntu Python 3.11/3.13, **697 discovered/job**, 0 FAIL (Windows 687 PASS/10 SKIP, Ubuntu 686 PASS/11 SKIP). Existing 12-file portable smoke PASS. New source ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9` after prior already-merged PR #34; historical SHA `894d83d5...` pertains old build.
+- **P2 gates:** genuine authorized n8n version/source+sanitizer/privacy evidence, owner's actual Windows/browser/Defender/Korean PDF visual, commercial supported inputs/quotas/retention/signed installer/support/approval. None may be inferred from CI. No Vercel/Production/sale/listing.
+- **Next ㄱ:** verify current HEAD and final CI, then focus actual supported adapter/customer data-path approval and owner-device acceptance, not more generic mock-heavy tooling. Record blocked items precisely, preserve source/secret safety.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 PR #34 writer failure-safe merge after PR #35
 
 - **Repo:** PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, main docs-only. [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) MERGED `60f9bc8cfb95012428f36064f0c29c1a54c93a40`; parallel prior [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) (guarded source-only export) also merged and preserved.

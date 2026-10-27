@@ -1,4 +1,19 @@
 # SOVIA Audit Lite v0.6.0 — offline synthetic quickstart
+
+## Latest verified `develop` commands (2026-10-27)
+
+For the current checked-out source tree, all output filenames must be NEW/unused. Structured synthetic P1 end-to-end:
+
+```powershell
+py -3 -I -B sovia_audit.py --input examples/demo_five_rules.json --output demo-audit.html --json-output demo-audit.json --findings-csv demo-findings.csv --events-csv demo-events.csv
+py -3 -I -B sovia_ephemeral_diagnostic.py --input examples/demo_five_rules.json --ack-sanitized-source
+py -3 -m unittest discover -s tests -v
+```
+
+First command creates four files (3 synthetic events/5 findings); second writes **no application report files** and prints only aggregated labels/counts; neither connects to an LLM or n8n API. Latest [four-platform Actions](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) ran 697 tests/job, 0 failed, synthetic only. The diagnostics script is source-only, excluded from the existing v0.10 ZIP. Read [MVP_BLUEPRINT_RECONCILIATION.md](MVP_BLUEPRINT_RECONCILIATION.md) for real P2 gaps. Old instructions and earlier test counts below are historical.
+
+---
+
 Tested: Python 3.13.5 on Linux. Standard library only, no API keys or external calls. Windows Python 3.10+ is a design target, not an independently tested platform.
 
 ## One-command demonstration
