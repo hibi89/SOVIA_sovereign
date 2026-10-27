@@ -189,6 +189,20 @@ def convert_paths(source, policy_path, output, *, mode="synthetic", attestation_
         policy_doc = audit.read_document(pol)
         canonical = convert(doc, policy_doc)
         if attest is not None:
+            # Fail closed before publishing canonical metadata; synthetic mode
+            # stays backwards-compatible with existing public demo fixtures.
+            preflight_path = Path(__file__).resolve().with_name("sovia_pii_preflight.py")
+            spec = spec_from_file_location("_sovia_local_pii_preflight", preflight_path)
+            if spec is None or spec.loader is None:
+                raise ContractError("PREFLIGHT_MODULE_UNAVAILABLE")
+            checker = module_from_spec(spec)
+            try:
+                spec.loader.exec_module(checker)
+                checker.assert_no_high_risk_patterns(doc, policy_doc)
+            except (OSError, ImportError) as exc:
+                raise ContractError("PREFLIGHT_MODULE_UNAVAILABLE") from exc
+            except ValueError as exc:
+                raise ContractError("PREFLIGHT_REJECTED") from exc
             manifest = audit.read_document(attest)
             verify_operator_attestation(manifest, doc, policy_doc)
         payload = json.dumps(canonical, ensure_ascii=False, indent=2)
@@ -220,6 +234,8 @@ def main(argv=None):
                    else "CONVERTED_WITH_UNVERIFIED_OPERATOR_CLAIMS"),
         "events": count, "independent_evidence_verified": False,
         "authorization_independently_verified": False,
+        "pii_pattern_scan_executed": args.mode == "approved-local",
+        "pii_absence_proven": False,
     }))
     return 0
 
