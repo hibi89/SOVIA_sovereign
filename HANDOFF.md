@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 bounded synthetic workload benchmark (10 sections)
+
+## 1. Mission, approved scope and technical stack
+SOVIA Sovereign Audit Lite: offline-first retrospective deterministic 5-rule audit, Python 3.11+ stdlib JSON/CSV/HTML/optional PDF, SQLite/history, static dashboard. Source-only P2, no Cloud/Private deployment or paid costs. New PR #32 adds **synthetic-only resource/volume measurement** to distinguish actual canonical JSON limits (1MiB/1000 events) from unverified real customer quota/performance. Existing 12-file v0.10 portable beta remains byte-identical and excludes source-only P2 tools.
+
+## 2. Design / completed implementation
+Compared (A) claiming 1000-event guaranteed customer SLA with actual source/backend/owner PC assumptions vs (B) reproducible bounded simulated load, explicit exclusions, OS/Python CI evidence. Implemented **B**. `sovia_capacity_benchmark.py` builds only deterministic `*.example` fabricated canonical events, profiles `normal` 0 findings and `alert_dense` 4×N+(N−2) findings; supports only 10,100,500,1000 events × 1–3 rounds. Auto-cleaned temporary JSON → existing strict `sovia_audit.read_document` → real `evaluate` → Korean `render_html` → JSON serialization, measures perf_counter elapsed and Python `tracemalloc` peak allocations (NOT RSS). Emits only aggregate results to stdout, no private data/permanent files/network. `tests/test_capacity_benchmark.py` 33 new tests, `SYNTHETIC_CAPACITY.md`, workflow compiles and runs the full eight synthetic cases on each of 4 runners. Original engine, input ceilings, portable, main unchanged.
+
+## 3. Exact test counts, CI outcomes, measured illustrative evidence
+[PR #32 Actions 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) on feature head `fa1fb31777667120ddce8bf465085715b701838e`: **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13; `unittest discover` **632 discovered/job**, Windows 622 PASS/10 optional skip, Ubuntu 621 PASS/11 skip, zero failures. Separate synthetic benchmark step successfully executes 8 cases on each runner, and unchanged isolated old 12-file v0.10 ZIP smoke PASS (SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`). Illustrative 1000-event `alert_dense` measurements (1 round): Linux 3.11 314.564 ms, Linux 3.13 394.005 ms, Windows 3.11 568.203 ms, Windows 3.13 434.522 ms; 4998 findings, 307201-byte fabricated input, 2136699-byte JSON report, Python-tracked peak about 13–13.5k KiB. Timings include tracemalloc overhead, exclude report disk publishing/PDF/SQLite and do NOT predict SLA. Docs final HEAD CI verify separately.
+
+## 4. Completion, open items, boundaries
+DONE PR #32 source-only harness, 33 adversarial tests, CI workload, source limits docs, integration with develop. PENDING physical owner PC performance, benchmark repeatability/concurrency, actual authorized supported n8n source/version/consent, anonymization/privacy false negatives, optional PDF/GUI/Defender manual acceptance, output file quota and legal retention/backup/support, commercial approval. Do not represent source MAX_EVENTS=1000 or 1MiB MAX_BYTES as a buyer guarantee; 1000-event synthetic dense report can be ~2.14MB from ~0.31MB input. Timing/alloc data limited to those 4 ephemeral CI runners.
+
+## 5. Failures / corrections / do not overclaim
+PR #32 first tested feature head **4/4 success**, no failed jobs/retries. Fixed early internal CLI numeric parsing before PR using the allowlisted integer count tuple. No change to core audit engine. Counts/outputs are synthetic calculated from known cases; `tracemalloc` excludes C/native RSS and timing may shift wildly with CI load/interpreter/hardware. Single run per case has no statistical performance guarantee; zero real data, P95/load/concurrency or owner-device evidence. No external API.
+
+## 6. Repo / branch / SHA / paths
+GitHub PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, default `main` docs-only. [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) feature `feature/p2-synthetic-capacity-bench`, tested SHA `fa1fb31777667120ddce8bf465085715b701838e`, merged commit `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. New `sovia_capacity_benchmark.py`, `tests/test_capacity_benchmark.py`, `SYNTHETIC_CAPACITY.md`, modified `.github/workflows/sovia-offline-regression.yml`. Updated HANDOFF, STATUS, RESUME, GAP_MATRIX, LISTING_PREP, SYNTHETIC_CAPACITY. Re-check current docs HEAD/author attribution after sync.
+
+## 7. Run, cost, production and actual performance boundary
+`python -I -B sovia_capacity_benchmark.py --synthetic-only --counts 10,100,500,1000 --profiles normal,alert_dense --rounds 1`; locally source-only, automatically deletes temporary simulated fixture, no artifact output/deployment. Results are aggregate JSON metadata. 1 MiB read/MAX_EVENTS 1000 reflect canonical code hard validation, not customer event allowance; 8 synthetic core-only cases differ from actual PDF/database/screenshots. No production/Vercel, paid dependencies, invoices, public commercial offer or code signing. v0.10 portable archive remains unchanged.
+
+## 8. Data/source security, backups, authorship
+No real customer logs, tokens, prompts, n8n API, real identity, screenshots, PC paths, backup contents or font files added to PUBLIC repo. Synthetic paths temporary and auto removed; owner originals, portable manifest, backup databases and remote visibility/access untouched; no force push or main change. Measured allocation data are not host identity or hardware benchmark certification.
+
+## 9. Next best safe work and owner approvals
+Next `ㄱ`: verify live HEAD + Action CI, then address **distinct** P2 shipping risk, e.g. customer scope contract matrix or synthetic report-output size/resource cap failure mode; avoid reimplementing PRs #16–#32. Approval before real customer data/API/source mapping, retention/destruction, visibility/access changes, spending, customer-supported quota, signed release, listing or production. Owner actual Windows/browser/Korean PDF/Defender acceptance remains outstanding and cannot be auto-marked.
+
+## 10. Evidence cutoff
+2026-10-27 KST; PR #32 tested feature `fa1fb31777667120ddce8bf465085715b701838e`, [Actions 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) completed success 4/4 with full suite and benchmark/portable smoke, merged `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. Final docs HEAD Actions independently check after this update. Human owner device, real customer/performance guarantee, privacy and production remain UNVERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 reproducible synthetic SAMPLE sales pack (10 sections)
 
 ## 1. Mission / scope / stack

@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #32 bounded synthetic performance/capacity benchmark
+
+Canonical PUBLIC GitHub `hibi89/SOVIA_sovereign`; `develop` source, `main` docs-only. [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. New source-only `sovia_capacity_benchmark.py`, 33 `tests/test_capacity_benchmark.py`, `SYNTHETIC_CAPACITY.md`, workflow measurement step in four OS/Python runners. Strictly fabricated only: 10/100/500/1000 events in normal/alert_dense profile; temporary JSON is deleted, measures read_document/evaluate/HTML/JSON serialization with perf_counter + tracemalloc Python allocations (not RSS). Core 1MiB input/1000 event cap unchanged; 1000 dense events yield 4998 findings and 2136699-byte JSON report from 307201-byte input.
+
+[Actions 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) tested feature SHA `fa1fb31777667120ddce8bf465085715b701838e`, **4/4 SUCCESS** Win/Ubuntu Python 3.11/3.13, 632 tests/job, 0 fails, 8 synthetic metrics cases/run and old 12-file portable smoke all PASS. 1000 dense one-run measured ~315–568ms across GitHub runners with tracing; NOT owner hardware or customer SLA. Final docs HEAD CI to verify. No code release/main/ZIP changes, real customer data, permission, deployment, sale.
+
+Next `ㄱ`: inspect latest `develop`, 10-section HANDOFF, STATUS, GAP_MATRIX, tests, and choose another P2 gap (e.g. bounded report-export size / explicit buyer scope and unsupported workload behavior), not duplicating PRs #16–#32. Real installed n8n API/schema, authorized customer samples, privacy/retention, physical Windows browser/PDF/AV and sales approval all UNKNOWN/NOT VERIFIED. Approval required for real API/data, destructive changes, access/visibility, production, spend or commercial promises.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #31 reproducible watermarked synthetic sales SAMPLE
 
 PUBLIC `hibi89/SOVIA_sovereign`, source `develop`, default main docs-only. [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`. Source-only `sovia_demo_pack.py`, 29 `tests/test_demo_pack.py`, `SALES_SYNTHETIC_SAMPLE.md` produce **new local folder only**: true-engine synthetic 3-event/5-finding HTML with visible+print SAMPLE warning/offline CSP, labeled JSON, explicit scope description and unsigned SHA-256 manifest. The fixed fabricated fixture is matched exactly; arbitrary customer data and old ZIP changes are blocked. This is not a real screen capture, external publication, release or verified client result.

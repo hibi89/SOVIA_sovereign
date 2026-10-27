@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic workload and resource measurement
+
+- **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC source on `develop`, default `main` docs-only; [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged SHA `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. NO production/listing/live service.
+- **Implemented:** source-only `sovia_capacity_benchmark.py` 8 bounded simulated input cases (10/100/500/1000 × normal/alert_dense), strict synthetic ack and fixed profiles; auto-cleans local temp fixture, runs canonical 1MiB-bounded JSON reader → five rules → Korean HTML renderer → JSON serializer. Outputs core wall-clock ms, bytes, findings, Python `tracemalloc` peak KiB (NOT RSS); rejects unsupported/unbounded profiles/cases/rounds, never persists user records or requires network. **33 new unit tests**, `SYNTHETIC_CAPACITY.md`, CI full 4-job case measurement. Old engine/core limits, main and 12-file portable ZIP unchanged.
+- **CI:** [Actions run 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) feature `fa1fb31777667120ddce8bf465085715b701838e`: Windows/Ubuntu Python 3.11/3.13 **4/4 SUCCESS**, each 632 tests (Win 622 pass/10 skip, Ubuntu 621 pass/11 skip; 0 fail), measured all 8 synthetic cases each, old 12-file clean ZIP portable smoke PASS same SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. No failure in PR. Docs-head CI to verify separately.
+- **Important numeric result:** 1000 alert_dense events generate 4998 findings and **~2.14MB JSON output** from **307201-byte simulated input**. One-run time varies Linux 3.11 315ms, Linux 3.13 394ms, Windows 3.11 568ms, Windows 3.13 435ms with tracemalloc overhead. **Not a supported customer volume, P95 benchmark or SLA.** Source hard caps 1 MiB/1000 input events are parser guards, not promise.
+- **Still open:** owner's actual Windows/browser/Defender/Korean PDF test, real sanctioned n8n source and human authorization/privacy, report export size/quota/recovery, legal retention/support, signed release or sale. Next `ㄱ`: different safe P2 gap; no real-data support, quota/price claims or deployment without explicit approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 owner-review synthetic SAMPLE generator
 
 - **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC; source `develop`, default `main` docs-only. [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`; no public sales listing, production, Vercel, signed release.

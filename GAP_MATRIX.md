@@ -1,3 +1,13 @@
+## CURRENT P2 — bounded synthetic core performance and input/output capacity (2026-10-27 KST)
+
+[PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged `develop` SHA `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. Added `sovia_capacity_benchmark.py` (source-only; no customer data), 33 adversarial tests, `SYNTHETIC_CAPACITY.md`, four-matrix CI workload step. Generates allowlisted 10/100/500/1000 events × 0-findings normal or dense 4N+(N−2) findings, uses bounded existing JSON reader/evaluator/HTML+JSON serializers and reports one-round elapsed time and Python tracemalloc peak, all WITHOUT customer/SLA claims. Does not persist benchmarks, run n8n, PDFs, SQLite or export files. Original core input 1 MiB/1000 records, main and old 12-file beta ZIP unchanged.
+
+[CI 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) feature `fa1fb31777667120ddce8bf465085715b701838e`, Win/Ubuntu 3.11/3.13 **4/4 SUCCESS**, 632 tests/job, no fail, all synthetic case measurements and portable smoke PASS. Dense 1000 generates 4998 findings, JSON report 2136699 bytes (> input 307201 bytes) and measured 314.6–568.2 ms across runners with tracemalloc overhead; not P95/RSS SLA. Post-doc final SHA CI to recheck.
+
+**Open:** real customer workload/volume and PDF/SQLite/export full-path benchmarks, bounded report output policy, independent owner PC manual acceptance, lawful n8n data/API/version, privacy and retention, release signing/terms/supported quota, commercial approval. Next safe unit should be distinct from PR #32: e.g. fail-closed report-size policy for synthetic outputs or honest buyer-supported scope checklist. Existing 1MiB/1000 event reader limits are engineering guards only.
+
+---
+
 ## CURRENT P2 — watermarked actual-engine synthetic sales sample generator (2026-10-27 KST)
 
 [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) merged `develop` SHA `f76807c2ce1d9d72eac98d863d4ad1fd19a6caf6`. Fixed-fabricated-input-only `sovia_demo_pack.py` calls real five-rule audit engine and writes an UNUSED local folder containing visible+print SAMPLE HTML (offline CSP), explicitly wrapped synthetic JSON, buyer scope notes and unsigned SHA-256/byte-count manifest. `tests/test_demo_pack.py` 29 synthetic safety/regression tests, `SALES_SYNTHETIC_SAMPLE.md`. No actual screenshots, public listing, client data or external API. Unchanged 12-file v0.10 portable ZIP and main docs-only.

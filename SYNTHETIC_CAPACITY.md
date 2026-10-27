@@ -1,3 +1,18 @@
+## Verified 2026-10-27 GitHub-hosted synthetic measurements (not customer results)
+
+[PR #32 feature run 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652) at `fa1fb31777667120ddce8bf465085715b701838e` finished **4/4 SUCCESS**: each OS × Python run executes 8 cases, full 632 discovered tests (0 fails) and existing unchanged 12-file v0.10 portable smoke. Values below are **one timed iteration only**, Python `tracemalloc` active; do not claim P95, throughput guarantee or deterministic reproducibility across CI runs.
+
+| GitHub CI runner | Python | 1000 normal / 0 findings | 1000 alert-dense / 4998 findings |
+|---|---|---:|---:|
+| Ubuntu | 3.11 | 153.781 ms | 314.564 ms |
+| Ubuntu | 3.13 | 195.805 ms | 394.005 ms |
+| Windows | 3.11 | 280.658 ms | 568.203 ms |
+| Windows | 3.13 | 206.179 ms | 434.522 ms |
+
+At 1000 alert-dense: **307201-byte synthetic input**, **2136699-byte JSON report**, Python `tracemalloc` peak approximately **13434–13548 KiB** across these four runs; this is **not RSS**. The output can grow far beyond the input. At 1000 normal: 311204-byte input and 331412-byte JSON report. These are actual measurements on ephemeral CI machines with unknown/noisy hardware contention, excluding output publication, PDF, SQLite and real integration. A `SUCCESS` here only proves exactly these synthetic profiles ran without an exception on the designated runner.
+
+---
+
 # SOVIA P2 — synthetic capacity and bounded core workload measurement
 
 **Status: non-SLA, unapproved customer quota.** A deterministic benchmark of fabricated data only. It is **not** a real client workload test, owner Windows PC performance certificate, production load test, memory leak analysis, runtime security audit or contract promise.

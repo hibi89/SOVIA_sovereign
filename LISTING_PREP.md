@@ -1,3 +1,11 @@
+## 2026-10-27 P2 update — bounded synthetic capacity measured, NO customer performance guarantee
+
+[PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32), [4/4 successful CI 40473847652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40473847652). Source-only benchmark `sovia_capacity_benchmark.py` and guide `SYNTHETIC_CAPACITY.md` measured fixed fabricated 10/100/500/1000 event normal+alert-dense core cases on Windows/Ubuntu × Python 3.11/3.13, 632 tests/job, zero failures. The **technical source JSON input guards** are <=1,048,576 bytes and <=1000 events, both must hold; they are **NOT customer package quotas or guaranteed speed**. One-round 1000 alert-dense core timings were 315–568 ms on cloud CI, including tracemalloc overhead and excluding file output/PDF/SQLite. The dense result expands from 307201 input bytes to **2136699 JSON report bytes** (4998 findings), so storage/export/report size needs a separate commercial guard.
+
+**Buyer wording DRAFT, not released:** “명시된 v1.0 구조화 실행 이벤트의 로컬 사후 규칙 분석을 지원하는 제품을 검증 중입니다. 현재 코드에 파일 1MiB·이벤트 1000개 입력 상한이 있으나 **판매 제공량·처리시간·실제 지원 OS·데이터 출처 및 납품 범위는 검증 후 계약별 확정**합니다.” Do not quote 315ms, 1000 events, memory allocations or optional PDF as a supported buyer guarantee. Price 199,000 KRW remains speculative, not a confirmed package. Real customer consent/n8n integration, owner Windows/browser/Defender and Korean PDF manual acceptance, incident/privacy/retention terms, accepted screenshots and owner publication approval still OPEN. No public listing or release performed.
+
+---
+
 ## 2026-10-27 P2 update — reproducible synthetic SAMPLE pack source (NOT published)
 
 [PR #31](https://github.com/hibi89/SOVIA_sovereign/pull/31) adds **source-only** `sovia_demo_pack.py` with full test coverage; see `SALES_SYNTHETIC_SAMPLE.md`. It runs the existing deterministic SOVIA engine on one **locked fabricated 3-event/5-finding fixture**, then writes to a new local folder: visibly/print-watermarked SAMPLE HTML, explicitly labeled JSON, honest buyer-facing scope, and unsigned checksums. It does **not** fabricate screenshots, demonstrate actual owner Windows/browser rendering, authorize customer logs, publish a marketplace listing, claim a signed release or replace original v0.10 ZIP. A working generator meets the code prerequisite, **not** the checklist's owner-reviewed/publication tasks.
