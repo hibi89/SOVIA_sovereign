@@ -146,7 +146,7 @@ def verify_archive(archive_path, checksum_path=None):
 def verify_directory(root_path):
     """Verify pristine extracted payload before adding local generated reports."""
     root = Path(root_path)
-    if _linked_or_reparse(root) or not root.is_dir():
+    if not root.is_dir() or _linked_or_reparse(root):
         raise PackageError("Extraction directory absent or linked")
     expected = set(FILES) | {MANIFEST}
     allowed_directories = {
