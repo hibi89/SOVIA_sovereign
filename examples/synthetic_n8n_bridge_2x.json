@@ -1,0 +1,43 @@
+{
+  "format": "sovia.n8n_execution_bridge.synthetic.v1",
+  "synthetic_only": true,
+  "source_kind": "synthetic_public_execution_summary_plus_sanitized_steps",
+  "pinned_release_tag": "n8n@2.44.7",
+  "execution_summary": {
+    "id": "101",
+    "workflowId": "201",
+    "status": "error",
+    "startedAt": "2026-10-25T15:01:00Z"
+  },
+  "sanitized_steps": [
+    {
+      "step_id": "node-1",
+      "occurred_at_utc": "2026-10-26T00:01:00+09:00",
+      "tool_code": "approved_lookup",
+      "target_code": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome_code": "success",
+      "evidence_ref": "synthetic:1"
+    },
+    {
+      "step_id": "node-2",
+      "occurred_at_utc": "2026-10-26T00:01:15+09:00",
+      "tool_code": "approved_lookup",
+      "target_code": "public_docs",
+      "destination_domain": "internal.example",
+      "permission_asserted": true,
+      "outcome_code": "success",
+      "evidence_ref": "synthetic:2"
+    },
+    {
+      "step_id": "node-3",
+      "occurred_at_utc": "2026-10-26T00:01:30+09:00",
+      "tool_code": "unauthorized_export",
+      "target_code": "client_records",
+      "destination_domain": "outside.example",
+      "permission_asserted": false,
+      "outcome_code": "unknown"
+    }
+  ]
+}
