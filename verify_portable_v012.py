@@ -24,6 +24,7 @@ PREFIX = "SOVIA-V012/"
 FILES = (
     "sovia_audit.py",
     "sovia_audit_v012.py",
+    "sovia_mvp_v012.py",
     "sovia_pii_preflight.py",
     "sovia_report_print_preview.py",
     "sovia_history_v012.py",
