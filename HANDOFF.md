@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic privacy review metrics (10 sections)
+
+## 1. Goal, scope and technology
+SOVIA offline-first retrospective AI agent audit (Python stdlib, zero mandatory API spend); preserve P1 5 risk rules, source CSV, optional Korean PDF, SQLite, static dashboard, v0.10 portable Windows synthetic self-check, P2 retention inventory, strictly sanitized n8n-like converter/operator assertions/PII preflight and injective code registry. This unit measures **fabricated reviewer-labeled privacy patterns only**, not live performance.
+## 2. Completed changes / alternatives and decision
+Compared (a) automatic PII allowlist/suppression for claimed false positives (unsafe bypass risk) vs (b) bounded offline synthetic test suite with explicit expected labels, aggregate TP/TN/FP/FN and no rule change. Chose (b). Created `sovia_privacy_triage.py`, 24 `tests/test_privacy_triage.py`, `examples/synthetic_privacy_baseline.json` (9 cases, 6 TP/3 TN), `examples/synthetic_privacy_review_queue.json` (1 FP/1 FN/1 TN intentionally) and `PRIVACY_TRIAGE.md`; added link to `FALSE_POSITIVE_REVIEW.md`. `OWNER_WINDOWS_ACCEPTANCE.md` defines concrete future manual test criteria with all statuses NOT_CHECKED. No real PII or user artifacts used.
+## 3. Verified test commands, counts and limits
+[PR-head CI 40461363016](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40461363016) **4/4 SUCCESS** at feature SHA `e04713d1f5b7ae5b584ba111b51affc4e91f9235`; Windows/Ubuntu × Python 3.11/3.13 `python -m unittest discover -s tests -v` found **329 tests/job**. Windows 319 PASS/10 SKIP, Ubuntu 318 PASS/11 SKIP; 0 FAIL. Existing extracted-12-file portable smoke (audit, SQLite/dashboard/recovery/owner synthetic self-check) passed on all jobs. Independent owner's physical Windows/AV/browser/PDF/manual check is **NOT VERIFIED**. Current docs-only HEAD CI is also unverified.
+## 4. Done / active / pending / stop point
+DONE synthetic-only TP/TN/FP/FN aggregates, redacted CLI, adversarial tests, full PR CI, develop merge and specific owner manual acceptance checklist. PENDING real human review decisions/identity, actual customer source consent and n8n schema-version compatibility, true PII clearance, lawful retention/backup/deletion, owner device security/visual tests, release signature and sales permission. Stop after docs verification; do not redo completed features.
+## 5. Failures, causes, retries, alternative handling
+PR #22 CI 40461363016 succeeded with no new failing cases. Synthetic review queue **intentionally** exits 3 with 1 false positive and 1 false negative; this is a designed review signal, NOT an unhandled CI/product error or permission to disable the scanner. No runtime customer incident. No on-device Windows testing claimed; prior beta evidence is GitHub-hosted CI.
+## 6. Repo/branches/SHAs/paths
+`hibi89/SOVIA_sovereign` PUBLIC. Feature `feature/p2-privacy-triage-metrics`, PR verified head `e04713d1f5b7ae5b584ba111b51affc4e91f9235`; [PR #22](https://github.com/hibi89/SOVIA_sovereign/pull/22) merged to `develop` at `431035b572625e42a94f83c69426700b9f00acb4`. Default `main` docs-only/unreleased. Files: `sovia_privacy_triage.py`, `tests/test_privacy_triage.py`, 2 example JSONs, `PRIVACY_TRIAGE.md`, `OWNER_WINDOWS_ACCEPTANCE.md`, `FALSE_POSITIVE_REVIEW.md` and updated GAP_MATRIX/STATUS/HANDOFF/RESUME. Fetch freshest develop SHA after final docs.
+## 7. Runtime commands and production
+Production URL/Vercel/release NONE; `python sovia_privacy_triage.py --input examples/synthetic_privacy_baseline.json --synthetic-only` returns aggregate pass and exit 0. Deliberate review queue with `--input examples/synthetic_privacy_review_queue.json` returns exit 3. Stdlib-only, offline, read-only; existing v0.10 12-file portable ZIP SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b` unchanged and DOES NOT contain newer triage features.
+## 8. Originals, backup, credentials and permissions
+Only fabricated examples in PUBLIC repo; no real customer files, messages, user tokens, prompts or log content accessed. Triage reports no specimens/labels/source paths. Existing backup/history unchanged, no auto-delete, no API calls/payments/deployment/visibility updates. Reviewer testimony is unverified; backup+erasure contracts still pending.
+## 9. Next priority and owner approvals
+On `ㄱ`, inspect fresh HEAD/status, advance another safe P2 gate (e.g., independent Windows acceptance evidence checklist automation, synthetic n8n version-contract tests), keep no raw customer input. Owner must independently run Windows PC check before corresponding visual/Defender/PDF rows can PASS. Require separate owner approval for real customer data, genuine n8n API access, repository privacy/access changes, public release/commercial listing, paid services and destructive deletion.
+## 10. Date, exact verification scope and completion boundary
+2026-10-27 KST, [CI 40461363016](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40461363016) on tested feature head, normal develop PR merge `431035b572625e42a94f83c69426700b9f00acb4`; final docs SHA must be independently fetched. No owner-PC, representative privacy benchmark, real n8n customer integration or sale validation. Most recent section supersedes older archived ones.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic code registry (10 sections)
 
 ## 1. Goals, scope, tech
