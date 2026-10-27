@@ -27,7 +27,7 @@
 }
 ```
 
-All mandatory items accept only `PASS`, `FAIL` or `NOT_CHECKED`. Optional PDF also accepts `NOT_TESTED`. An automatic `SKIPPED_REPORTLAB_MISSING` or `SKIPPED_KOREAN_TTF_MISSING` cannot be paired with a PDF `PASS`. Existing reports and ZIP are **never** overwritten; the checker creates no files and prints only aggregate status and bools.
+All mandatory items accept only `PASS`, `FAIL` or `NOT_CHECKED`. Optional PDF also accepts `NOT_TESTED`. An automatic `SKIPPED_REPORTLAB_MISSING` or `SKIPPED_KOREAN_TTF_MISSING` cannot be paired with a PDF `PASS`. A `FAILED_OPTIONAL_PDF` automatic result or an explicit human PDF `FAIL` leaves the review **BLOCKED**, even when other fields are declared PASS. Existing reports and ZIP are **never** overwritten; the checker creates no files and prints only aggregate status and bools.
 
 ## Offline command example
 
