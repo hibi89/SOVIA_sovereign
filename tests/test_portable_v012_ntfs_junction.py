@@ -71,7 +71,7 @@ class WindowsJunctionPortableTests(unittest.TestCase):
     def test_linked_install_root_refused_even_with_correct_member_bytes(self):
         linked = self.base / "root-junction"
         self.junction(linked, self.install)
-        self.assertEqual(9, verify.verify_directory(self.install)["files"])
+        self.assertEqual(len(verify.FILES), verify.verify_directory(self.install)["files"])
         with self.assertRaisesRegex(verify.PackageError, "absent or linked"):
             verify.verify_directory(linked)
 
