@@ -1,3 +1,8 @@
+## 2026-10-27 independent v0.11.2 package acceptance — **LINUX SYNTHETIC PASS / OWNER WINDOWS PENDING**
+Latest develop CI `2125cc66b6ac57e38e196be0f0aff425903afbad` [run 40487176510](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40487176510) 4/4 success; downloaded actual P2 CI artifact 12724979578. Independently confirmed inner ZIP SHA256 `5667be53c206af5b8e4c0c96239595988b7866a655587d73d6a18a8078a8a71e`, 18 allowed files + manifest, verifier/extractor and installed-directory integrity PASS, isolated Linux Python 3.13.5 owner P2 selfcheck 3 synthetic events/5 findings and 9 automated checks PASS. Simulated token injection rejected with generic code/exit 2, no output and no token echo. Optional Korean PDF generated, PDF text extracted and raster visually readable in Linux. Chromium attempt timed out: actual browser rendering remains UNVERIFIED, not product failure. Windows physical install/HTML/PDF/Defender, genuine authorized n8n + PII, signed/commercial release remain **NOT_CHECKED**. No source code changes, user data, production, Vercel or new cost. Details `LATEST_HANDOFF.md` / `HANDOFF.md`.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 one-command pre-sanitized report workflow
 
 - Repo PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, default `main` documentation-only. **P1 functional MVP is synthetically complete**; follow original blueprint→real shipping gaps before deep hardening.
