@@ -56,10 +56,14 @@ class WindowsRunnerActualTests(unittest.TestCase):
     def launch(self):
         # Execute the real packaged CRLF batch script from an unrelated CWD.
         # --ci suppresses opening Edge or pausing in GitHub Actions.
+        # Windows cmd.exe /s /c needs double outer quoting around a
+        # quoted batch path plus its arguments; otherwise a path containing
+        # spaces/ampersands is split before the batch script is reached.
+        script = self.install / "RUN_V012_DEMO.cmd"
+        command = f'cmd.exe /d /s /c ""{script}" --ci"'
         return subprocess.run(
-            ["cmd.exe", "/d", "/c",
-             str(self.install / "RUN_V012_DEMO.cmd"), "--ci"],
-            cwd=self.parent, capture_output=True, text=True, timeout=45,
+            command, cwd=self.parent, capture_output=True,
+            text=True, timeout=45,
         )
 
     def test_real_cmd_creates_report_and_metadata_then_refuses_overwrite(self):
