@@ -234,13 +234,19 @@ def verify_output_dir(output_dir):
         # SQLite URI immutable+mode=ro does not create WAL/SHM or modify the
         # existing history. Only inspect already complete static snapshots.
         uri = (root / OUTPUTS[2]).as_uri() + "?mode=ro&immutable=1"
-        with sqlite3.connect(uri, uri=True, timeout=5) as db:
+        # sqlite3.Connection's context manager commits/rolls back but does
+        # NOT close its file handle. Explicit close is mandatory on Windows
+        # so a verified folder can immediately be archived/moved/removed.
+        db = sqlite3.connect(uri, uri=True, timeout=5)
+        try:
             history._schema(db)
             rows = db.execute(
                 "SELECT report_uid, source_report_id, engine_version, "
                 "source_digest, findings_digest, event_count, finding_count "
                 "FROM reports LIMIT 2"
             ).fetchall()
+        finally:
+            db.close()
         expected_row = (
             uid, report["report_id"], history.ENGINE_VERSION,
             digest, findings_digest, report["event_count"], report["finding_count"],

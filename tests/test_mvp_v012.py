@@ -113,6 +113,29 @@ class MVPV012Tests(unittest.TestCase):
         })
         self.assertEqual(set(mvp.OUTPUTS), set(files))
 
+    def test_readonly_verifier_releases_ledger_handle_after_success(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        mvp.verify_output_dir(self.target)
+        # NTFS refuses renaming an open SQLite file; POSIX permits it.
+        ledger = self.target / "history.sqlite3"
+        parked = self.target / "parked.db"
+        ledger.rename(parked)
+        parked.rename(ledger)
+        self.assertEqual(set(mvp.OUTPUTS),
+                         {path.name for path in self.target.iterdir()})
+
+    def test_readonly_verifier_releases_ledger_handle_after_rejection(self):
+        mvp.run(GOLDEN, self.target, synthetic_only=True)
+        ledger = self.target / "history.sqlite3"
+        with sqlite3.connect(ledger) as db:
+            db.execute("UPDATE reports SET finding_count=finding_count+1")
+            db.commit()
+        with self.assertRaisesRegex(mvp.MVPError, "VERIFY_LEDGER_MISMATCH"):
+            mvp.verify_output_dir(self.target)
+        parked = self.target / "parked.db"
+        ledger.rename(parked)
+        parked.rename(ledger)
+
     def test_readonly_verifier_accepts_synthetic_n8n_metadata(self):
         mvp.run(N8N, self.target, synthetic_only=True,
                 source_format="n8n-sanitized", policy_path=POLICY)
