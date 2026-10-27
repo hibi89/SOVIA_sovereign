@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic privacy triage + Windows manual gate
+
+- Repo `hibi89/SOVIA_sovereign` PUBLIC synthetic-only; active code `develop`; [PR #22](https://github.com/hibi89/SOVIA_sovereign/pull/22) MERGED SHA `431035b572625e42a94f83c69426700b9f00acb4`. `main` remains docs-only/unreleased, no production/Vercel or live listing.
+- Implemented separate `sovia_privacy_triage.py`: bounded strict synthetic specimen suite, aggregation-only TP/TN/FP/FN, no source/match/ID/path in output, CLI requires `--synthetic-only`; exit 0 for no mismatch, 3 for review-required mismatches, 2 invalid. `tests/test_privacy_triage.py` (24 synthetic tests), two fabricated examples, `PRIVACY_TRIAGE.md`. Purposefully 1 FP and 1 FN in *review-queue example* demonstrate both blind spots; no allowlist or rule modifications. `OWNER_WINDOWS_ACCEPTANCE.md` defines manual evidence gates, all **NOT_CHECKED**. Cross-reference added to `FALSE_POSITIVE_REVIEW.md`.
+- Verified full PR-head [GitHub Actions 40461363016](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40461363016) Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 329 discovered/job, Windows 319 PASS/10 SKIP, Ubuntu 318 PASS/11 SKIP, 0 FAIL; unchanged clean-extracted 12-file v0.10 ZIP audit/SQLite/dashboard/backup/restore/selfcheck PASS in all environments. Current post-merge docs HEAD CI **not independently verified**.
+- No claim of measured live FP/FN rate, privacy completeness, validated user/customer consent or n8n API integration. Synthetic suite flag can be self-asserted; do NOT use actual personal/customer data in public repo. No real owner-device Windows or optional PDF visual/AV signoff. Old ZIP unchanged and excludes later registry/preflight/triage code. No deletion, remote data upload, secret or account changes.
+- Next on `ㄱ`: verify new develop HEAD and docs. Next safest P2 may strengthen independent owner Windows self-check evidence capture or support representative approved sanitized n8n schema mapping **only with data-owner approval**; continue retention/disposal and false-positive review gates. Do not repeat integrated P1/core/SQLite/dashboard/ZIP or prior PRs. No automatic commercial deployment.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 explicit synthetic code registry merged
 
 - **Repo:** `hibi89/SOVIA_sovereign` PUBLIC, active code `develop`. [PR #21](https://github.com/hibi89/SOVIA_sovereign/pull/21) merged SHA `c882ac46a837cbadc33eb0465a39c20d0f35bb01`. `main` documentation-only/unreleased. Connected GitHub actor `hibi89` confirmed.
