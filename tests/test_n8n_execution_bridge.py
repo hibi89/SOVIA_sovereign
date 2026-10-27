@@ -83,7 +83,8 @@ class SyntheticExecutionBridgeTests(unittest.TestCase):
         d = sample()
         d["execution_summary"]["startedAt"] = "2025-01-02T03:04:05Z"
         c = bridge.convert_synthetic(d, policy())
-        self.assertEqual("2026-10-25T15:01:00Z", c["events"][0]["occurred_at_utc"])
+        self.assertEqual("2026-10-26T00:01:00+09:00", c["events"][0]["occurred_at_utc"])
+        self.assertEqual("2026-10-25T15:01:00Z", evaluate(c)["events"][0]["occurred_at_utc"])
 
     def test_v1_numeric_id_types_enforced(self):
         for val in ("101", True, 0, -1, 1.3, None, [], {}, 10**13):
