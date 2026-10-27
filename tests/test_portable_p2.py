@@ -125,6 +125,7 @@ class P2VersionedPortableTests(unittest.TestCase):
         report = json.loads(files[0].read_text(encoding="utf-8"))
         self.assertEqual(report["status"], "AUTOMATED_PASS_MANUAL_PENDING")
         self.assertEqual(report["checks"]["direct_sanitized"], "PASS")
+        self.assertEqual(report["checks"]["direct_metadata_pattern_scan"], "PASS")
         self.assertEqual(report["checks"]["aggregate_no_report"], "PASS")
         self.assertTrue(all(value == "NOT_CHECKED"
                             for value in report["manual_acceptance"].values()))
