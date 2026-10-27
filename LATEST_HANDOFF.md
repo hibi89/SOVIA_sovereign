@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 v0.11.0-beta packaged P2 candidate (10 sections)
+
+## 1. Goal / stack
+MVP → original blueprint gaps → security/stability/compatibility before commercial use. P1 offline 5-rule engine already synthetically verified. Python 3.11+ stdlib, optional PDF ReportLab + local font.
+
+## 2. Delivered
+[PR #39](https://github.com/hibi89/SOVIA_sovereign/pull/39) MERGED: separately versioned `SOVIA-Audit-Lite-0.11.0-beta.zip` with strict 18-file allowlist, independent `build_portable_p2.py`, `verify_portable_p2.py`, `owner_p2_selfcheck.py`, `RUN_P2_SELF_CHECK.cmd`, `P2_PORTABLE_README.md`, and `portable_smoke_p2.py`. Package contains original audit/CSV/PDF(optional)/history/dashboard plus pre-sanitized direct n8n-like metadata audit, PII pattern scanner, optional guarded output and no-report aggregate diagnosis. v0.10 remains separate and unchanged.
+
+## 3. CI and artifact identity
+[PR CI 40484567239](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40484567239) on `15f221364f44e3cf8f2602a913e7785bb2a3552a` Windows+Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, **742 tests/job, 0 failures**. Windows 732 PASS/10 optional PDF SKIP; Ubuntu 731 PASS/11 SKIP. Both P2 extracted-package smoke + legacy v0.10 portable smoke PASS. v0.11 ZIP SHA256 `a15ce8bebcb894c991fcb6e2b4fdc793e6460c31fb5067b97f73acf820cd1d70` identical across tested OS; v0.10 SHA256 unchanged `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Separate **`sovia-portable-p2-beta` CI artifact** (14-day retention) uploaded on Ubuntu 3.11; not a signed Release.
+
+## 4. DONE / PENDING
+DONE new v0.11 isolated build+verification+extraction+owner test, 10 P2 suite regressions including tamper, version separation, old ZIP immutability, no-clobber, isolated source-only direct and aggregate CLI, synthetic owner selfcheck. PENDING owner actual Windows/browsers/Defender/SmartScreen/Korean PDF visual, real authorized native n8n version/source/consent/PII false negatives, verified support/retention/quotas, signing and commercial release.
+
+## 5. Failure notes / boundaries
+No full CI failures at tested PR head. 18-file P2 package is unsigned and not a standalone executable installer. ZIP SHA256 is NOT publisher authenticity. Verifier checks fixed allowlist/hash and refuses unknown paths, but output logs must live outside pristine extracted directory. Existing per-file 1/2/4 MiB output test cap is not an approved customer SLA; disk capacity snapshot and multi-output writes are not crash-atomic. No real n8n raw export/API.
+
+## 6. GitHub refs
+PUBLIC `hibi89/SOVIA_sovereign`, authoritative code `develop`; default `main` docs-only. [PR #39](https://github.com/hibi89/SOVIA_sovereign/pull/39) merged `f677c337c9884d8d008c7d79edc190d5562ebe42`, tested feature HEAD `15f221364f44e3cf8f2602a913e7785bb2a3552a`. Latest docs commit will advance HEAD; refresh live before editing. Old PRs #16–#39 complete; no duplicate work.
+
+## 7. Commands / cost / production
+From checkout create `dist` folder then `python -I -B build_portable_p2.py --output dist/SOVIA-Audit-Lite-0.11.0-beta.zip`. `python -I -B verify_portable_p2.py --archive dist/SOVIA-Audit-Lite-0.11.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.11.0-beta.zip.sha256 --extract-to NEW-FOLDER`. Extracted under `NEW-FOLDER/SOVIA-P2`, invoke `RUN_P2_SELF_CHECK.cmd` on owner Windows or `python -I -B owner_p2_selfcheck.py --output-dir ../SOVIA_P2_DIAGNOSTICS`. No API, paid hosting, Vercel/Production URL, commercial listing or signed release.
+
+## 8. Originals, secrets, access, preservation
+No private customer logs, real data, credentials, fonts, device paths or secrets committed. No forced push, main rewrite, existing v0.10 artifact modification, GitHub visibility/access change, destructive file history, paid deployment or production. Public repo remains PUBLIC. Synthesized sample outputs outside app install, owner source/backup untouched.
+
+## 9. NEXT ㄱ priority
+Stop building wrappers. Take the **owner manual acceptance package** from v0.11: physical Windows selfcheck and offline browser/Korean PDF/Defender audit still NOT_CHECKED. Without owner access, precise handoff of steps and verification rubric rather than pretending CI runner = physical PC. Genuine n8n API/schema+consent requires permitted real source version and approval. Next engineering hardening: output isolation and package link/no-clobber power-loss boundaries, compatibility only where tests reveal concrete gaps, then approved launch criteria. Do not publish as customer product without explicit user decision.
+
+## 10. Date and evidence cutoff
+2026-10-27 KST. PR #39 feature 4/4 PASS [40484567239](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40484567239); merged `f677c337c9884d8d008c7d79edc190d5562ebe42`. Post-docs final HEAD CI must be checked before asserting full current-head SUCCESS. No owner manual acceptance or real customer API proof.
+
+---
+
 # SOVIA latest P2 checkpoint — 2026-10-27, PR #38
 
 ## 1 Mission
