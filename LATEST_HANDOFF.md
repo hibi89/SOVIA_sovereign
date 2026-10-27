@@ -1,3 +1,11 @@
+## 2026-10-27 — PR #50 source-only preview shared PII/credential gate MERGED
+
+PUBLIC `hibi89/SOVIA_sovereign`, `develop` active, `main` docs only. [PR #50](https://github.com/hibi89/SOVIA_sovereign/pull/50) merge SHA `2d5404bf41c32219f98ca9eb5b6757ee8a851357`; feature `e2201254846acbd16dfa5d9927a78d9796331828`. Previously opt-in v0.12 printable HTML preview could render schema-valid event email/token-like metadata with no PII-pattern screen, notwithstanding synthetic-only unverified claim. Reuses existing offline `sovia_pii_preflight.assert_no_high_risk_patterns` **before** evaluation/publish; generic refusal, no output, no metadata or local path leakage. 2 new regression methods. Heuristics are NOT sanitization/consent proof.
+
+[Actions 40505099448](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40505099448) 4/4 SUCCESS Win+Ubuntu × Python3.11/3.13, 779 discovered tests/job, Windows 768 PASS/11 SKIP, Ubuntu 764 PASS/15 SKIP, 0 FAIL. Original v0.10 and v0.11.2 immutable ZIP extracted smoke PASS, hashes preserved; Windows hosted Edge synthetic A4 job PASS, but this run's PDF not independently manually reinspected. `sovia_audit.py`, frozen packages, Production and user data unchanged. **Next `ㄱ`: verify docs-head CI; owner physical Windows/Defender/print/optional Korean PDF or explicitly authorized genuine n8n version + sanitized source/consent/privacy evidence. No further redundant synthetic preview wrapper loops, no commercial release before approval.**
+
+---
+
 ## 2026-10-27 — actual Windows Edge A4 PDF visually verified (PR #49 MERGED)
 
 **Product/source:** [PR #49](https://github.com/hibi89/SOVIA_sovereign/pull/49) merged `92345150b4a7937d7ae4ad7960a620cf98045939` into active `develop`; only opt-in **source-only** `sovia_report_print_preview.py` printing CSS, `windows_edge_local_smoke.py` Edge output, related 2 tests, CI YAML and preview docs changed. Existing `sovia_audit.py` and frozen v0.10/v0.11.2 portable ZIP manifests/SHA bytes untouched; no v0.12 customer distribution or signed release.
