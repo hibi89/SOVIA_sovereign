@@ -1,3 +1,13 @@
+## 2026-10-27 — real Windows NTFS junction acceptance added (feature PR, CI pending)
+
+Previous source-only mitigation checked terminal scan root and no-follow children for reparse attributes. A **root below a junction ancestor** (`junction/child`) could otherwise silently scan external metadata. The new source-only `sovia_retention.inventory` obtains an absolute path *without resolving links*, checks root and all ancestor components with `stat(follow_symlinks=False)`, and rejects a reported symlink/Windows reparse attribute before any metadata traversal. The directory walk still skips reparse child entries; all matches remain read-only, aggregate, no contents, no deletion.
+
+**Real integration**: `tests/test_retention_windows_junction.py` creates *actual junctions* on GitHub Actions Windows runners using `cmd /c mklink /J`; verifies real attributes, a child junction excluded from a selected directory, junction-as-root refused, `junction/child` ancestor refused, and retention review ignores the target. A POSIX temporary symlink ancestor regression also runs on Ubuntu. The test uses fabricated local files only; it is not an owner's PC or an actual customer's environment.
+
+**Safety limit**: no race-free handle-based tree confinement; a concurrent attacker may swap directory entries after a no-follow stat check. Root/ancestor checks can be more conservative than earlier versions and reject intentionally linked installation paths. No modifications to v0.10/v0.11.2 portable allowlists or historical SHA baselines; source-only helper only. All Windows/Ubuntu 3.11/3.13 CI plus extracted historic portable smokes must pass before merge; if actual junction creation fails on runners, investigate and do NOT claim Windows acceptance. **Real owner Windows/Defender/browser/PDF, genuine n8n source/controller consent and commercial authorization remain OPEN.**
+
+---
+
 ## P2 Windows reparse-point safety — proposed, 2026-10-27 KST
 
 The read-only inventory already ignores Unix and Windows symlinks represented by `S_ISLNK`, but Windows NTFS junctions and directory mount points may appear as directories with `st_file_attributes & FILE_ATTRIBUTE_REPARSE_POINT`. Scanning such an entry risks including metadata from outside the selected folder. The source-only helper `sovia_retention.py` now rejects a reparse-point root and skips any reparse-point file/directory before descending or counting files. The existing `symlinks_skipped` count includes skipped junction/reparse entries for backward-compatible summary output.
