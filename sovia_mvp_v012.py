@@ -77,10 +77,9 @@ def run(input_path, output_dir, *, synthetic_only=False,
             stage = Path(temp)
             engine = _module("sovia_audit_v012.py", "_sovia_mvp_engine")
             history = _module("sovia_history_v012.py", "_sovia_mvp_history")
-            selected_input = source
             if source_format == "n8n-sanitized":
-                # Only pre-sanitized fabricated n8n-like metadata. This is NOT
-                # an API client, raw execution importer or proof of consent.
+                # Only pre-sanitized fabricated n8n-like metadata. No raw
+                # execution import, network/API access or proof of consent.
                 core = _module("sovia_audit.py", "_sovia_mvp_n8n_reader")
                 pii = _module("sovia_pii_preflight.py", "_sovia_mvp_n8n_pii")
                 adapter = _module("sovia_n8n_sanitized.py", "_sovia_mvp_n8n_adapter")
@@ -88,20 +87,21 @@ def run(input_path, output_dir, *, synthetic_only=False,
                 policy_document = core.read_document(policy)
                 pii.assert_no_high_risk_patterns(source_document, policy_document)
                 canonical = adapter.convert(source_document, policy_document)
-                # Keep the intermediate canonical representation confined to
-                # a temporary private working folder; nothing is published
-                # except the three fixed final artifacts. This is not secure
-                # erase; abrupt termination can leave temporary disk traces.
-                selected_input = stage / "_temporary_canonical.json"
-                core.write_reports_atomically([(
-                    selected_input,
-                    json.dumps(canonical, ensure_ascii=False, sort_keys=True,
-                               separators=(",", ":"), allow_nan=False),
-                )])
-            report = engine.run_synthetic(
-                selected_input, stage / OUTPUTS[0], stage / OUTPUTS[1]
-            )
-            entry = history.import_synthetic(stage / OUTPUTS[2], selected_input)
+                # Pass the validated canonical object directly to the audit
+                # and history. Never serialize an intermediate canonical JSON
+                # file, including in the temporary staging directory.
+                report = engine.write_synthetic_document(
+                    canonical, stage / OUTPUTS[0], stage / OUTPUTS[1],
+                    legacy_audit=core
+                )
+                entry = history.import_synthetic_document(
+                    stage / OUTPUTS[2], canonical, legacy_audit=core
+                )
+            else:
+                report = engine.run_synthetic(
+                    source, stage / OUTPUTS[0], stage / OUTPUTS[1]
+                )
+                entry = history.import_synthetic(stage / OUTPUTS[2], source)
             if entry["status"] != "imported":
                 raise MVPError("HISTORY_IMPORT_INCOMPLETE")
             if any(not (stage / name).is_file() for name in OUTPUTS):
