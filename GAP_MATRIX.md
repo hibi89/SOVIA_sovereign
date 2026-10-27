@@ -1,3 +1,9 @@
+## 2026-10-28 — P0 minimum working unit integrated (synthetic-only) / frontend deferred
+
+[PR #59](https://github.com/hibi89/SOVIA_sovereign/pull/59) merged code `8ab399b6d642f3469af5a55eb6e53b8b9431bea1`; bundled 10-file distinct v0.12 ZIP includes single-command `sovia_mvp_v012.py` to generate HTML/JSON/SQLite v2 in one new folder from canonical synthetic JSON. CI #40526564129 Windows/Ubuntu × Python3.11/3.13 4/4 PASS (840 tests/job 0 fail; clean-install MVP smoke), new SHA `1084cd267b7f8a00d656a13c6f55ff0c8795fcd507679de30ab59b8924e26b2c`. Design/R1–R9 advanced in synthetic scope; UI polish and extra features DEFERRED. Full customer path/true n8n source+schema+consent, owner hardware/PDF, license/privacy/retention/support, signed release and deployment BLOCKED. No real customer data or Production.
+
+---
+
 ## 2026-10-27 — P2 SQLite v0.12 strict DDL/triggers integrity PR #58
 
 [PR #58](https://github.com/hibi89/SOVIA_sovereign/pull/58) merged `develop` code SHA `bbe58019431a542a13d6005e2722ad0152d27eaf`. Canonical fixed owned SQLite v2 table SQL plus exact `sqlite_master` inventory validation replaces column-name-only acceptance. Refuses forged tables without PK/UNIQUE constraints, added triggers and unsolicited indexes before import/status/snapshot; avoids silent application mismatch. Three regressions, [CI #40523109701](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40523109701) 4/4 Windows/Ubuntu × Python3.11/3.13 PASS, 834 discovered/job, 0 FAIL. No schema migrations or legacy release file changes. The separate v0.12 synthetic candidate has checksum `7fbd1128a660a4158ee09f115784432ef49cc24086e1baac62d3ce4c973d1366`. This does not prove cryptographic DB authenticity nor satisfy owner local Windows, real n8n provenance/authorization/PII, legal/retention/support/signature or commercial go-live. No Production.

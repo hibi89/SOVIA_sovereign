@@ -1,3 +1,11 @@
+## 2026-10-28 MVP deadline — core working unit now merged in PR #59
+
+- **P0 scope completed (synthetic-only):** one offline command from isolated v0.12 ZIP accepts canonical fabricated JSON, runs pattern preflight and corrected UTC five-rule evaluator, writes **fresh** `report.html`, `report.json`, `history.sqlite3`. Uses existing HTML as interim UI; frontend/extra features deferred. `python -I -B sovia_mvp_v012.py --input examples/demo_five_rules.json --output-dir ../sovia-mvp-output --synthetic-only`. Does not support authorized native customer n8n or proof of consent/privacy. See `MVP_20261028_RUNBOOK.md`.
+- [PR #59](https://github.com/hibi89/SOVIA_sovereign/pull/59) merged to `develop` SHA `8ab399b6d642f3469af5a55eb6e53b8b9431bea1`. [Rerun CI #40526564129](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40526564129) Windows/Ubuntu Python 3.11/3.13 **4/4 PASS**, 840 discovered/job, 0 fails, Windows 829 PASS/11 optional SKIP, Ubuntu 823 PASS/17 optional SKIP. New **10-file** v0.12 ZIP standalone smoke PASS (`mvp_one_command_pass=true`) and legacy ZIPs preserved. New candidate SHA256 `1084cd267b7f8a00d656a13c6f55ff0c8795fcd507679de30ab59b8924e26b2c`. Earlier PR CI #40526156904 had stale Windows assertion file count 9; test corrected to dynamic count, rerun all green.
+- **Release gates STILL OPEN:** customer/real n8n data source/version/consent, true privacy/retention/security/legal checks, owner Windows/Defender/SmartScreen/print, license/signing, verified support and approval. `main` docs-only, `develop` source, PUBLIC repo; NO production/Vercel/commercial installer. Browser/UI upgrades after core.
+
+---
+
 ## 2026-10-27 — PR #58 SQLite v0.12 exact schema identity gate MERGED
 
 - [PR #58](https://github.com/hibi89/SOVIA_sovereign/pull/58) merged code `bbe58019431a542a13d6005e2722ad0152d27eaf`: SQLite `user_version=2` + matching columns + `quick_check` no longer suffice. The separate beta v0.12 history now requires exact original `CREATE TABLE reports` DDL and no additional application-level schema objects, rejecting lookalike tables lacking PK/UNIQUE, added triggers and unsolicited indexes. No existing schema format or data migration. Not cryptographic attestation.

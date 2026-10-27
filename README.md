@@ -1,5 +1,12 @@
 # SOVIA Sovereign — local-first AI agent evidence audit
 
+## 2026-10-28 deadline: one-command **minimum working unit now integrated on develop**
+
+The **source/ZIP synthetic-only v0.12 MVP** is callable with one command: `python -I -B sovia_mvp_v012.py --input examples/demo_five_rules.json --output-dir ../sovia-mvp-output --synthetic-only`. It creates `report.html`, `report.json`, `history.sqlite3` in a fresh output directory; audit uses the corrected v0.12 UTC temporal rule. [PR #59](https://github.com/hibi89/SOVIA_sovereign/pull/59), [four-platform CI](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40526564129): Windows/Ubuntu × Python 3.11/3.13 all green, 840 discovered/job and 0 failures; clean-extracted ten-file ZIP end-to-end smoke. See [MVP_20261028_RUNBOOK.md](MVP_20261028_RUNBOOK.md). Frontend redesign and optional enhancements follow later. Real n8n/native customer inputs, verified consent, privacy review, owner Windows installation, signed release and sales remain **NOT COMPLETE**. GitHub `main` is documentation-only; use `develop` for running source.
+
+---
+
+
 ## Verified working baseline — 2026-10-27 (active `develop`)
 
 **P1 offline functional MVP is implemented and synthetically verified**: canonical JSON/CSV, five explainable risk rules, evidence/unknown limits, Korean HTML/JSON/CSV, optional PDF, SQLite metadata history, dashboard, portable 12-file offline beta and owner synthetic self-check. The latest regression at [GitHub Actions 40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) succeeded across Windows/Ubuntu × Python 3.11/3.13 (697 discovered/job, zero failures). Do not confuse GitHub-runner checks with actual owner Windows/browser/Defender/Korean PDF review, sanctioned real n8n integration or customer readiness.
