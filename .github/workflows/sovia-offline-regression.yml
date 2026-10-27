@@ -38,7 +38,7 @@ jobs:
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
         run: |
           python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
-          python -I -B windows_edge_local_smoke.py --screenshot-dir dist/browser-qa
+          python -I -B windows_edge_local_smoke.py --screenshot-dir dist/browser-qa --next-print-preview
       - name: Publish synthetic Edge screenshots for visual review (NOT acceptance)
         if: matrix.os == 'windows-latest' && matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
