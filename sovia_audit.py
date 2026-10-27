@@ -262,12 +262,14 @@ def write_reports_atomically(items):
         if any(path.exists() or path.is_symlink() for path, _ in items):
             raise AuditInputError("Output path already exists; no files overwritten")
         for path, text in items:
-            fd, temp_name = tempfile.mkstemp(prefix=".sovia-staging-", suffix=".tmp", dir=path.parent)
-            temp_path = Path(temp_name)
-            staged.append(temp_path)
+            # Validate before allocating an OS file descriptor; rejected payloads
+            # must never leave an unowned open staging file behind.
             data = text.encode("utf-8") if isinstance(text, str) else text
             if not isinstance(data, bytes):
                 raise AuditInputError("Report must be UTF-8 text or bytes")
+            fd, temp_name = tempfile.mkstemp(prefix=".sovia-staging-", suffix=".tmp", dir=path.parent)
+            temp_path = Path(temp_name)
+            staged.append(temp_path)
             with os.fdopen(fd, "wb") as out:
                 out.write(data)
                 out.flush()
@@ -275,8 +277,12 @@ def write_reports_atomically(items):
         for (destination, _), staging in zip(items, staged):
             # os.link refuses to overwrite an existing target, including a race.
             # Fails safely on unsupported filesystems rather than risking overwrite.
+            # Capture inode identity BEFORE publication. If stat fails after
+            # link(), the new destination would otherwise be untracked and
+            # escape rollback on a filesystem error.
+            original = os.stat(staging)
             os.link(staging, destination)
-            published.append((destination, os.stat(staging)))
+            published.append((destination, original))
     except Exception:
         for destination, original in published:
             # Do not unlink a destination swapped out by another process.
