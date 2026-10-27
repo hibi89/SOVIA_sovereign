@@ -1,3 +1,13 @@
+## P2 Windows reparse-point safety — proposed, 2026-10-27 KST
+
+The read-only inventory already ignores Unix and Windows symlinks represented by `S_ISLNK`, but Windows NTFS junctions and directory mount points may appear as directories with `st_file_attributes & FILE_ATTRIBUTE_REPARSE_POINT`. Scanning such an entry risks including metadata from outside the selected folder. The source-only helper `sovia_retention.py` now rejects a reparse-point root and skips any reparse-point file/directory before descending or counting files. The existing `symlinks_skipped` count includes skipped junction/reparse entries for backward-compatible summary output.
+
+Options evaluated: (A) resolve every visited path against root repeatedly (extra filesystem traversals and race windows); (B) examine no-follow `stat` reparse attributes, fail closed without traversal or content reads (chosen, minimal dependency-free Windows Python 3.11+ change). The Windows bit is checked via `getattr(st, "st_file_attributes", 0)`, preserving POSIX compatibility. Existing single-pass category checks, dry-run/no-delete and output contracts remain unchanged.
+
+Synthetic mocks in `tests/test_retention_reparse.py` test simulated Windows reparse root, directory and regular-file flags plus ordinary file compatibility in Windows/Ubuntu Python CI. **Limit:** a concurrent directory replacement may occur after stat and before os.scandir; this is best-effort hygiene, **NOT** a hardened sandbox, race-free directory confinement, guarantee of actual Windows junction behavior, customer privacy certification or approval to delete. Actual owner Windows filesystem test remains outstanding. No real user files/credentials accessed. Existing v0.10 and v0.11.2 fixed portable payloads do not include the retention source helper, so immutable ZIP checksums must not change. Do not market this as completed commercial hardening.
+
+---
+
 ## P2 follow-up — category policy dry-run (2026-10-27)
 
 An independent source-only `sovia_retention_review.py` applies strict synthetic **per-category review thresholds** and operator-asserted legal-hold/backup states to the existing metadata-only `sovia_retention.inventory` counts. See [RETENTION_REVIEW.md](RETENTION_REVIEW.md). It **never** grants deletion authority or invokes the history purge, never uses customer file contents and never ships in the existing portable v0.10 beta ZIP. Five scans share a fixed clock, but are **not an atomic filesystem snapshot**. All outputs remain human-review candidates, not lawful expiry dates. Full CI regression is required before develop integration.
