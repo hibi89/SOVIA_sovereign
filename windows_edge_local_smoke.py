@@ -104,8 +104,58 @@ def open_local_dom(edge, file, profile):
     return proc.stdout
 
 
-def smoke():
+
+def _png_size(path):
+    """Bounded screenshot PNG header check; NOT human visual validation."""
+    import struct
+    try:
+        if not path.is_file() or not 1_000 <= path.stat().st_size <= 8_388_608:
+            raise EdgeSmokeError("EDGE_SCREENSHOT_INVALID")
+        with path.open("rb") as file:
+            header = file.read(24)
+        if (len(header) != 24 or header[:8] != b"\x89PNG\r\n\x1a\n" or
+                header[12:16] != b"IHDR"):
+            raise EdgeSmokeError("EDGE_SCREENSHOT_INVALID")
+        width, height = struct.unpack(">II", header[16:24])
+        if not 1100 <= width <= 4000 or not 900 <= height <= 4000:
+            raise EdgeSmokeError("EDGE_SCREENSHOT_INVALID")
+        return [width, height]
+    except OSError as exc:
+        raise EdgeSmokeError("EDGE_SCREENSHOT_INVALID") from exc
+
+
+def capture_local_png(edge, file, profile, output):
+    """Render a full viewport of synthetic file:// HTML with preinstalled Edge."""
+    command = [
+        str(edge), "--headless=new", "--disable-gpu",
+        "--disable-background-networking", "--disable-component-update",
+        "--disable-extensions", "--disable-default-apps",
+        "--no-first-run", "--no-default-browser-check", "--disable-sync",
+        "--no-proxy-server", "--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE localhost",
+        "--disable-features=MediaRouter,OptimizationHints",
+        "--force-device-scale-factor=1", "--window-size=1440,1600",
+        "--hide-scrollbars", "--user-data-dir=" + str(profile),
+        "--screenshot=" + str(output), file.as_uri(),
+    ]
+    try:
+        finished = subprocess.run(
+            command, capture_output=True, timeout=45, check=False,
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise EdgeSmokeError("EDGE_SCREENSHOT_TIMEOUT") from exc
+    if finished.returncode:
+        raise EdgeSmokeError("EDGE_SCREENSHOT_FAILED")
+    return _png_size(output)
+
+
+def smoke(screenshot_dir=None):
     edge = locate_edge()
+    destination = None
+    if screenshot_dir is not None:
+        destination = Path(screenshot_dir).absolute()
+        if (destination.exists() or destination.is_symlink() or
+                not destination.parent.is_dir() or destination.parent.is_symlink()):
+            raise EdgeSmokeError("SCREENSHOT_DEST_INVALID")
     with tempfile.TemporaryDirectory(prefix="sovia-browser-qa-") as folder:
         root = Path(folder)
         zip_file = root / DEFAULT_NAME
@@ -130,11 +180,30 @@ def smoke():
         dashboard_dom = open_local_dom(edge, dashboard, root / "edge-dashboard-profile")
         assert_dom(dashboard_dom, ("에이전트 감사 이력", "최근 이벤트 타임라인",
                                    "감사 보고서", "위험 소견", "script-src 'none'"))
+        dimensions = {}
+        if destination is not None:
+            images = {
+                "synthetic-audit-edge.png": audit,
+                "synthetic-dashboard-edge.png": dashboard,
+            }
+            for name, document in images.items():
+                local = root / name
+                dimensions[name] = capture_local_png(
+                    edge, document, root / ("profile-" + name), local)
+            # Publish only fabricated HTML screenshots, never source/client files.
+            destination.mkdir()
+            for name in images:
+                with (root / name).open("rb") as source_file, (
+                        destination / name).open("xb") as target:
+                    shutil.copyfileobj(source_file, target)
         verify_directory(extracted)
         return {
             "status": "SYNTHETIC_EDGE_LOCAL_FILE_DOM_PASS",
             "browser": "Microsoft Edge (GitHub-hosted Windows runner)",
             "html_pages_opened": 2,
+            "synthetic_edge_screenshot_count": len(dimensions),
+            "synthetic_edge_screenshot_dimensions": dimensions,
+            "screenshot_human_visual_review": False,
             "portable_archive_sha256": result["sha256"],
             "offline_html_asset_urls": False,
             "network_absence_independently_verified": False,
@@ -148,10 +217,12 @@ def smoke():
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Offline synthetic Edge DOM from extracted P2 ZIP")
-    parser.parse_args(argv)
+    parser.add_argument("--screenshot-dir",
+                        help="New empty folder for two synthetic Edge screenshot PNGs")
+    args = parser.parse_args(argv)
     try:
         from json import dumps
-        print(dumps(smoke(), ensure_ascii=False, sort_keys=True))
+        print(dumps(smoke(args.screenshot_dir), ensure_ascii=False, sort_keys=True))
         return 0
     except (EdgeSmokeError, OSError, RuntimeError, ValueError) as exc:
         # Fixed non-disclosing codes, no source/Edge paths or stderr backtrace.
