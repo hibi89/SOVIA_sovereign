@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #34 hardened report publisher merged with PR #35
+
+Canonical PUBLIC `hibi89/SOVIA_sovereign`, `develop` code, `main` docs-only. [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) merged `60f9bc8cfb95012428f36064f0c29c1a54c93a40` after parallel [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) guarded offline HTML/JSON source-only export merged `9d27e3468eb555ed72dfd2229cf414fbe674ebf1`. Changed existing audit writer: validate bytes BEFORE staging file descriptor, obtain staging stat BEFORE published hardlink, preserving fsync/exclusive no-overwrite/best-effort rollback. Ten synthetic injected errors/success tests plus owner evidence hash compatibility test updated. Existing archived ZIP SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`; current hardened ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`; strict source-only checker explicitly accepts only these two (both unsigned).
+
+[PR #34 CI 40478529065](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478529065): Windows/Ubuntu Python 3.11/3.13 4/4 SUCCESS, 681 tests/job, zero failures, extracted portable synthetic smoke PASS all four. Earlier failed PR run 40477881434 was due pinned historical SHA mismatch, corrected after deterministic diagnostic run 40478291808 (temporary diagnostic removed). Final combined latest HEAD CI still check separately.
+
+Next `ㄱ`: inspect updated HANDOFF→STATUS→AGENTS→REQUIREMENTS, current SHA/CI and guarded export/actual writer. Do not duplicate PRs #16–#35 or override parallel writes. Owner-PC browser/Defender/Korean PDF, lawful n8n/customer input/PII false negatives, support/retention, release signing and commercial authorization still NOT VERIFIED; no Production/Vercel, no paid API, no data uploads.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #35 guarded local export source tool
 
 Repo PUBLIC hibi89/SOVIA_sovereign. develop active, main docs-only. [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) merged 9d27e3468eb555ed72dfd2229cf414fbe674ebf1: added opt-in sovia_guarded_export.py, 23 synthetic tests and GUARDED_LOCAL_EXPORT.md. Existing audit CLI/source core/v0.10 unsigned 12-file ZIP unchanged by PR #35. New script runs actual audit JSON->HTML+indented JSON with explicit local TEST budget (1/2/4 MiB per output), best-effort grouped disk free-space check and existing staged no-clobber writer/rollback. No external calls, client data, release, production or sold quota.
