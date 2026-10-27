@@ -1,3 +1,11 @@
+## CURRENT P2 — one-step strict sanitized envelope→audit reports (2026-10-27 KST)
+
+[PR #37](https://github.com/hibi89/SOVIA_sovereign/pull/37) merged `develop` SHA `6b7896f78005399a608486c93e18020c57c3c52e`. Source-only `sovia_n8n_direct_audit.py` merges two already-existing local commands: sanitized n8n-*like* envelope+SOVIA policy → strict existing canonical converter → actual five-rule evaluator → Korean HTML+JSON output, without creating a separate canonical file. 25 regression tests `tests/test_n8n_direct_audit.py`, guide `N8N_DIRECT_AUDIT.md`, tested feature SHA `0c764855ca96ff9f85b59911110fb9a679193f12`, [4/4 CI 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164) 722 discovered per OS/Python job 0 fail; old v0.10 ZIP unchanged and passing smoke.
+
+**Remaining truth boundary:** no real native n8n API/export parser, authenticated source authorization, comprehensive upstream PII clearance, real version mapping/fixtures, owner Windows/browser/Defender/Korean PDF proof, supported quotas/contract, signed customer release or Production. Operator-claim approvals remain unsigned and unverified. One-command path is not yet in the old portable ZIP. Avoid treating source-only workflow as proof of sellability.
+
+---
+
 ## CURRENT MVP→ORIGINAL BLUEPRINT RECONCILIATION (2026-10-27 KST)
 
 [PR #36](https://github.com/hibi89/SOVIA_sovereign/pull/36) merged `0fab78dacf35c2048f329df882d6b76b16df7d57`: `MVP_BLUEPRINT_RECONCILIATION.md` records R1–R9 actual code path versus missing real acceptance; P1 functional MVP is **synthetically VERIFIED** already, not a reason to rebuild. Added source-only `sovia_ephemeral_diagnostic.py` with 16 regression tests covering R6 aggregate no-report-file diagnostic, local input acknowledgement, known rule counts and no input details stdout. `--ack-sanitized-source` does not prove real consent or cleaning. [CI 40479432652](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40479432652) Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 697 tests/job, 0 FAIL, portable smoke PASS.

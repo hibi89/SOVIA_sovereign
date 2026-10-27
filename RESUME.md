@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 direct sanitized single-command report / PR #37
+
+Canonical PUBLIC `hibi89/SOVIA_sovereign` source `develop`; main docs-only. MVP (P1) offline 5-rule CLI/HTML synthetic verified. PR [#37](https://github.com/hibi89/SOVIA_sovereign/pull/37) merged SHA `6b7896f78005399a608486c93e18020c57c3c52e`: new source-only `sovia_n8n_direct_audit.py`, 25 tests and `N8N_DIRECT_AUDIT.md`. The real pre-sanitized contract converter is composed directly with the actual auditor/HTML+JSON exporter without an intermediate canonical file. `--synthetic-only` required in fabricated demo; `--mode approved-local --attestation` reuses existing PII and unsigned operator claim gates, but proves neither genuine source/version, real consent nor complete PII sanitation. Raw n8n API execution/export remains unsupported.
+
+[Actions 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164): tested feature SHA `0c764855ca96ff9f85b59911110fb9a679193f12`, Windows/Ubuntu Python 3.11/3.13 4/4 SUCCESS, **722 discovered tests/job**, zero fail, original 12-file portable beta smoke unchanged SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`. Final docs HEAD CI separately inspect. Source-only utility excluded from beta ZIP; no production, real customer/test consent, paid services or access changes.
+
+NEXT `ㄱ`: inspect HEAD, 10-section HANDOFF, STATUS, AGENTS, REQUIREMENTS and code. Do not redo P1/P2 PRs #16–#37. Real blocker: installed approved native n8n version/source mapping and consent/privacy; owner actual Windows/browser/Defender/Korean PDF; next versioned supported delivery and contractual quotas. Without real approved source evidence mark BLOCKED and pursue distinct useful packaging/UX capability, not repetitive mock-only features.
+
+---
+
 # LATEST RESUME — 2026-10-27 MVP→blueprint acceleration / PR #36
 
 Active source PUBLIC `hibi89/SOVIA_sovereign` `develop`; default `main` docs-only. PR [#36](https://github.com/hibi89/SOVIA_sovereign/pull/36) merged at `0fab78dacf35c2048f329df882d6b76b16df7d57`: added source-only `sovia_ephemeral_diagnostic.py`, 16 synthetic tests, and `MVP_BLUEPRINT_RECONCILIATION.md`. New opt-in JSON aggregate no-report-file mode uses real 5-rule evaluator, masks paths/event content, no network, no DB/report writes, cannot exclude OS/shell traces or verify consent. Source-only; unchanged old 12-file package with existing writer fix introduced by PR #34.

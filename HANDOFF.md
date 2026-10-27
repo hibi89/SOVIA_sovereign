@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 direct sanitized input-to-report flow (10 sections)
+
+## 1. Mission, requirements, stack
+Owner strategy: finish functional MVP → original blueprint gap reconciliation → add remaining customer-use features → final security/stability/compatibility gate. P1 synthetic MVP complete. Python 3.11+ stdlib offline five-rule auditor with Korean HTML/JSON/CSV, optional Korean PDF, SQLite/dashboard and 12-file portable selfcheck. No live API/Cloud/Private or customer deployment.
+
+## 2. New completed work and design
+[PR #37](https://github.com/hibi89/SOVIA_sovereign/pull/37) implemented **one-command pre-sanitized n8n-like JSON + policy → real five-rule evaluation → Korean HTML + machine JSON**, without persisting an intermediate canonical JSON. Reuses actual strict `sovia_n8n_sanitized.convert`, original evaluator and exclusive no-clobber report writer. Synthetic mode requires `--synthetic-only` acknowledgement; separate `--mode approved-local --attestation` reuses existing PII-pattern preflight and unsigned hash/expiry-bound operator assertions. Unverified operator claims are NEVER represented as independent authorization. Added `sovia_n8n_direct_audit.py`, 25 tests `tests/test_n8n_direct_audit.py`, `N8N_DIRECT_AUDIT.md`. Original converter, old CLI, portable ZIP, main unaffected. Tradeoff: direct report generation is a real customer workflow simplification, but NOT native n8n API or raw execution JSON support.
+
+## 3. CI/tests and exact evidence
+[PR #37 Actions 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164) verified feature SHA `0c764855ca96ff9f85b59911110fb9a679193f12`, 4/4 SUCCESS Windows/Ubuntu × Python 3.11/3.13, **722 discovered/job**, Windows 712 PASS/10 optional PDF SKIP, Ubuntu 711 PASS/11 SKIP, 0 failures. Old v0.10 12-file portable smoke PASS with rebuilt fixed-writer inner ZIP SHA256 `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9` on both sampled OS jobs. Run source CLI `python -I -B sovia_n8n_direct_audit.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --html-output NEW_SAMPLE.html --json-output NEW_SAMPLE.json --synthetic-only`; expect 3 synthetic events/5 findings. Run regression `python -m unittest discover -s tests -v`; `python portable_smoke.py`. Final doc SHA CI separately verify.
+
+## 4. Done / pending / blocked
+DONE direct flow and 25 focused synthetic tests: matches old convert→audit semantics, no intermediate JSON, protected output paths and symlinks, PII heuristic operator gate, strict malformed/raw export refusal, no network, failure rollback on simulated writer error. OPEN: actual n8n instance/version native records, true upstream PII redaction/false negatives and legal controller permission, physical owner Windows browser/Defender/Korean PDF acceptance, signed release, customer supported volume, retention/support/legal agreements. These cannot be marked PASS by synthetic CI.
+
+## 5. Errors, incidents, no-repeat boundary
+No failed full CI at tested PR #37 HEAD. A test fixture was strengthened before CI to use Luhn-valid numeric metadata and specifically exercise PII heuristic, rather than invalid email-format code rejected earlier by structural validation. No customer input or API requests used. This direct path has NO output byte budget and is not part of the v0.10 portable bundle. Multi-file write rollback remains best-effort, not transactional under power failure or concurrent readers; do not market as customer ready.
+
+## 6. Branch, SHA, paths, authorship
+PUBLIC GitHub `hibi89/SOVIA_sovereign`, active code `develop`, default `main` docs-only. PR #37 feature head `0c764855ca96ff9f85b59911110fb9a679193f12`, merged SHA `6b7896f78005399a608486c93e18020c57c3c52e`. New `sovia_n8n_direct_audit.py`, `tests/test_n8n_direct_audit.py`, `N8N_DIRECT_AUDIT.md`. Existing `sovia_n8n_sanitized.py`, `sovia_audit.py`, `sovia_guarded_export.py`, `build_portable.py` unmodified. Docs synchronization advances develop HEAD; re-check before next edit.
+
+## 7. Runtime, cost, deployment/URLs
+Runs offline Python source tree only with standard library, no paid dependencies/hosted LLM/API or user-visible service deployment. Production/Vercel URL: NONE, NOT APPLICABLE. Existing unsigned synthetic v0.10 12-file package does NOT include this new source-only CLI; no signed commercial release, invoice or listing.
+
+## 8. Originals, backups, privacy, access
+No actual customer log/prompt/credentials, real n8n execution dump, PII, local owner path, fonts or SQLite data committed. Public repo remains public; no branch visibility/security setting change, force push, destructive history rewrite, deployment or backup deletion. Output reports contain event metadata and require secure user-selected paths and independent controller authorization. Operator attestation is unsigned/forgeable and heuristic PII scanning cannot prove absence.
+
+## 9. Next prioritized action / approvals
+NEXT `ㄱ`: check current HEAD/CI. Stop adding redundant synthetic wrappers; inspect native **specific installed n8n version and authorized source data path** before claiming compatibility. In absence of authorized real data, improve shipping UX/version coherence of existing beta in a separately versioned package only after owner approval; preserve old ZIP. Owner physical Windows/Defender/browser/PDF and consent/retention/support/pricing still require real-world evidence/decision. Never use customer log or API without explicit approval. Cloud/Private remain later independent products.
+
+## 10. Evidence cutoff
+2026-10-27 KST. Started develop `5d51506d29df1db1a895a437ba0412b60d5cba13` CI run 40479909912 4/4 success. PR #37 feature `0c764855ca96ff9f85b59911110fb9a679193f12` tested 4/4 success at Actions 40481135164, merged `6b7896f78005399a608486c93e18020c57c3c52e`. Final docs SHA CI separately check. No owner hardware, live n8n, customer PII legal or commercial production evidence.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 MVP-to-blueprint acceleration (10 sections)
 
 ## 1. Mission / confirmed requirements / stack

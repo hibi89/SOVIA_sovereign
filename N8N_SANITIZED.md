@@ -1,3 +1,9 @@
+## P2 direct offline audit command (2026-10-27)
+
+Existing separate sanitized converter and auditor now also have a **source-only one-command path** `sovia_n8n_direct_audit.py` described in [N8N_DIRECT_AUDIT.md](N8N_DIRECT_AUDIT.md). It composes the same strict sanitized format with existing five rules, produces Korean HTML + machine JSON **without intermediate canonical JSON**, and uses the existing approved-local operator-claim+PII-pattern mechanisms; it does **not** support genuine native n8n API/raw execution data or prove actual consent. Tested [PR #37 CI 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164), 722 discovered/job, 4/4 green. Source-only, not in old beta ZIP.
+
+---
+
 ## P2 synthetic n8n field-family / version-claim probe (2026-10-27)
 
 `N8N_VERSION_PROBE.md` describes a new **key-only synthetic profile classifier** in `sovia_n8n_compatibility.py` which refuses direct n8n workflow/export or execution API import for *any* claimed 1.x/2.x version. The existing sanitized converter is unchanged, and the probe does not certify any n8n source version, authorize data, inspect raw payloads, or bypass the PII/attestation gates. See `tests/test_n8n_compatibility.py` for negative and regression tests.

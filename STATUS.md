@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 one-command pre-sanitized report workflow
+
+- Repo PUBLIC `hibi89/SOVIA_sovereign`, active `develop`, default `main` documentation-only. **P1 functional MVP is synthetically complete**; follow original blueprint→real shipping gaps before deep hardening.
+- [PR #37](https://github.com/hibi89/SOVIA_sovereign/pull/37) merged `6b7896f78005399a608486c93e18020c57c3c52e`. New `sovia_n8n_direct_audit.py` implements single CLI for strict pre-sanitized n8n-*like* envelope and SOVIA policy → real five-rule Korean HTML + JSON report; eliminates intermediate canonical file. Synthetic mode requires explicit --synthetic-only flag; approved-local reuses existing **unsigned operator-claim checks and heuristic PII scan**, NOT actual source/consent proof. No raw n8n execution support/API, no production integration.
+- New `tests/test_n8n_direct_audit.py` **25 tests**, `N8N_DIRECT_AUDIT.md`; [CI 40481135164](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40481135164) feature SHA `0c764855ca96ff9f85b59911110fb9a679193f12`, Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 722 discovered/job, 0 failures; portable 12-file v0.10 smoke PASS with unchanged new-writer ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`.
+- **Not complete:** sanctioned installed native n8n version/schema/API mapping and approved sanitized real fixture, privacy false negatives, owner Windows/Defender/browser/Korean PDF actual acceptance, real supported environment/quota, contractual retention/support, signed release/commercial approval. Source-only module NOT in old v0.10 ZIP; no Production/Vercel URL.
+- Next `ㄱ`: verify actual live HEAD + CI; focus independently verified integration inputs and local acceptance, not additional synthetic code wrappers. Require owner permission before customer data, external APIs, paid services, access changes, production or listing.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 MVP complete (synthetic) → original blueprint gap fill
 
 - **Current source:** PUBLIC `hibi89/SOVIA_sovereign` `develop` (default `main` docs-only). Functional P1 minimum offline JSON→5 deterministic rules→evidence/unknown→Korean HTML/JSON→CLI tests **synthetically verified**; initial R1–R9 reconciliation now in `MVP_BLUEPRINT_RECONCILIATION.md`. Do not rebuild already complete P1.
