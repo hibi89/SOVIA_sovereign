@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 owner Windows record consistency (10 sections)
+
+## 1. Goal, scope and technologies
+Offline-first SOVIA Audit Lite retrospective agent behavior audit, Python stdlib and zero paid API. Extend P2 precommercial evidence gates while preserving previously validated 5-rule audit, CSV/optional PDF, SQLite, dashboard, 12-file v0.10 beta owner self-check, retention inventory, strict synthetic n8n-like converter, operator review hash gate, PII metadata preflight, safe-code registry, synthetic FP/FN triage.
+## 2. Changes / alternatives / rationale
+Compared changing legacy automated self-check to set manual PASS (unsafe false claim) versus separate read-only evidence consistency checker that always disclaims independent owner execution. Chose separate checker. Added `sovia_owner_evidence.py`, `tests/test_owner_evidence.py` (30 synthetic tests), `OWNER_EVIDENCE_CHECKER.md`, owner Windows checklist link/fix. Checks actual v0.10 inner ZIP SHA-256, Windows-shaped self-check summary (all 6 automatic PASS and 3 events/5 findings/1 report), independent operator-declared manual statuses with fail-closed mismatches. PDF failures prevent complete status; manual values are never independently authenticated. No main/ZIP/runtime modules changed.
+## 3. Actual tests / outcomes and independent gaps
+PR feature source HEAD `212ec674e56afebfadcc7bcc65525acfa5015967`, [Actions 40462591912](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40462591912) **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13. Each `python -m unittest discover -s tests -v` found 359 tests; Windows 349 PASS/10 SKIP; Ubuntu 348 PASS/11 SKIP; **0 FAIL**. `python portable_smoke.py` old pristine 12-file v0.10 synthetic audit/SQLite/dashboard/backup/restore/self-check PASS in all jobs. User's real Windows PC, AV/SmartScreen, browser, Korean PDF visual acceptance and current docs HEAD CI are **NOT independently verified**.
+## 4. Done/in progress/pending/stop
+DONE separate local evidence checker, strict schema/status constraints, privacy-minimal messages, 30 tests, CI and PR #23 merge, docs. PENDING actual owner-device acceptance, live n8n versioned format/approved data, authenticated consent, comprehensive PII handling, backup/retention deletion plans, signed commercially supported installer and real customer approvals. Stop after final develop SHA verification.
+## 5. Failures / evidence / retries
+Initial draft PR CI had a new test mismatch: `defender_smartscreen` was not schema field `antivirus_or_smartscreen`; failed as expected with INVALID_FIELDS, corrected test. Added regression for automatic/visual PDF failures blocking review. Full final CI 40462591912 green, no source bug reported. A fabricated Windows JSON can still be forged, so all outputs leave `owner_device_execution_independently_verified:false`; no genuine customer incident.
+## 6. Repo/branches/SHA/paths
+Repo `hibi89/SOVIA_sovereign` PUBLIC; default `main` docs-only. Feature `feature/p2-owner-evidence-crosscheck` tested SHA `212ec674e56afebfadcc7bcc65525acfa5015967`, [PR #23](https://github.com/hibi89/SOVIA_sovereign/pull/23) merged `develop` SHA `8e120a9db2baa1b490d2ce3987979366185fcf39`. New `sovia_owner_evidence.py`, `tests/test_owner_evidence.py`, `OWNER_EVIDENCE_CHECKER.md`; updated `OWNER_WINDOWS_ACCEPTANCE.md`, GAP_MATRIX/STATUS/HANDOFF/RESUME. Verify docs HEAD after last write.
+## 7. Production URL, commands, environment
+Production/Vercel/sale NONE; no cloud, external API, paid service or released new ZIP. Source-only CLI: `python sovia_owner_evidence.py --portable-zip PATH_TO_INNER_v010_ZIP --selfcheck SELF_CHECK_RESULT.json --manual-review review.json`. Returns only `OPERATOR_CLAIMS_CONSISTENT_UNVERIFIED` when self-declared records agree; 3 on manual pending/blocked, 2 invalid. Checker not packaged into old v0.10 ZIP, and source never modifies old beta artifacts.
+## 8. Originals / secrets / backup / access
+Only synthetic Windows and review records used in tests, no owner device data uploaded, no real customer files, secrets, prompts or identifiers committed to PUBLIC GitHub. Checker hashes local ZIP and reads summary JSON, does not extract/run supplied ZIP or change existing reports, databases, backups, privacy permissions or controls; no customer identity verification.
+## 9. Next tasks and owner approvals
+On next `ㄱ`, inspect latest develop, focus next safe P2 unit (synthetic n8n version-specific adapter feasibility or retention governance) without raw/customer data; do not redo P1/SQLite/dashboard/ZIP. Real owner-PC verification requires the owner's independent offline test or furnished evidence without personal info. Obtain owner approval for real customer data, external API/hosting, visibility/access edits, paid listing, production release and destructive deletion.
+## 10. Date / verification evidence / stopping boundary
+2026-10-27 KST. Exact tested source PR head `212ec674e56afebfadcc7bcc65525acfa5015967`, green Actions run 40462591912, merge `8e120a9db2baa1b490d2ce3987979366185fcf39`. Current docs HEAD will advance; must be fetched and reported, CI at newest docs HEAD not independently verified. No real owner device, customer or sale acceptance. Older archived sections follow.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic privacy review metrics (10 sections)
 
 ## 1. Goal, scope and technology
