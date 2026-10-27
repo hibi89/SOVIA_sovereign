@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 explicit synthetic code registry merged
+
+- **Repo:** `hibi89/SOVIA_sovereign` PUBLIC, active code `develop`. [PR #21](https://github.com/hibi89/SOVIA_sovereign/pull/21) merged SHA `c882ac46a837cbadc33eb0465a39c20d0f35bb01`. `main` documentation-only/unreleased. Connected GitHub actor `hibi89` confirmed.
+- **New development functions:** `sovia_code_registry.py` explicit lower-case, injective code aliases for tools/targets; policy-aware mapping; original+mapped PII-pattern preflight; existing 5-rule findings and coverage invariance; fail-closed on unknown maps/duplicates, no overwrite, offline isolated CLI requires `--synthetic-only`. New synthetic example, 31 tests, `CODE_REGISTRY.md` and `FALSE_POSITIVE_REVIEW.md` (review, re-code and retest; no suppression/bypass). Old n8n adapter with `synthetic` and `approved-local` pathways unchanged. Existing v0.10 12-file beta ZIP unchanged.
+- **Actual test evidence:** [PR CI 40460394248](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40460394248) on source SHA `2b50e2b8299ad74f8e757a090953e61a956c4050` **4/4 SUCCESS**, Windows+Ubuntu Python 3.11/3.13. Each job 305 tests discovered; Windows 295 PASS/10 optional PDF SKIP, Ubuntu 294 PASS/11 platform/PDF SKIP, 0 FAIL. Existing clean-extracted ZIP audit/SQLite/dashboard/recovery/self-check smoke PASS all jobs. First PR run failed one new test because a tuple fixture was reassigned by item; test corrected, **entire CI rerun green**. Docs HEAD independent CI still UNVERIFIED.
+- **Scope restrictions:** No real customer/source data, raw n8n export, automatic PII anonymization, legal consent verification, signed release, production/Vercel deployment, paid API, remote storage, or repo privacy/access changes. No proof of PII absence or rule completeness; SHA/review still self-asserted. Current registry is development-source synthetic only, not in v0.10 ZIP.
+- **Next on `ㄱ`:** inspect latest develop SHA, original documents and gap matrix; improve safe synthetic false-positive adjudication/test fixtures or prepare concrete owner Windows beta acceptance, then tackle version-validated n8n metadata mappings and real customer permission only with separate owner approval. Preserve P1 and all existing P2 modules. Commercial readiness remains OPEN.
+
+---
+
 # CURRENT STATUS — 2026-10-27 SOVIA P2 metadata preflight integrated
 
 - GitHub: hibi89/SOVIA_sovereign PUBLIC synthetic-only; PR #20 merged to develop at be1562c520be62d0e5341abe72a48a527b490987. main remains docs-only/unreleased.
