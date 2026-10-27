@@ -1,3 +1,11 @@
+# LATEST RESUME — 2026-10-27 PR #22 synthetic privacy triage and Windows manual gate
+
+SOVIA PUBLIC repo `hibi89/SOVIA_sovereign`; active code `develop`, default `main` docs-only. [PR #22](https://github.com/hibi89/SOVIA_sovereign/pull/22) MERGED at `431035b572625e42a94f83c69426700b9f00acb4`. Added `sovia_privacy_triage.py`, 24 tests, fabricated baseline/review queue JSONs, `PRIVACY_TRIAGE.md`, `OWNER_WINDOWS_ACCEPTANCE.md` and false-positive review doc cross-link. It measures aggregate synthetic TP/TN/FP/FN only, no automatic overrides; intentionally one FP and one FN in review queue are expected and force exit 3. [PR-head CI 40461363016](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40461363016) SUCCESS 4/4 Windows/Ubuntu × Python 3.11/3.13 with **329 discovered per job**, 0 failures, old v0.10 12-file extracted ZIP smoke PASS. Latest docs-head CI UNVERIFIED.
+
+Next `ㄱ`: verify latest `develop`, `HANDOFF.md` → `STATUS.md` → `AGENTS.md` → `REQUIREMENTS.md` → `GAP_MATRIX.md`, then continue safe P2 owner-device evidence process or synthetic n8n compatibility/false-positive case coverage. Do NOT redo previous P1, retention, dashboard, portable, or PRs #16–#22. **Owner Windows/Defender/Korean browser/PDF manual acceptance NOT_CHECKED**, no actual customer consent, n8n native integration, representative PII measurement, commercial readiness, production or cloud. Old v0.10 portable ZIP still excludes latest source-only triage/registry modules. No external customer logs or code release without owner approval. Verify final documentation SHA on live GitHub.
+
+---
+
 # LATEST RESUME — 2026-10-27 P2 synthetic code registry
 
 Actual source baseline is **develop PR #21 merge `c882ac46a837cbadc33eb0465a39c20d0f35bb01`**. New `sovia_code_registry.py` explicit synthetic tool/target mappings, injectivity and policy-aware five-rule finding preservation with PII preflight; 31 tests, `CODE_REGISTRY.md`, `FALSE_POSITIVE_REVIEW.md`. [PR-head CI 40460394248](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40460394248): Windows/Ubuntu Python 3.11/3.13 4/4 success, 305 discovered/job, 0 fail, 10/11 optional/platform skips, all old portable smoke passed. First run failed only a tuple fixture test error, fixed in verified head `2b50e2b8299ad74f8e757a090953e61a956c4050`.
