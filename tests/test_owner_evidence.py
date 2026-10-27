@@ -216,7 +216,7 @@ class OwnerEvidenceTests(unittest.TestCase):
 
     def test_required_manual_fields_cannot_be_not_tested(self):
         record = review()
-        record["manual_checks"]["defender_smartscreen"] = "NOT_TESTED"
+        record["manual_checks"]["antivirus_or_smartscreen"] = "NOT_TESTED"
         self.save(manual=record)
         with self.assertRaisesRegex(evidence.EvidenceError, "REVIEW_INVALID_STATE"):
             evidence.assess_files(self.portable, self.auto, self.manual)
