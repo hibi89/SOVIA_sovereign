@@ -38,16 +38,16 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: |
           python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
-          python -I -B build_portable_p2.py --output dist/SOVIA-Audit-Lite-0.11.1-beta.zip
-          python -I -B verify_portable_p2.py --archive dist/SOVIA-Audit-Lite-0.11.1-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.11.1-beta.zip.sha256
+          python -I -B build_portable_p2.py --output dist/SOVIA-Audit-Lite-0.11.2-beta.zip
+          python -I -B verify_portable_p2.py --archive dist/SOVIA-Audit-Lite-0.11.2-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.11.2-beta.zip.sha256
       - name: Publish distinct v0.11 P2 CI artifact (NOT a release)
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         uses: actions/upload-artifact@v4
         with:
           name: sovia-portable-p2-beta
           path: |
-            dist/SOVIA-Audit-Lite-0.11.1-beta.zip
-            dist/SOVIA-Audit-Lite-0.11.1-beta.zip.sha256
+            dist/SOVIA-Audit-Lite-0.11.2-beta.zip
+            dist/SOVIA-Audit-Lite-0.11.2-beta.zip.sha256
           if-no-files-found: error
           retention-days: 14
       - name: Build downloadable synthetic portable beta
