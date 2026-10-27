@@ -1,3 +1,15 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 privacy/retention inventory merged
+
+**GitHub source:** `hibi89/SOVIA_sovereign` public; active code `develop` PR [#17](https://github.com/hibi89/SOVIA_sovereign/pull/17) merge SHA `c462f480eb2fee35e5830ceb807c9cf2396f31d4`, HEAD will advance with this documentation update. `main` remains documentation-only/unreleased. GitHub connected account hibi89; PR commit attributed to hibi89, merge via web-flow.
+
+**Verified scope:** new `sovia_retention.py` aggregate/read-only offline inventory, 11 focused synthetic tests and `RETENTION.md`, no file contents read, source modifications or deletion. Fixed unbounded directory-list materialization to bounded streaming. File SHA parity with local tested source verified before PR. `feature/p2-retention-inventory` integrated and **not active/reopen required**.
+
+**PR CI:** [Actions 40454869234](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40454869234) SUCCESS **4/4** Windows/Ubuntu Python 3.11/3.13. Each job **200 tests discovered**, Windows **190 PASS / 10 SKIP**, Ubuntu **189 PASS / 11 SKIP**, **0 FAIL**; full clean extracted v0.10 ZIP self-check and SQLite/dashboard/restore still passed on all. Local module tests 11/11 pass; compileall pass. New code not included in unchanged 12-file ZIP. Post-merge push / docs-head CI **NOT VERIFIED**, do not conflate with PR CI.
+
+**Remaining:** actual owner's Windows/browser/font/Defender acceptance, real customer authorization, supported sanitized n8n formats, original/report/backup retention and deletion policy, PII/adversarial/false-positive reviews and approval for sales. No production URL, Vercel, cloud or paid product. Do not auto-delete files or disclose private file paths. On `ㄱ` inspect latest develop HEAD, post-merge status, and proceed with safe synthetic n8n-like adapter/contract validation or privacy gate—not previous finished P1/dashboard/ZIP.
+
+---
+
 # SOVIA STATUS — 2026-10-27 P2 retention inventory feature checkpoint
 
 - **Active scoped branch:** `feature/p2-retention-inventory` derived from verified develop HEAD `76d338fd43efa531364c1536fbd3d88ebca594c3` (v0.10 self-check); **main docs-only**, develop unchanged until reviewed PR.
