@@ -1,3 +1,11 @@
+## 2026-10-27 — PR #58 SQLite v0.12 exact schema identity gate MERGED
+
+- [PR #58](https://github.com/hibi89/SOVIA_sovereign/pull/58) merged code `bbe58019431a542a13d6005e2722ad0152d27eaf`: SQLite `user_version=2` + matching columns + `quick_check` no longer suffice. The separate beta v0.12 history now requires exact original `CREATE TABLE reports` DDL and no additional application-level schema objects, rejecting lookalike tables lacking PK/UNIQUE, added triggers and unsolicited indexes. No existing schema format or data migration. Not cryptographic attestation.
+- [PR CI #40523109701](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40523109701) Windows/Ubuntu × Python3.11/3.13 job results 4/4 PASS, 834 discovered each, Windows 823 PASS/11 SKIP, Ubuntu 817 PASS/17 SKIP, zero FAIL. Three new anti-tamper regression tests pass. Historical v0.10/v0.11.2 ZIP smoke passed with immutable hashes. Distinct v0.12 artifact ZIP SHA256 `7fbd1128a660a4158ee09f115784432ef49cc24086e1baac62d3ce4c973d1366` is NOT signed or commercial release.
+- Merge-head and final docs-head CI to be separately verified; owner real Windows/Defender/PDF, legitimate n8n schema/data/consent, privacy/license/retention/signing/support/sale approvals remain OPEN. Legacy issue #52 unsupported old-engine burst sorting unresolved in frozen archives. `main` documentation only, `develop` active source, repo PUBLIC and production NONE.
+
+---
+
 ## 2026-10-27 — PR #57 NTFS junction/reparse-point verification FIXED in distinct v0.12 beta
 
 - [PR #57](https://github.com/hibi89/SOVIA_sovereign/pull/57) merged to `develop` source SHA `eed263b3bf594d08cf59943c3cef67ae674b5566`. Extracted-package strict verification now rejects both symlinks and Windows NTFS reparse-point aliases of the selected root/children. Uses Python 3.11-compatible `lstat` file attributes; does NOT claim to stop hostile concurrent path swaps or linked ancestors outside the root. Actual `cmd.exe mklink /J` tests on GitHub-hosted Windows verify linked root and allowlisted `examples/` directory are refused, not followed/overwritten.

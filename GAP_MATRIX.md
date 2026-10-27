@@ -1,3 +1,9 @@
+## 2026-10-27 — P2 SQLite v0.12 strict DDL/triggers integrity PR #58
+
+[PR #58](https://github.com/hibi89/SOVIA_sovereign/pull/58) merged `develop` code SHA `bbe58019431a542a13d6005e2722ad0152d27eaf`. Canonical fixed owned SQLite v2 table SQL plus exact `sqlite_master` inventory validation replaces column-name-only acceptance. Refuses forged tables without PK/UNIQUE constraints, added triggers and unsolicited indexes before import/status/snapshot; avoids silent application mismatch. Three regressions, [CI #40523109701](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40523109701) 4/4 Windows/Ubuntu × Python3.11/3.13 PASS, 834 discovered/job, 0 FAIL. No schema migrations or legacy release file changes. The separate v0.12 synthetic candidate has checksum `7fbd1128a660a4158ee09f115784432ef49cc24086e1baac62d3ce4c973d1366`. This does not prove cryptographic DB authenticity nor satisfy owner local Windows, real n8n provenance/authorization/PII, legal/retention/support/signature or commercial go-live. No Production.
+
+---
+
 ## 2026-10-27 — P2 v0.12 extracted ZIP Windows NTFS junction integrity PR #57
 
 [PR #57](https://github.com/hibi89/SOVIA_sovereign/pull/57) merged `develop` SHA `eed263b3bf594d08cf59943c3cef67ae674b5566`. Source-only v0.12 package verifier now rejects NTFS root/child reparse junction aliases in addition to symlinks, as proved with two real GitHub Windows `mklink /J` scenarios; portable Python3.11-compatible `Path.lstat().st_file_attributes` implementation. [CI 40520947638](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40520947638) Win/Ubuntu × Python3.11/3.13 4/4, 831 discovered/job, 0 FAIL. Historical v0.10/v0.11.2 ZIPs unchanged; new v0.12 hash `eec6b92ee2d87885b2ebb1c023ebb405bac3d8358cae35789be51e8e85242979`. This only closes the specified NTFS verification gap; no TOCTOU/linked-ancestor security certification, owner Windows acceptance, true n8n/consent/PII/contract or signed release. No Production/Vercel.
