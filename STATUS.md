@@ -1,3 +1,14 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 operator-review contract integrated
+
+- **Repository:** `hibi89/SOVIA_sovereign` (PUBLIC synthetic-only), code on `develop`. PR [#19](https://github.com/hibi89/SOVIA_sovereign/pull/19) MERGED SHA `0a2a8cd7eeb78c2e8b5cf7e387ab2d50d6e34509`, `main` remains docs-only/unreleased. GitHub profile `hibi89` verified before merge.
+- **This unit:** Updated `sovia_n8n_sanitized.py` for explicit opt-in `--mode approved-local --attestation`; operator review flags, canonical digest binding for sanitized source+policy, UTC 30-day maximum assertion expiry, fail-closed redacted error/status. Added `tests/test_n8n_operator_gate.py` (25 synthetic regression tests) and `N8N_APPROVAL_GATE.md`. Updated `N8N_SANITIZED.md` after merge. Default `synthetic` path and earlier audit/CSV/PDF/SQLite/dashboard/retention/portable code unchanged. No customer data, secrets, network or deletion.
+- **Verified PR-head CI `ee14c560aa5f847729c2fa9e74ebb67fea765db1`:** [Actions 40458082863](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40458082863), Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**; each job 245 discovered, Windows 235 PASS/10 PDF SKIP, Ubuntu 234 PASS/11 SKIP (Windows CMD conditional), 0 FAIL. Existing extracted-12-file portable end-to-end audit/SQLite/dashboard/restore PASS on all environments. GitHub connector confirms PR merge. Post-docs HEAD GitHub CI not independently verified.
+- **Important limitation:** Manifest proves *a local operator's claims matched the parsed files*, **not actual consent, sanitization efficacy, authenticated review, or legal entitlement**. No real n8n export parser or live n8n API; metadata could still be personal/linkable. Neither `approved-local` nor `synthetic` is an authorization substitute. New code not part of unsigned v0.10 12-file ZIP.
+- **Remaining P2:** authenticated/externally evidenced permission and sanitized customer input mapping, approved retention/backup disposal, adversarial PII/false-positive reviews, owner Windows/Defender/browser/PDF visual acceptance, signed/supportable package, listing approval. Production/Vercel NONE; Cloud/Private not started. No changes to repo visibility.
+- **Next on ㄱ:** recheck latest develop HEAD and HANDOFF/STATUS; focus on safe, synthetic-only upstream PII preflight/controlled field mapping or owner acceptance documentation. Never automatically fetch raw n8n logs, delete customer records, promote main or claim commercial readiness.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic n8n-like adapter integration
 
 - **GitHub:** `hibi89/SOVIA_sovereign`, repository PUBLIC; active code `develop`. [PR #18](https://github.com/hibi89/SOVIA_sovereign/pull/18) MERGED to develop SHA `db44dccb81f5d867de47df2797451b69de86d260`. Current documentation HEAD will advance after this update. `main` intentionally remains docs-only/unreleased. GitHub user `hibi89` access confirmed.
