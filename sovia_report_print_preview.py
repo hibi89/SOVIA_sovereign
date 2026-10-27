@@ -156,6 +156,20 @@ def render(report):
     return html_doc
 
 
+def _pii():
+    """Load the fail-closed existing offline heuristic from adjacent source."""
+    src = Path(__file__).resolve().with_name("sovia_pii_preflight.py")
+    spec = spec_from_file_location("_sovia_next_print_pii", src)
+    if spec is None or spec.loader is None:
+        raise PreviewError("PREVIEW_PRIVACY_GATE_UNAVAILABLE")
+    module = module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except (OSError, ImportError) as exc:
+        raise PreviewError("PREVIEW_PRIVACY_GATE_UNAVAILABLE") from exc
+    return module
+
+
 def preview_files(input_path, output_path):
     """Read sanitized canonical input and exclusively publish one new HTML file."""
     source = Path(input_path).resolve()
@@ -168,7 +182,11 @@ def preview_files(input_path, output_path):
         raise PreviewError("PREVIEW_OUTPUT_EXISTS")
     audit = _audit()
     try:
-        report = audit.evaluate(audit.read_document(source))
+        document = audit.read_document(source)
+        # --synthetic-only is a self-declaration, not sanitization evidence.
+        # Screen for recognizable PII/secrets before any report is published.
+        _pii().assert_no_high_risk_patterns(document)
+        report = audit.evaluate(document)
         payload = render(report)
         audit.write_reports_atomically([(destination, payload)])
     except (ValueError, TypeError, OSError, OverflowError, RecursionError) as exc:
