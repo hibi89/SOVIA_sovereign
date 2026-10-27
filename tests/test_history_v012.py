@@ -1,5 +1,6 @@
 """Isolated v0.12 history v2 has distinct report identity and rejects legacy v1."""
 from __future__ import annotations
+from contextlib import closing
 import copy
 import json
 from pathlib import Path
@@ -55,7 +56,7 @@ class HistoryV012Tests(unittest.TestCase):
         for value in (b"synthetic-agent",b"public_docs",b"internal.example",
                       b"synthetic:1",b"client_records"):
             self.assertNotIn(value,raw)
-        with sqlite3.connect(self.db) as db:
+        with closing(sqlite3.connect(self.db)) as db:
             self.assertEqual(2,db.execute("PRAGMA user_version").fetchone()[0])
             self.assertEqual("0.12.0-preview",
                              db.execute("SELECT engine_version FROM reports").fetchone()[0])
@@ -141,8 +142,9 @@ class HistoryV012Tests(unittest.TestCase):
 
     def test_conflict_same_uid_different_findings_is_rejected(self):
         h.import_synthetic(self.db,SAMPLE)
-        with sqlite3.connect(self.db) as db:
+        with closing(sqlite3.connect(self.db)) as db:
             db.execute("UPDATE reports SET findings_digest=?",("f"*64,))
+            db.commit()  # closing() does not implicitly commit
         with self.assertRaisesRegex(h.HistoryV012Error,"VERSIONED_RESULT_CONFLICT"):
             h.import_synthetic(self.db,SAMPLE)
         self.assertEqual(1,h.status(self.db)["reports"])
