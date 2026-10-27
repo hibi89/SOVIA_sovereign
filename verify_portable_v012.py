@@ -25,6 +25,7 @@ FILES = (
     "sovia_audit.py",
     "sovia_audit_v012.py",
     "sovia_mvp_v012.py",
+    "RUN_V012_DEMO.cmd",
     "sovia_n8n_sanitized.py",
     "sovia_pii_preflight.py",
     "sovia_report_print_preview.py",
