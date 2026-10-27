@@ -1,5 +1,20 @@
 # SOVIA Audit Lite — 최소작동단위(MVP), 2026-10-28
 
+## 2026-10-28 P2 acceleration — fabricated pre-sanitized n8n metadata supported in same CLI
+
+The verified separate v0.12 beta can also accept the pre-existing fabricated, strictly pre-sanitized n8n-like metadata contract without manually running the adapter first:
+
+```powershell
+python -I -B sovia_mvp_v012.py --source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../n8n-demo-output --synthetic-only
+```
+
+It outputs a new folder containing `report.html`, `report.json`, and `history.sqlite3`; synthetic fixture: 3 event rows/5 findings. Canonical mode remains default and still rejects a `--policy` argument. Tested after extracting the **13-file** distinct ZIP in Windows/Ubuntu Python3.11/3.13 CI. [PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) / [Actions #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186): 847 discovered tests each job, 4/4 success, no failures. Current new v0.12 *synthetic CI artifact* SHA256 `63fbe704163611ec82b581be50854a4467dd8041da91e4aede33057022abad80`. Existing old ZIP archives are untouched.
+
+Only pre-sanitized **synthetic** n8n-like step metadata is accepted. This is NOT actual n8n API/version compatibility, live execution import, independently reviewed de-identification or lawful customer data handling. Policy and input are validated, recognizable private patterns rejected heuristically; no actual n8n credentials/network used. Temporary canonical metadata is staged locally and deleted during normal cleanup, **not securely erased**. No signed installer, validated owner Windows or commercial release.
+
+---
+
+
 ## 목적 및 현재 상태
 고객 출시가 아닌 합성 데이터 기반의 **실행 가능한 최소작동단위**. 검증된 Python 3.11+ 환경에서 추가 라이브러리·서버·프론트엔드 설치 없이 JSON 감사 → 한국어 HTML·JSON 보고서 → SQLite v2 이력까지 한 명령으로 생성한다. 기존 보고서 HTML을 임시 프론트엔드로 쓴다.
 

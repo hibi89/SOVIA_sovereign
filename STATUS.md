@@ -1,3 +1,11 @@
+## 2026-10-28 — Accelerated P2 PR #60: synthetic pre-sanitized n8n-like one-command adapter MERGED
+
+- [PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) code merged `develop` SHA `58281a01a6067e4787a0ce5c47dc5b65f62f6776`. Single-command `sovia_mvp_v012.py` now supports `--source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../n8n-demo-output --synthetic-only`. Strict fabricated, pre-sanitized metadata only; reuse PII preflight and corrected v0.12 engine; three normal output files. No original raw node parameters, credentials, API fetch or actual customer n8n compatibility. Temporary canonical metadata staging not a secure erase guarantee.
+- [PR CI #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186): Windows/Ubuntu × Python 3.11/3.13 **4/4 PASS**, 847 tests discovered/job, 0 fail, Windows 836 PASS/11 SKIP and Ubuntu 830 PASS/17 SKIP; 7 new integration tests and strict extracted 13-file ZIP smoke `n8n_synthetic_one_command_pass=true`. Beta ZIP hash `63fbe704163611ec82b581be50854a4467dd8041da91e4aede33057022abad80`; original v0.10/v0.11.2 hashes and smokes unchanged.
+- Next: verify merge/docs HEAD CI; real source authorization, genuine n8n API+version/schema, robust privacy/provenance, owner Windows and sale/signing remain blocked. Frontend/Cloud/Private deferred. Product launch NOT approved, Vercel/Production NONE.
+
+---
+
 ## 2026-10-28 MVP deadline — core working unit now merged in PR #59
 
 - **P0 scope completed (synthetic-only):** one offline command from isolated v0.12 ZIP accepts canonical fabricated JSON, runs pattern preflight and corrected UTC five-rule evaluator, writes **fresh** `report.html`, `report.json`, `history.sqlite3`. Uses existing HTML as interim UI; frontend/extra features deferred. `python -I -B sovia_mvp_v012.py --input examples/demo_five_rules.json --output-dir ../sovia-mvp-output --synthetic-only`. Does not support authorized native customer n8n or proof of consent/privacy. See `MVP_20261028_RUNBOOK.md`.

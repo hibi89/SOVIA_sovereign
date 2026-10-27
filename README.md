@@ -1,5 +1,18 @@
 # SOVIA Sovereign — local-first AI agent evidence audit
 
+## 2026-10-28 accelerated P2: one-command synthetic n8n-like metadata accepted
+
+[PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) merged into active `develop`, code SHA `58281a01a6067e4787a0ce5c47dc5b65f62f6776`. In addition to prior canonical synthetic JSON, the existing v0.12 one-command CLI supports the strict already-sanitized, fabricated `sovia.n8n_sanitized.v1` envelope plus separate policy. Python 3.11+ stdlib, offline, no UI/dependency install:
+
+```sh
+python -I -B sovia_mvp_v012.py --source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../n8n-demo-output --synthetic-only
+```
+
+Three output files: HTML report, JSON report, SQLite v2 metadata history; 3 synthetic events/5 findings. Corrected v0.12 UTC rules and heuristic metadata/PII checks remain active; no original raw execution body or secret field accepted, intermediate canonical file staged temporarily and not published. [PR CI #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186) Windows/Ubuntu × Python3.11/3.13 4/4 SUCCESS, 847 tests discovered per job, zero failures; separately packaged 13-file v0.12 ZIP smoke succeeded. This is **NOT** native n8n execution/API integration, actual version proof, source authorization, full PII clearance or a commercial release; no real customer data. See [MVP_20261028_RUNBOOK.md](MVP_20261028_RUNBOOK.md) and [HANDOFF.md](HANDOFF.md).
+
+---
+
+
 ## 2026-10-28 deadline: one-command **minimum working unit now integrated on develop**
 
 The **source/ZIP synthetic-only v0.12 MVP** is callable with one command: `python -I -B sovia_mvp_v012.py --input examples/demo_five_rules.json --output-dir ../sovia-mvp-output --synthetic-only`. It creates `report.html`, `report.json`, `history.sqlite3` in a fresh output directory; audit uses the corrected v0.12 UTC temporal rule. [PR #59](https://github.com/hibi89/SOVIA_sovereign/pull/59), [four-platform CI](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40526564129): Windows/Ubuntu × Python 3.11/3.13 all green, 840 discovered/job and 0 failures; clean-extracted ten-file ZIP end-to-end smoke. See [MVP_20261028_RUNBOOK.md](MVP_20261028_RUNBOOK.md). Frontend redesign and optional enhancements follow later. Real n8n/native customer inputs, verified consent, privacy review, owner Windows installation, signed release and sales remain **NOT COMPLETE**. GitHub `main` is documentation-only; use `develop` for running source.

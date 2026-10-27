@@ -1,3 +1,9 @@
+## 2026-10-28 — Accelerated P2 synthetic n8n contract into full single-command v0.12 pipeline (PR #60)
+
+[PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) merged source SHA `58281a01a6067e4787a0ce5c47dc5b65f62f6776`. Closed source-only gap: fabricated `sovia.n8n_sanitized.v1` envelope + policy may now run from ONE offline CLI invocation through strict adapter and PII heuristic into corrected v0.12 HTML/JSON/SQLite v2, without publishing canonical intermediate. v0.12 ZIP package expanded 10→13 members; [CI #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186) 4/4 Win/Ubuntu × Python3.11/3.13 PASS, 847 tests/job, no failures; separate new beta ZIP `63fbe704163611ec82b581be50854a4467dd8041da91e4aede33057022abad80`, legacy archives fixed. **OPEN** actual n8n API/installed version/consent/source provenance/sanitization, legal/retention/support/signing, real owner Windows and customer readiness. Synthetic flags/PII heuristics are not independently certified. Frontend polish deferred, no Production.
+
+---
+
 ## 2026-10-28 — P0 minimum working unit integrated (synthetic-only) / frontend deferred
 
 [PR #59](https://github.com/hibi89/SOVIA_sovereign/pull/59) merged code `8ab399b6d642f3469af5a55eb6e53b8b9431bea1`; bundled 10-file distinct v0.12 ZIP includes single-command `sovia_mvp_v012.py` to generate HTML/JSON/SQLite v2 in one new folder from canonical synthetic JSON. CI #40526564129 Windows/Ubuntu × Python3.11/3.13 4/4 PASS (840 tests/job 0 fail; clean-install MVP smoke), new SHA `1084cd267b7f8a00d656a13c6f55ff0c8795fcd507679de30ab59b8924e26b2c`. Design/R1–R9 advanced in synthetic scope; UI polish and extra features DEFERRED. Full customer path/true n8n source+schema+consent, owner hardware/PDF, license/privacy/retention/support, signed release and deployment BLOCKED. No real customer data or Production.
