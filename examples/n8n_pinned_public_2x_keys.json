@@ -1,0 +1,16 @@
+{
+  "schema_version": "sovia.n8n_pinned_workflow_keys.v1",
+  "synthetic_only": true,
+  "source_kind": "public_api_workflow_keyset_only",
+  "pinned_release_tag": "n8n@2.44.7",
+  "field_keys": [
+    "name",
+    "nodes",
+    "connections",
+    "settings",
+    "id",
+    "description",
+    "versionId",
+    "activeVersionId"
+  ]
+}

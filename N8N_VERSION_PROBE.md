@@ -1,3 +1,9 @@
+## P2 follow-up — official pinned public API workflow key references (2026-10-27)
+
+[**N8N_PINNED_PUBLIC_SCHEMA.md**](N8N_PINNED_PUBLIC_SCHEMA.md) records verified GitHub source **tag, release commit SHA, schema blob SHA and top-level Public API workflow YAML fields** for `n8n@1.123.88` and `n8n@2.44.7`. A separate `sovia_n8n_pinned_reference.py` does **synthetic key-only comparisons** and blocks ALL raw import (including exact key matches). It is **not evidence of real n8n API support** or version-specific execution data compatibility, nor an upgrade to the mock probe. No existing converter/portable behavior changes.
+
+---
+
 # SOVIA P2 — n8n source-profile / version-claim key-only probe
 
 **Scope: synthetic-only source capability probe, NOT native n8n version support.** It never ingests real n8n workflow exports, execution responses, node parameters, credentials, items, binary data, runData or customer/prompt contents. No n8n API credentials/network.
