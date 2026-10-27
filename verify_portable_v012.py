@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+import stat
 import sys
 import zipfile
 
@@ -46,6 +47,18 @@ class PackageError(ValueError):
 
 def _sha(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def _linked_or_reparse(path):
+    """Reject links including Windows NTFS junctions/mount reparse points.
+
+    Path.is_symlink() alone does not reliably identify NTFS junctions.
+    lstat() observes the entry itself, not its redirected destination.
+    """
+    attributes = Path(path).lstat()
+    reparse = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+    return (stat.S_ISLNK(attributes.st_mode) or
+            bool(getattr(attributes, "st_file_attributes", 0) & reparse))
 
 
 def _check_manifest(raw):
@@ -133,8 +146,8 @@ def verify_archive(archive_path, checksum_path=None):
 def verify_directory(root_path):
     """Verify pristine extracted payload before adding local generated reports."""
     root = Path(root_path)
-    if not root.is_dir() or root.is_symlink():
-        raise PackageError("Extraction directory absent or symlinked")
+    if _linked_or_reparse(root) or not root.is_dir():
+        raise PackageError("Extraction directory absent or linked")
     expected = set(FILES) | {MANIFEST}
     allowed_directories = {
         "/".join(filename.split("/")[:depth])
@@ -144,8 +157,8 @@ def verify_directory(root_path):
     found = set()
     for entry in root.rglob("*"):
         name = entry.relative_to(root).as_posix()
-        if entry.is_symlink():
-            raise PackageError("Symlink in extracted payload")
+        if _linked_or_reparse(entry):
+            raise PackageError("Linked or reparse entry in extracted payload")
         if entry.is_file():
             if name not in expected:
                 raise PackageError("Unexpected extracted file")
