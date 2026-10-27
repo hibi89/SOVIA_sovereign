@@ -148,7 +148,7 @@ def capture_local_png(edge, file, profile, output):
     return _png_size(output)
 
 
-def smoke(screenshot_dir=None):
+def smoke(screenshot_dir=None, *, next_print_preview=False):
     edge = locate_edge()
     destination = None
     if screenshot_dir is not None:
@@ -180,12 +180,24 @@ def smoke(screenshot_dir=None):
         dashboard_dom = open_local_dom(edge, dashboard, root / "edge-dashboard-profile")
         assert_dom(dashboard_dom, ("에이전트 감사 이력", "최근 이벤트 타임라인",
                                    "감사 보고서", "위험 소견", "script-src 'none'"))
+        preview = None
+        if next_print_preview:
+            # Run the additive next-version source ONLY. It is deliberately
+            # NOT copied into or executed from the immutable 18-file ZIP.
+            preview = root / "synthetic-print-preview.html"
+            _run_cli(Path(__file__).resolve().with_name("sovia_report_print_preview.py"),
+                     "--input", source, "--output", preview, "--synthetic-only")
+            preview_dom = open_local_dom(edge, preview, root / "edge-next-print-preview")
+            assert_dom(preview_dom, ("SOVIA Audit Lite", "차기 출력 미리보기",
+                                     "위험 소견 5건", "data-label=", "이벤트 타임라인"))
         dimensions = {}
         if destination is not None:
             images = {
                 "synthetic-audit-edge.png": audit,
                 "synthetic-dashboard-edge.png": dashboard,
             }
+            if preview is not None:
+                images["synthetic-next-print-preview-edge.png"] = preview
             for name, document in images.items():
                 local = root / name
                 dimensions[name] = capture_local_png(
@@ -200,7 +212,8 @@ def smoke(screenshot_dir=None):
         return {
             "status": "SYNTHETIC_EDGE_LOCAL_FILE_DOM_PASS",
             "browser": "Microsoft Edge (GitHub-hosted Windows runner)",
-            "html_pages_opened": 2,
+            "html_pages_opened": 3 if next_print_preview else 2,
+            "experimental_source_only_print_preview_dom_verified": next_print_preview,
             "synthetic_edge_screenshot_count": len(dimensions),
             "synthetic_edge_screenshot_dimensions": dimensions,
             "screenshot_human_visual_review": False,
@@ -218,11 +231,14 @@ def smoke(screenshot_dir=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Offline synthetic Edge DOM from extracted P2 ZIP")
     parser.add_argument("--screenshot-dir",
-                        help="New empty folder for two synthetic Edge screenshot PNGs")
+                        help="New empty folder for synthetic Edge screenshot PNGs")
+    parser.add_argument("--next-print-preview", action="store_true",
+                        help="Include opt-in source-only future print layout for synthetic QA")
     args = parser.parse_args(argv)
     try:
         from json import dumps
-        print(dumps(smoke(args.screenshot_dir), ensure_ascii=False, sort_keys=True))
+        print(dumps(smoke(args.screenshot_dir, next_print_preview=args.next_print_preview),
+                    ensure_ascii=False, sort_keys=True))
         return 0
     except (EdgeSmokeError, OSError, RuntimeError, ValueError) as exc:
         # Fixed non-disclosing codes, no source/Edge paths or stderr backtrace.
