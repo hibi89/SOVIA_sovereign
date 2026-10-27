@@ -14,6 +14,8 @@ import sovia_history_v012 as history
 
 GOLDEN = ROOT / "examples" / "demo_five_rules.json"
 BOUNDARY = ROOT / "examples" / "demo_temporal_boundary.json"
+N8N = ROOT / "examples" / "demo_n8n_sanitized.json"
+POLICY = ROOT / "examples" / "demo_policy.json"
 
 
 class MVPV012Tests(unittest.TestCase):
@@ -63,6 +65,80 @@ class MVPV012Tests(unittest.TestCase):
         with self.assertRaisesRegex(mvp.MVPError, "MVP_INPUT_OR_OUTPUT_REJECTED"):
             mvp.run(forbidden, self.target, synthetic_only=True)
         self.assertFalse(self.target.exists())
+
+    def test_n8n_synthetic_one_command_outputs_no_canonical_export(self):
+        previous = (N8N.read_bytes(), POLICY.read_bytes())
+        result = mvp.run(N8N, self.target, synthetic_only=True,
+                         source_format="n8n-sanitized", policy_path=POLICY)
+        self.assertEqual("n8n-sanitized", result["source_format"])
+        self.assertEqual("SYNTHETIC_V012_MVP_COMPLETE", result["status"])
+        self.assertEqual((3, 5), (result["events"], result["findings"]))
+        self.assertEqual(set(mvp.OUTPUTS), {p.name for p in self.target.iterdir()})
+        self.assertEqual(previous, (N8N.read_bytes(), POLICY.read_bytes()))
+        report = json.loads((self.target / "report.json").read_text("utf-8"))
+        self.assertEqual("0.12.0-preview", report["engine_version"])
+        self.assertEqual(5, report["finding_count"])
+        status = history.status(self.target / "history.sqlite3")
+        self.assertEqual((1, 5), (status["reports"], status["finding_count_total"]))
+        self.assertFalse(result["real_n8n_verified"])
+        self.assertFalse(result["customer_release_approved"])
+
+    def test_n8n_rejects_missing_policy_without_publishing(self):
+        with self.assertRaisesRegex(mvp.MVPError, "POLICY_REQUIRED_ONLY_FOR_N8N"):
+            mvp.run(N8N, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized")
+        self.assertFalse(self.target.exists())
+
+    def test_canonical_rejects_unexpected_policy_without_publishing(self):
+        with self.assertRaisesRegex(mvp.MVPError, "POLICY_REQUIRED_ONLY_FOR_N8N"):
+            mvp.run(GOLDEN, self.target, synthetic_only=True, policy_path=POLICY)
+        self.assertFalse(self.target.exists())
+
+    def test_n8n_rejects_raw_node_parameters_without_publishing(self):
+        document = json.loads(N8N.read_text("utf-8"))
+        document["steps"][0]["parameters"] = {"secret": "SHOULD_NOT_ACCEPT"}
+        bad = self.root / "raw-node.json"
+        bad.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(mvp.MVPError, "MVP_INPUT_OR_OUTPUT_REJECTED"):
+            mvp.run(bad, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized", policy_path=POLICY)
+        self.assertFalse(self.target.exists())
+
+    def test_n8n_rejects_pii_before_materializing_report(self):
+        document = json.loads(N8N.read_text("utf-8"))
+        document["steps"][0]["evidence_ref"] = "person@example.com"
+        bad = self.root / "pii-node.json"
+        bad.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(mvp.MVPError, "MVP_INPUT_OR_OUTPUT_REJECTED"):
+            mvp.run(bad, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized", policy_path=POLICY)
+        self.assertFalse(self.target.exists())
+
+    def test_n8n_source_policy_same_file_and_existing_output_refused(self):
+        with self.assertRaisesRegex(mvp.MVPError, "SOURCE_POLICY_COLLISION"):
+            mvp.run(N8N, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized", policy_path=N8N)
+        self.assertFalse(self.target.exists())
+        self.target.mkdir()
+        (self.target / "sentinel").write_bytes(b"PRESERVE")
+        with self.assertRaisesRegex(mvp.MVPError, "OUTPUT_EXISTS"):
+            mvp.run(N8N, self.target, synthetic_only=True,
+                    source_format="n8n-sanitized", policy_path=POLICY)
+        self.assertEqual(b"PRESERVE", (self.target / "sentinel").read_bytes())
+
+    def test_n8n_isolated_python_cli(self):
+        proc = subprocess.run([
+            sys.executable, "-I", "-B", str(ROOT / "sovia_mvp_v012.py"),
+            "--source-format", "n8n-sanitized",
+            "--input", str(N8N), "--policy", str(POLICY),
+            "--output-dir", str(self.target), "--synthetic-only",
+        ], capture_output=True, text=True, cwd=self.root, timeout=45)
+        self.assertEqual(0, proc.returncode, proc.stderr)
+        summary = json.loads(proc.stdout)
+        self.assertEqual("n8n-sanitized", summary["source_format"])
+        self.assertEqual((3, 5), (summary["events"], summary["findings"]))
+        self.assertEqual(set(mvp.OUTPUTS), {p.name for p in self.target.iterdir()})
+        self.assertNotIn(str(N8N), proc.stdout)
 
     def test_isolated_python_cli_no_cwd_import_dependencies(self):
         proc = subprocess.run([
