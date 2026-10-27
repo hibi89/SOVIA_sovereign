@@ -1,3 +1,6 @@
+## P2 retention inventory checkpoint — 2026-10-27 KST (feature only)
+Read-only `sovia_retention.py` inventory and `RETENTION.md` design drafted and locally tested: **11 PASS / 0 FAIL** (synthetic temporary files, Python compileall pass). Safe output is aggregated only, no file names/paths/content, no network/read of contents/deletion; bounded recursion and symlink avoidance. GitHub blob hashes of code/tests/docs matched local tested snapshots. This work is **FEATURE-ONLY, NOT PACKAGED IN v0.10 ZIP**, and full repository GitHub Actions CI is pending. Privacy/PII, consented n8n inputs, definitive retention policy, backup lineage, customer machine and sale acceptance remain OPEN. See `RETENTION.md`. Never mark automated deletion, real retention enforcement or customer clearance complete.
+
 # SOVIA blueprint vs verified implementation (2026-10-26 KST, CSV-source checkpoint)
 Feature CSV commit 770172baa1dfe0eb0fd4b1a63d0afead0eaf6bc2; CI 5c99ca3ca1205a26b586a057874172f6607d3e19. Windows+Ubuntu Python 3.11/3.13 on GitHub Actions run 40213287272: 4/4 success, each 92 tests discovered, 82 pass, 10 optional-PDF skip, 0 fail. DONE_VERIFIED means synthetic scope only.
 
