@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 owner synthetic artifact static preflight
+
+- **Repo/branch:** `hibi89/SOVIA_sovereign` PUBLIC, `develop` active code, `main` docs-only; [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. Production/Vercel/release/commercial listing NONE.
+- **New:** source-only offline read-only `sovia_owner_artifact_preflight.py`, 35 adversarial `tests/test_owner_artifact_preflight.py`, `OWNER_ARTIFACT_STATIC_PREFLIGHT.md`. Requires previously generated `SOVIA_SELF_CHECK_*/SELF_CHECK_RESULT.json`, synthetic audit HTML+JSON and dashboard HTML; original selfcheck must claim six core checks PASS with all manual fields NOT_CHECKED. Verifies 3 events/5 findings/five known rules, audit HTML ID/counter/coverage, dashboard 1/3/5 and restrictive CSP, blocks obvious script/resource/meta-refresh/active-CSS inserts, optional PDF header/trailer if generated. No files written/network, symlink/size bounds. Status **STATIC ONLY / MANUAL PENDING**; doesn't prove browser/Defender/SmartScreen/Korean glyphs, real owner hardware or PDF safety.
+- **Test evidence:** [Actions 40471339135](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40471339135) PR feature SHA `7a08f4f1a20257301e8baca3d9402f595280a2b8` Windows+Ubuntu Python 3.11/3.13 **4/4 SUCCESS**, 570 discovered/job, Windows 560 pass/10 skip, Ubuntu 559 pass/11 skip, 0 failed; unchanged 12-file beta portable smoke passes all jobs (SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`). Post-doc HEAD CI to verify. Prior PRs #16–#29 retained.
+- **Manual/external not done:** Actual owner's Windows machine, browser, Defender/SmartScreen, Korean PDF visual, signed release, customer controller permission, installed n8n version and real PII control, backup-retention legal acceptance. Old beta package excludes all P2 source-only extensions including this checker.
+- **Next ㄱ:** confirm HEAD/docs, choose next **distinct** safe P2 action; do not redo existing portable/selfcheck/evidence checker or PRs #16–#30. No owner-local/manual PASS or sale/production/customer claim without real evidence and approval.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 synthetic evidence digest and PII-pattern QA integrated
 
 - **Repo:** `hibi89/SOVIA_sovereign` PUBLIC; active `develop`, default `main` docs-only. [PR #29](https://github.com/hibi89/SOVIA_sovereign/pull/29) merged SHA `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. Production/Vercel, release, customer data, sale NONE.

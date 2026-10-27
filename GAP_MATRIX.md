@@ -1,3 +1,13 @@
+## CURRENT P2 — source-only owner synthetic HTML/PDF static preflight (2026-10-27 KST)
+
+[PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged `develop` SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. Added `sovia_owner_artifact_preflight.py`, 35 `tests/test_owner_artifact_preflight.py`, `OWNER_ARTIFACT_STATIC_PREFLIGHT.md` for distinct read-only post-selfcheck static artifact check: selfcheck v0.10 synthetic contract, output JSON 3 events/5 findings/five rules, audit HTML text and report ID, dashboard 1/3/5 counters and CSP, conservative active HTML/resources/CSS screening, optional PDF %PDF-/%%EOF only. Symlink/size inputs rejected; no writes/network. Result **manual pending**, not real Windows/browser/Defender/SmartScreen/Korean PDF visual or security proof. Owner checklist and earlier read-only evidence checker remain separate and unchanged.
+
+[Actions 40471339135](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40471339135) tested feature SHA `7a08f4f1a20257301e8baca3d9402f595280a2b8` Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 570 discovered/job, 0 fail, old portable smoke 12-file beta unchanged SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. Post-doc HEAD CI to verify.
+
+**Open gaps:** Actual owner device Windows manual visual/AV, provenance of real client logs / controller consent, genuine n8n instance/version sanctioned raw-to-sanitized mapping, privacy false negatives and retention/backup legal policy, signed supported release and sales authorization. Current v0.10 ZIP excludes P2 modules; `main` docs-only; NO production. Next safe unit must be distinct from PR #30 and old work.
+
+---
+
 ## CURRENT P2 — unsigned synthetic source/policy/canonical integrity & heuristic PII gate (2026-10-27 KST)
 
 [PR #29](https://github.com/hibi89/SOVIA_sovereign/pull/29) merged `develop` SHA `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. New read-only `sovia_synthetic_evidence.py`, 35 adversarial tests `tests/test_synthetic_evidence.py`, `SYNTHETIC_EVIDENCE.md`. Strict 7-field unsigned synthetic manifest binds SHA256 of fabricated source, policy and regenerated canonical steps; existing offline PII-pattern preflight scans source/policy before conversion and canonical metadata afterward; no writing, API or real logs. Exactly one known fixed, >40 character protocol `source_kind` literal is excluded from heuristic opaque-token scan to avoid an internal false positive, while arbitrary other values remain inspected. This is NOT cryptographic source authentication, actual customer approval, complete PII clearance or n8n native import. Anyone can rehash/forge the unsigned claim.

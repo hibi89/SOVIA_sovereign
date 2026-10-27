@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 owner synthetic output static preflight (10 sections)
+
+## 1. Mission, scope and frozen requirements
+SOVIA offline-first, zero-paid-API retrospective AI-agent risk audit, deterministic five-rule synthetic/authorized-sanitized evidence only. Existing Python 3.11+ core/JSON/CSV/optional PDF, SQLite, read-only dashboard and 12-file v0.10 portable beta preserved. This P2 increment checks generated **synthetic owner-selfcheck artifacts** statically, NOT actual browser visuals/Defender/SmartScreen or real customer n8n compatibility.
+
+## 2. Completed work / engineering decision
+Already-merged v0.10 `owner_selfcheck.py` verifies audit/SQLite/dashboard/recovery and `sovia_owner_evidence.py` verifies portable ZIP + manual operator *claims*, but neither statically audits generated HTML/PDF. Implemented distinct source-only read-only `sovia_owner_artifact_preflight.py`, `tests/test_owner_artifact_preflight.py` **35 new tests**, `OWNER_ARTIFACT_STATIC_PREFLIGHT.md`. Gate validates selfcheck synthetic v0.10 contract, generated audit JSON 3 events/5 findings/five rules, matching HTML report ID and count literals, dashboard 1/3/5 metrics and restrictive CSP, disallows active HTML/resource attrs/meta refresh/obvious external CSS, checks optional PDF bounded header/trailer consistency. All output status and flags say manual visual/AV and actual owner device remain unverified. No file writes/network. Original selfcheck, evidence checker, portable beta ZIP and default main unchanged.
+
+## 3. Reproducible tests and remaining unverified
+[PR #30 feature-head Actions 40471339135](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40471339135) SHA `7a08f4f1a20257301e8baca3d9402f595280a2b8` **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13; `python -m unittest discover -s tests -v` discovered **570** per job; Windows 560 PASS/10 PDF optional SKIP; Ubuntu 559 PASS/11 SKIP; 0 FAIL. `python portable_smoke.py` 12-file extracted pristine beta SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b` audit 3/5, SQLite/dashboard/recovery, owner-selfcheck `AUTOMATED_PASS_MANUAL_PENDING` all PASS. Physical owner machine, Defender/SmartScreen, real browser/Korean PDF visuals, real n8n/customer privacy/authorization NOT VERIFIED. Docs-head CI to check.
+
+## 4. Done / pending / exact safe stop
+DONE source-only synthetic static analyzer, adversarial regression, usage/limitations, [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged to `develop`. PENDING actual owner PC execution/manual status review, live n8n API+version, client consent and privacy false-negative evidence, signed release, backups/retention, commercial support. Do not claim static parser proves no HTML XSS, PDF security or real antivirus compatibility.
+
+## 5. Failures / mitigations
+No failures in tested PR #30 4/4 matrix; no retries needed. Previous PR #29 pattern-detector source_kind fixed marker exemption documented below. This static HTML allowlist rejects known active HTML and resource-bearing attrs; not a full HTML parser/browser engine/security attestation. PDF verifies only %PDF- and %%EOF, not PDF integrity/contents/rendering. Existing owner selfcheck fake Windows metadata can be forged: no independent identity authentication. No mutation of original inputs or output files, symlinks refused, size bounds enforced, no sensitive paths echoed.
+
+## 6. Canonical repo, SHAs and files
+`hibi89/SOVIA_sovereign` PUBLIC synthetic-only, `develop` source, default `main` docs-only. [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) feature head `7a08f4f1a20257301e8baca3d9402f595280a2b8`, merge commit `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. New `sovia_owner_artifact_preflight.py`, `tests/test_owner_artifact_preflight.py`, `OWNER_ARTIFACT_STATIC_PREFLIGHT.md`. Updated `HANDOFF.md`, `STATUS.md`, `GAP_MATRIX.md`, `RESUME.md`. Fetch final docs HEAD and verify author/committer.
+
+## 7. Runtime, production, cost
+No Vercel, Production URL, paid services, installer or customer deploy. Source-only read-only invocation from verified repository: `python -I -B sovia_owner_artifact_preflight.py --results-dir EXISTING_LOCAL_SOVIA_SELF_CHECK_FOLDER` on synthetic owner output only. Success `SYNTHETIC_ARTIFACT_STATIC_CHECKS_PASSED_MANUAL_PENDING` is NEVER visual verification. Existing v0.10 12-file portable beta unchanged and does NOT include this checker or later source-only P2 modules. Reports remain in existing local folder without new files or network.
+
+## 8. Original data/backup/authentication/approvals
+No customer data, original logs/DB, actual screenshots/fonts/secrets in public GitHub. Only fabricated samples and transient synthetic CI fixtures. No registry/Defender modifications, network traffic, deletion, access/visibility changes, forced pushes, release, main promotion or production. Original 12-file zip hash unchanged in smoke tests. User is owner; real-device validation and commercial approval require owner action, never inferred from CI.
+
+## 9. Next priorities and gates
+Next `ㄱ`: verify latest `develop`, 4 docs and Actions, then address a **distinct** readiness gap, ideally easier owner device selfcheck packaging/instructions or stronger synthetic privacy-negative tests, avoiding duplicate PRs #16–#30. For actual Windows GUI/AV/PDF manual acceptance owner must run and privately record per `OWNER_WINDOWS_ACCEPTANCE.md` and `OWNER_EVIDENCE_CHECKER.md`; assistant can't observe. For real n8n/customer data, signed release/sale, payments, production, access/visibility change or destructive actions require explicit approval and legal/safety review.
+
+## 10. Verified evidence cutoff (KST)
+2026-10-27 KST. PR tested SHA `7a08f4f1a20257301e8baca3d9402f595280a2b8`, Actions `40471339135` completed SUCCESS 4/4, 570 tests/job, merged `develop` SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d`. Post-doc HEAD CI to verify. No owner-local/browser/antivirus/manual Korean PDF or actual customer/n8n evidence. No release.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 unsigned synthetic evidence and metadata privacy gate (10 sections)
 
 ## 1. Goal / approved scope / technology

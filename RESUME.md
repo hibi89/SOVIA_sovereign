@@ -1,3 +1,11 @@
+# LATEST RESUME — 2026-10-27 PR #30 owner synthetic artifact static preflight
+
+Canonical GitHub `hibi89/SOVIA_sovereign` PUBLIC, code `develop`, `main` docs-only. [PR #30](https://github.com/hibi89/SOVIA_sovereign/pull/30) merged SHA `6a3a46ec5b1b3d6e99011aef485806f58993ac9d` after passing [Actions 40471339135](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40471339135) feature `7a08f4f1a20257301e8baca3d9402f595280a2b8`: 4/4 SUCCESS Windows/Ubuntu Python 3.11/3.13, 570 tests discovered/job, no FAIL, old v0.10 isolated 12-file portable smoke PASS (unchanged ZIP). New source-only `sovia_owner_artifact_preflight.py`, 35 tests `tests/test_owner_artifact_preflight.py`, usage `OWNER_ARTIFACT_STATIC_PREFLIGHT.md` inspect synthetic owner-selfcheck output JSON/HTML/CSP/limited PDF static markers; rejects basic active markup and tampering without changing files/network. This is not real browser/antivirus/owner PC or PDF visual verification. Original portable and `owner_selfcheck.py`, `sovia_owner_evidence.py` not changed. Final docs HEAD CI to check after synchronization.
+
+On `ㄱ`, fetch latest `develop` SHA, HANDOFF/STATUS/AGENTS/REQUIREMENTS/GAP_MATRIX and files, continue a **different safe gap** without repeating PRs #16–#30. Real installed n8n/customer consent, owner hardware/Defender/browser/PDF manual acceptance, privacy/retention/release/certification all UNVERIFIED; approval required before real APIs/data, paid services, access/visibility changes, deployment, signed release/listing, destructive changes. Follow `OWNER_WINDOWS_ACCEPTANCE.md` for existing owner manual check.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #29 read-only synthetic integrity/privacy QA
 
 Canonical repo `hibi89/SOVIA_sovereign` PUBLIC synthetic-only, development on `develop`, `main` docs-only. [PR #29](https://github.com/hibi89/SOVIA_sovereign/pull/29) merged SHA `fdd13e9c7fd599c51e3cc4d934c3fde30ccfb2cf`. Source module `sovia_synthetic_evidence.py`, 35 tests `tests/test_synthetic_evidence.py`, `SYNTHETIC_EVIDENCE.md`. Read-only local gate verifies SHA256 self-consistency of fabricated n8n-bridge document, example policy and recomputed SOVIA canonical events, checks heuristic metadata patterns before/after conversion. It cannot authenticate origin, prove consent/privacy or import raw real n8n data; no changes to original converter/core/main/portable ZIP.
