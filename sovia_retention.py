@@ -13,6 +13,8 @@ import time
 MAX_ENTRIES = 10_000
 MAX_DEPTH = 8
 SKIP_DIRECTORIES = frozenset({".git", ".venv", "venv", "__pycache__", "node_modules"})
+CATEGORIES = frozenset({"source_or_export", "rendered_report", "history_or_backup",
+                        "history_sidecar", "package_or_checksum"})
 
 
 class InventoryError(ValueError):
@@ -34,16 +36,25 @@ def _category(filename: str) -> str | None:
     return None
 
 
-def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
+def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES,
+              category_thresholds=None):
     """Summarize *candidates* by extension and mtime, without reading or modifying data.
 
     No filenames, paths, or file content are included in the returned summary.
     Fail closed on traversal errors/limits; symlinks are never followed.
+    Optional strict per-category thresholds are evaluated in the SAME scan;
+    this is not a transactional filesystem snapshot or disposal authorization.
     """
     if type(older_than_days) is not int or not 1 <= older_than_days <= 36500:
         raise InventoryError("INVALID_AGE")
     if type(max_entries) is not int or not 1 <= max_entries <= MAX_ENTRIES:
         raise InventoryError("INVALID_LIMIT")
+    if category_thresholds is not None:
+        if (type(category_thresholds) is not dict or
+                set(category_thresholds) != CATEGORIES or
+                any(type(v) is not int or not 1 <= v <= 36500
+                    for v in category_thresholds.values())):
+            raise InventoryError("INVALID_CATEGORY_THRESHOLDS")
     target = Path(root)
     try:
         if target.is_symlink() or not target.is_dir():
@@ -57,6 +68,9 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
     if not isinstance(when, (int, float)) or not (0 < when < float("inf")):
         raise InventoryError("INVALID_CLOCK")
     cutoff = when - older_than_days * 86400
+    cutoffs = (None if category_thresholds is None else
+               {key: when - days * 86400
+                for key, days in category_thresholds.items()})
     scanned = 0
     skipped_links = 0
     ignored = 0
@@ -93,7 +107,7 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
                         ignored += 1
                         continue
                     categories[category] += 1
-                    if mode.st_mtime <= cutoff:
+                    if mode.st_mtime <= (cutoff if cutoffs is None else cutoffs[category]):
                         candidates[category] += 1
                         candidate_bytes[category] += mode.st_size
     except InventoryError:
@@ -102,7 +116,7 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
         raise InventoryError("TRAVERSAL_FAILED") from exc
     return {
         "status": "READ_ONLY_CANDIDATES_NOT_DELETION_AUTHORIZATION",
-        "older_than_days": older_than_days,
+        "older_than_days": older_than_days if cutoffs is None else None,
         "entries_scanned": scanned,
         "symlinks_skipped": skipped_links,
         "unrecognized_or_skipped": ignored,
