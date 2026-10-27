@@ -1,3 +1,13 @@
+# CURRENT STATUS — 2026-10-27 SOVIA P2 metadata preflight integrated
+
+- GitHub: hibi89/SOVIA_sovereign PUBLIC synthetic-only; PR #20 merged to develop at be1562c520be62d0e5341abe72a48a527b490987. main remains docs-only/unreleased.
+- Implemented: offline bounded heuristic metadata pattern scanner sovia_pii_preflight.py; hooked into approved-local path of sovia_n8n_sanitized.py before output, with refusal containing no matched values. Default synthetic mode unchanged. New tests/test_pii_preflight.py: 29 synthetic cases, plus PII_PREFLIGHT.md explaining false positives/negatives. No changes to old core, CSV, PDF, SQLite, dashboard, retention inventory or 12-file portable ZIP.
+- Verified GitHub PR-head CI https://github.com/hibi89/SOVIA_sovereign/actions/runs/40459232377, SHA de15214dadec8cfc196af138920a1dc7d2352c4f: 4/4 SUCCESS, Windows and Ubuntu Python 3.11/3.13. 274 tests discovered/job, Windows 264 PASS/10 SKIP, Ubuntu 263 PASS/11 SKIP, zero FAIL. Existing portable end-to-end smoke passed each job. Latest docs commit's independent CI unverified.
+- Critical limits: no guarantee of PII absence, independent proof of authorization, genuine n8n export integration, privacy-law compliance or commercial readiness. Operator attestation is self-asserted; pattern false negatives/positives remain. New scanner is not included in existing ZIP. No customer data, production/Vercel, external transmissions or paid deployment.
+- Next on ㄱ: controlled synthetic pseudonymous field-mapping registry and false-positive adjudication, plus independent owner Windows manual acceptance when appropriate; do not redo P1/CSV/SQLite/dashboard/portable. Owner approval required for real customer data, external API/hosting, publication, access-setting changes or deletion.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 operator-review contract integrated
 
 - **Repository:** `hibi89/SOVIA_sovereign` (PUBLIC synthetic-only), code on `develop`. PR [#19](https://github.com/hibi89/SOVIA_sovereign/pull/19) MERGED SHA `0a2a8cd7eeb78c2e8b5cf7e387ab2d50d6e34509`, `main` remains docs-only/unreleased. GitHub profile `hibi89` verified before merge.
