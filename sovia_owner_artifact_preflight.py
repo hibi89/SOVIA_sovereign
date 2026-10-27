@@ -80,6 +80,14 @@ class _SafeStaticHTML(HTMLParser):
         # are misencoded or decorated with mixed case by the HTML parser.
         if len(set(k for k, _ in attrs)) != len(attrs):
             raise StaticPreflightError("DUPLICATE_HTML_ATTRIBUTE")
+        if tag == "meta":
+            attr = dict(attrs)
+            if attr.get("http-equiv") is not None and attr["http-equiv"] != "Content-Security-Policy":
+                raise StaticPreflightError("ACTIVE_OR_UNEXPECTED_HTML")
+            if attr.get("name") is not None and attr["name"] != "viewport":
+                raise StaticPreflightError("ACTIVE_OR_UNEXPECTED_HTML")
+            if attr.get("charset") is not None and attr["charset"].lower() != "utf-8":
+                raise StaticPreflightError("ACTIVE_OR_UNEXPECTED_HTML")
         self.tags[tag] = self.tags.get(tag, 0) + 1
         if tag == "style":
             self._in_style = True
@@ -137,6 +145,10 @@ def inspect(root_path):
         raise StaticPreflightError("INVALID_RESULT_DIRECTORY")
     owner = _local("sovia_owner_evidence.py", "_sovia_static_owner")
     audit = _local("sovia_audit.py", "_sovia_static_audit")
+    for name in ("SELF_CHECK_RESULT.json", "synthetic-audit.json"):
+        path = root / name
+        if path.is_symlink() or not path.is_file():
+            raise StaticPreflightError("ARTIFACT_MISSING_OR_SYMLINK")
     try:
         selfcheck = audit.read_document(root / "SELF_CHECK_RESULT.json")
         pdf_state = owner._validate_selfcheck(selfcheck)
