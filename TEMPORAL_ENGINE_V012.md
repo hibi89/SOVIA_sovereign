@@ -1,3 +1,9 @@
+## 2026-10-27 verified follow-up: distinct v0.12 delivery prototype (PR #54)
+
+[PR #54](https://github.com/hibi89/SOVIA_sovereign/pull/54) merged 5fd58b7483a687ce374692904a50dcd924868a23. [Actions 40512561672](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40512561672) 4/4 Win/Ubuntu Python3.11/3.13 full CI SUCCESS, 821 discovered tests/job, zero fails. Distinct new 9-file 0.12-beta ZIP SHA256 6f9682988d80ec1984856d359ecbc6920fdb9fae2109fe12e25c21b5fd7065b0 with strict manifest/extraction and temporary artifact 12737183121 (not release). v2 SQLite ledger key is SHA-256(engine-version+NUL+normalized-source-digest), findings digest cross-check, only hashed metadata, explicit fail-closed v1 database refusal, fresh independent backup/restore. Included isolated repaired engine CLI HTML chronology with regression. Original v0.10/v0.11.2 immutable ZIPs and default legacy engine untouched. Source-only 0.12 beta has NO customer approval, real data provenance, installed n8n version validation, full PII clearance, verified Windows owner PC/Defender/SmartScreen or signed production version. Avoid treating an unsigned checksum as publisher signature.
+
+---
+
 ## 2026-10-27 verified candidate checkpoint
 
 [PR #53](https://github.com/hibi89/SOVIA_sovereign/pull/53) merged 9a1e21c279e27e03dc4bb75e43cb385dc5bfe1d1. [CI 40509368149](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40509368149) Windows/Ubuntu Python3.11/3.13 **4/4 SUCCESS**, 797 tests per job, 0 fails, original v0.10 and v0.11.2 immutable ZIP SHA-256 clean extract smoke PASS. New 0.12 source-only evaluator / CLI and opt-in preview are verified on synthetic inputs; no commercial package or real n8n support. Legacy history/report identity migration OPEN and Issue #52 intentionally remains OPEN for supported release. Current CI generated Edge synthetic A4 but this run's PDF was not independently raster-inspected.

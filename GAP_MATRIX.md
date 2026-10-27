@@ -1,3 +1,9 @@
+## 2026-10-27 R3/R6/R9 new versioned portability/identity stage — PR #54
+
+Synthetic-only separate 0.12.0-beta ZIP, nine-file strict manifest, verifier and CI artifact produced in [PR #54](https://github.com/hibi89/SOVIA_sovereign/pull/54), four-platform CI 821 tests/job zero fail. New SQLite metadata-only schema v2 prevents silently treating old source report_id from a changed rule version as the same report by using SHA-256(engine version + NUL + full normalized source digest), and stores findings digest to reject same-version conflict. Old v1 DB is refused; no automatic legal/migration assumptions or mixed version read. New CLI HTML uses true UTC sort. Historical v0.10 and v0.11.2 ZIP hash pinned unchanged. **NOT sellable or commercial P2 complete**: only synthetic tests, unsigned ZIP, no genuine approved n8n/PII/consent, owner Windows/Defender/manual Korean PDF/print, license/support/retention approval, Production or real customers. Issue #52 still open for supported-path default and release gates.
+
+---
+
 ## 2026-10-27 — actual CI-verified source-only 0.12 UTC temporal successor, PR #53
 
 [PR #53](https://github.com/hibi89/SOVIA_sovereign/pull/53) merged; 0.12.0-preview candidate now corrects BURST_TOOLS lexical timestamp false positives via timezone-aware UTC sort, 16 focused tests, 4/4 CI [40509368149](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40509368149) 797 tests/job, 0 failures. Existing 0.10/0.11.2 archive SHA unchanged. Opt-in next HTML preview calls successor. **R3 commercial supported release is still PARTIAL:** old packaged core still has defect, report identity shared across versioned findings breaks legacy SQLite idempotent meaning, new product package/strict installer/versioned history migration not implemented, no approved real n8n or owner Windows. Issue #52 OPEN. No production or sale.

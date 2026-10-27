@@ -1,3 +1,11 @@
+# LATEST RESUME — 2026-10-27 PR #54 complete v0.12 synthetic package, SQLite v2
+
+Read HANDOFF.md first latest 10 sections, then STATUS.md, AGENTS.md, REQUIREMENTS.md and actual code. PUBLIC hibi89/SOVIA_sovereign source branch develop, default main docs-only. PR #54 merged 5fd58b7483a687ce374692904a50dcd924868a23, [4/4 CI #40512561672](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40512561672), 821 tests/job zero fail, both old fixed ZIP smoke and new distinct 9-file v0.12-beta ZIP smoke, SQLite v2 hashed UID import/dedup/backup/restore, no-clobber and wrong-v1-schema rejection. v0.12 packed HTML chronology fixed. New artifact #12737183121 (sha256 6f9682988d80ec1984856d359ecbc6920fdb9fae2109fe12e25c21b5fd7065b0), 14-day GitHub CI artifact, NOT customer release. Old engine/ZIPs remain byte identical and old default CLI still has bug.
+
+NEXT ㄱ verify docs SHA full CI, then owner physical Windows/Defender/SmartScreen and manually viewed report, authorized native n8n installed version/real SANITIZED fixture+consent and PII review, before any release/signing/sale. SQLite old v1 migration intentionally unsupported; distinct v2 new ledger, do not overwrite/delete old databases. Issue #52 remains open for replacing supported product path; no customer data, paid API, Production/Vercel or access settings changes without owner approval. See V012_PORTABLE_README.md and TEMPORAL_ENGINE_V012.md.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #53 source-only temporal successor (issue #52 OPEN)
 
 Read HANDOFF.md latest 10-section entry first, then STATUS.md, AGENTS.md, REQUIREMENTS.md and actual code. PUBLIC hibi89/SOVIA_sovereign, active develop code / docs-only main. PR #53 merged at 9a1e21c279e27e03dc4bb75e43cb385dc5bfe1d1 (feature 75fcef230cac8a29781f5f69ea888c90ddc5e1b9). New sovia_audit_v012.py reuses old strict input validation and four rules, recomputes only temporal burst rule correctly from UTC instants; opt-in source-only 0.12 preview uses it, all frozen 0.10/0.11.2 ZIP unchanged. 16 new tests, [4/4 CI 40509368149](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40509368149), 797 tests/job, 0 failed, original archives clean smoke PASS and real hosted Windows Edge synthetic A4 step PASS. CLI 0.12.0-preview is experimental only; not a signed packaged commercial product, user device or authenticated n8n.
