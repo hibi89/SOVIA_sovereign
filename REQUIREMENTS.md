@@ -1,4 +1,6 @@
 # SOVIA product requirements (PRD)
+
+> **2026-10-28 USER INTEGRATION PRIORITY OVERRIDE:** Sovereign remains an independent agent risk/audit product, **and is a required audit component in HAE (Humanized Automation Ecosystem)**. First-party integration is **Lightning Azent (LA)** plan/approval/execution evidence, **not n8n**. LA enforces action execution/approval; SOVIA analyzes pre-execution risk (future), runtime policy decisions (future integration), and post-execution evidence (existing retrospective audit engine). DBVORA owns separate database visibility/recovery; HAE owns guided natural-language customer UX. Full private owner architecture resides at `hibi89/HAE@main/docs/ECOSYSTEM_CANONICAL.md` (do not reproduce private details in this PUBLIC repo). This is architectural priority, not completed LA connection or verified real inputs. Historical third-party n8n plans are demoted to optional future adapters.
 Revision: 0.1 / 2026-10-25 KST
 Status: approved strategic direction; detailed functional acceptance criteria are design proposals pending implementation.
 
@@ -25,7 +27,7 @@ R9. Product identity, version and report schema; transparent limitations.
 No guarantee of zero leaks, certified compliance, legal opinions, runtime blocking, 24/7 SOC human response, NAS vendor matrix, live multi-tenant SaaS, live billing or automatic legal certification.
 
 ## After MVP: stage gates
-P2 Sellable Audit Lite: supported integration (n8n first candidate, only after feasibility), reproducible import of real sanitized fixtures, installer, input guide, false-positive review, recovery, customer contract scope.
+P2 Sellable Audit Lite: supported first-party Lightning Azent (LA) event/approval provenance integration, only after feasibility and explicit authorized data review; n8n or other third-party systems are optional later adapters, reproducible import of real sanitized fixtures, installer, input guide, false-positive review, recovery, customer contract scope.
 P3 Paid pilot: 1-2 real authorized customers, defined event limits/retention, incident ownership, no sensitive original logs without formal consent.
 P4 Cloud: opt-in agent -> ingestion API -> queue/DB -> tenant-scoped policy engine -> dashboards, notifications, billing; privacy, rate limits, backup/restore, delete/export, incident response required before production.
 P5 Private: same core and user interface, Docker/offline local database, disconnected license/update/install/restore workflows, local alerts, explicit support boundaries and platform certification matrix.
