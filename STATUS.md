@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 P2 synthetic n8n-like adapter integration
+
+- **GitHub:** `hibi89/SOVIA_sovereign`, repository PUBLIC; active code `develop`. [PR #18](https://github.com/hibi89/SOVIA_sovereign/pull/18) MERGED to develop SHA `db44dccb81f5d867de47df2797451b69de86d260`. Current documentation HEAD will advance after this update. `main` intentionally remains docs-only/unreleased. GitHub user `hibi89` access confirmed.
+- **Implemented:** `sovia_n8n_sanitized.py` standard-library read-only safe converter for *pre-sanitized synthetic metadata only* -> existing SOVIA v1 JSON; strict top-level/step allowlists; unknown/unsafe fields rejected; separate operator policy; no inferred permission/evidence; no network/credentials; atomic NEW output path only. `examples/demo_n8n_sanitized.json`, `tests/test_n8n_sanitized.py` (20 new tests), `N8N_SANITIZED.md`. Existing audit/CSV/SQLite/dashboard/retention module/12-file portable package not modified.
+- **Verified CI on exact PR head `76a898e175dfcfce8fa7b188bf9b21a72eb8eeb2`:** [workflow 40456761731](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40456761731) 4/4 SUCCESS across Windows/Ubuntu Python 3.11/3.13. Each job 220 discovered: Windows 210 pass/10 optional PDF skip; Ubuntu 209 pass/11 skip (Windows .cmd only); **0 fails**. Full clean-extracted v0.10 synthetic portable audit/SQLite/dashboard/backup/restore still PASS in each job. Post-merge current docs SHA/full workflow **not independently verified**.
+- **Open P2 gates:** Real n8n export schema/API mapping (intentionally unsupported), real consented sanitized fixture and upstream privacy validation, false positives, actual owner Windows/Defender/browser/Korean font PDF, original/report/backup retention and deletion policy, commercial support/release. Not in portable 12-file ZIP. No deployment/Vercel/paid listing or customer data. No repo visibility/security change.
+- **Next on `ㄱ`:** check fresh develop HEAD, final documentation consistency and post-merge status; improve the upstream *synthetic-only* redaction/authorization contract or test plan without importing raw customer logs; then staged owner manual Windows acceptance. Never claim native n8n integration or revisit P1/SQLite/dashboard/ZIP already verified.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 privacy/retention inventory merged
 
 **GitHub source:** `hibi89/SOVIA_sovereign` public; active code `develop` PR [#17](https://github.com/hibi89/SOVIA_sovereign/pull/17) merge SHA `c462f480eb2fee35e5830ceb807c9cf2396f31d4`, HEAD will advance with this documentation update. `main` remains documentation-only/unreleased. GitHub connected account hibi89; PR commit attributed to hibi89, merge via web-flow.
