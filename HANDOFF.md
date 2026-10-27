@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 operator-review manifest / SHA binding
+
+## 1. Goal, confirmed scope, technologies
+Offline-first SOVIA evidence audit, P2 precommercial input provenance/retention gates. Python stdlib, no paid API or services. Prior 5-rule engine, HTML/CSV/optional PDF, SQLite, dashboard, portable, owner self-check, read-only inventory, strict synthetic n8n-like metadata adapter preserved.
+## 2. Completed changes and rationale
+Compared (a) requiring review for every run (breaks synthetic workflows) versus (b) preserving `synthetic` default while adding opt-in `approved-local` with review claims. Selected (b) for regression compatibility, no costs, narrower scope. Added exact manifest schema/three true flags/parsed source-policy SHA-256 digests/UTC expiry <=30 days. Reports never assert independent authorization. Changed `sovia_n8n_sanitized.py`, added 25-case `tests/test_n8n_operator_gate.py`, `N8N_APPROVAL_GATE.md`; updated `N8N_SANITIZED.md` after merge. PR #19 integrated into develop.
+## 3. Actual tests, commands and limitations
+[PR-head GitHub Actions run 40458082863](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40458082863): 4/4 success Windows/Ubuntu Python 3.11/3.13. Each `python -m unittest discover -s tests -v` found 245 tests; Windows 235 PASS 10 SKIP, Ubuntu 234 PASS 11 SKIP; all zero fail. Compile and `python portable_smoke.py` PASS across all; 12-file v0.10 beta synthetic audit→SQLite→dashboard→recovery unchanged. No independent user Windows/AV/font/PDF or real customer tests; subsequent docs HEAD CI **NOT VERIFIED**.
+## 4. Done/in progress/pending and stopping point
+DONE opt-in gate, backward compatibility, 25 new regression tests, reviewed PR #19 integration. REMAINING P2 customer authorization evidence, upstream effective PII sanitization, real n8n adapter-version mapping, false positives, approved backup/retention/delete and owner device acceptance. Stop after doc update and SHA verification. Do not revisit finished core/CSV/SQLite/dashboard/portable milestones.
+## 5. Errors, evidence, causes, retry and alternatives
+Initial source review caught incorrect use of `hashlib.compare_digest`; corrected before tests/PR to `hmac.compare_digest`. Added max 30-day review assertion validity. CI run 40458082863 4/4 success; no PR test failures recorded. Local unauthenticated clone had previously failed DNS; used connected GitHub and Actions instead. Operator review manifest is **forgeable**; do not misdescribe as consent verification. Alternatives documented in N8N_APPROVAL_GATE.md.
+## 6. Repo/branch/SHA and key paths
+`hibi89/SOVIA_sovereign` PUBLIC. Default `main` docs only. Feature `feature/p2-n8n-operator-gate` CI verified HEAD `ee14c560aa5f847729c2fa9e74ebb67fea765db1`, PR #19 merged into `develop` at `0a2a8cd7eeb78c2e8b5cf7e387ab2d50d6e34509`. Main paths `sovia_n8n_sanitized.py`, `tests/test_n8n_operator_gate.py`, `N8N_APPROVAL_GATE.md`, `N8N_SANITIZED.md`, plus updated HANDOFF/STATUS/GAP_MATRIX. The latest develop docs HEAD must be fetched after update.
+## 7. Production, Vercel, commands and environment
+Production URL NONE; Vercel project NONE; live/signed release NONE; production test N/A. Demo: `python sovia_n8n_sanitized.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output UNUSED.json`; operator pathway `--mode approved-local --attestation LOCAL_REVIEW.json`. Existing v0.10 12-file portable ZIP does not contain the new gate. No network calls/LLM.
+## 8. Originals, storage, backup, security
+Only synthetic examples and code in PUBLIC repo. No customer records, prompts, credentials, unauthorized external transfers or visibility/access changes. New output exclusively created after validation; source/policy/manifest remain read-only; backups untouched. SHA integrity binding does NOT prove author identity or legal consent, and source identifiers may remain linkable. Retention legal basis needs operator/owner confirmation before genuine use.
+## 9. Next priority and approvals
+Inspect HEAD and latest source, then implement safe local synthetic metadata preflight/PII-negative regressions or improve manual owner Windows acceptance. Require owner approval for external real data, code deployment/main promotion, actual auto-deletion, privacy/access settings, payment or commercial publication. Complete readiness only after user-machine/authorized real input/privacy/contract validations.
+## 10. KST update, verification basis and scope
+2026-10-27 KST. Source baseline PR #19 merge `0a2a8cd7eeb78c2e8b5cf7e387ab2d50d6e34509`; PR-head CI 40458082863, 4/4 success. Post-document HEAD to be fetched and verified. No production, client, independent local Windows or customer authorization testing.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 n8n sanitized contract (10 sections)
 
 ## 1. Goal, confirmed requirements, technology
