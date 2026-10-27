@@ -326,5 +326,71 @@ class DirectAuditBudgetIntegrationTests(unittest.TestCase):
         self.assertNotIn(str(self.base), proc.stdout)
 
 
+
+class DirectAuditAllModePrivacyTests(unittest.TestCase):
+    """A self-declared synthetic flag must never turn off PII-pattern screening."""
+
+    def setUp(self):
+        t = tempfile.TemporaryDirectory(prefix="sovia-mode-pii-")
+        self.addCleanup(t.cleanup)
+        self.root = Path(t.name)
+        self.source = self.root / "source.json"
+        self.policy = self.root / "policy.json"
+        self.html = self.root / "report.html"
+        self.report = self.root / "report.json"
+        self.source.write_bytes((ROOT / "examples/demo_n8n_sanitized.json").read_bytes())
+        self.policy.write_bytes((ROOT / "examples/demo_policy.json").read_bytes())
+
+    def execute(self):
+        return direct.direct_audit(
+            self.source, self.policy, self.html, self.report,
+            synthetic_only=True)
+
+    def test_clean_synthetic_metadata_is_scanned(self):
+        result = self.execute()
+        self.assertTrue(result["pii_pattern_scan_executed"])
+        self.assertFalse(result["pii_absence_proven"])
+        self.assertFalse(result["source_authorization_independently_verified"])
+        self.assertTrue(self.html.is_file())
+        self.assertTrue(self.report.is_file())
+
+    def test_synthetic_mode_rejects_luhn_credit_card_like_id(self):
+        document = json.loads(self.source.read_text(encoding="utf-8"))
+        document["steps"][0]["step_id"] = "evt_4111111111111111"
+        self.source.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(direct.DirectAuditError,
+                                    "^CONTRACT_OR_REVIEW_REJECTED$"):
+            self.execute()
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.report.exists())
+        self.assertEqual(list(self.root.glob(".sovia-staging-*")), [])
+
+    def test_synthetic_mode_rejects_secret_in_policy(self):
+        policy = json.loads(self.policy.read_text(encoding="utf-8"))
+        policy["policy"]["allowed_tools"].append("sk-" + "x" * 25)
+        self.policy.write_text(json.dumps(policy), encoding="utf-8")
+        with self.assertRaisesRegex(direct.DirectAuditError,
+                                    "^CONTRACT_OR_REVIEW_REJECTED$"):
+            self.execute()
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.report.exists())
+
+    def test_synthetic_cli_rejects_secret_without_echoing_data_or_paths(self):
+        doc = json.loads(self.source.read_text(encoding="utf-8"))
+        doc["steps"][0]["step_id"] = "evt_4111111111111111"
+        self.source.write_text(json.dumps(doc), encoding="utf-8")
+        p = subprocess.run(
+            [sys.executable, "-I", "-B", str(ROOT / "sovia_n8n_direct_audit.py"),
+             "--input", str(self.source), "--policy", str(self.policy),
+             "--html-output", str(self.html), "--json-output", str(self.report),
+             "--synthetic-only"], capture_output=True, text=True, timeout=25)
+        self.assertEqual(p.returncode, 2)
+        self.assertEqual(json.loads(p.stderr)["error_code"], "CONTRACT_OR_REVIEW_REJECTED")
+        self.assertNotIn("4111111111111111", p.stderr)
+        self.assertNotIn(str(self.root), p.stderr)
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.report.exists())
+
+
 if __name__ == "__main__":
     unittest.main()
