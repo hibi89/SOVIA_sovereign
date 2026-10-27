@@ -1,3 +1,9 @@
+## 2026-10-27 R3 Issue #52 v0.12 temporal engine source candidate
+
+Reproducible old BURST_TOOLS false alert; versioned source-only candidate rewrites only sliding-window results in UTC-aware order. Opt-in v0.12 printable preview uses it; historic v0.10/v0.11.2 unchanged. Legacy SQLite identity can collide for same document and is NOT supported for candidate. See TEMPORAL_ENGINE_V012.md. Candidate CI pending; no real customer use or release.
+
+---
+
 ## 2026-10-27 R2/R3 temporal event correctness — preview fix vs core open bug
 
 Source-only v0.12 preview HTML chronology fixed in [PR #51](https://github.com/hibi89/SOVIA_sovereign/pull/51): real UTC datetime ordering handles mixed exact seconds and microseconds, tie breaks by event_id; 4/4 Windows/Linux CI verified (781 tests/job), immutable ZIPs unchanged. **R3 still PARTIAL:** existing frozen v0.10/v0.11.2 core `sovia_audit.evaluate` uses lexicographic UTC timestamp sort for 60-second BURST_TOOLS queue, potentially producing spurious alerts with valid fractional-second records. [Issue #52](https://github.com/hibi89/SOVIA_sovereign/issues/52) is OPEN and requires focused core regression plus separately versioned integrity-safe successor. Do not claim old version corrected, production accuracy, authorized native n8n or sale approval.
