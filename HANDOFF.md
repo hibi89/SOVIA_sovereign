@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic n8n claimed-version key probe (10 sections)
+
+## 1. Mission, scope, technology
+Zero-paid-service, offline-first SOVIA retrospective AI-agent risk audit. Preserve implemented P1 core five rules, CSV, optional PDF, SQLite history, dashboard, v0.10 synthetic portable/selfcheck, P2 retention inventory/category dry-run, operator claim/PII gate, sanitized n8n-like converter, pseudonymous code registry, synthetic privacy FP/FN triage and owner evidence checker.
+## 2. Work completed / rationale / alternatives
+Rejected importing arbitrary raw n8n exports/execution records labeled 1.x/2.x, because native schemas, payload risks and actual version compatibility remain unverified. Implemented `sovia_n8n_compatibility.py` **key-name-only synthetic source-family/claimed-version probe** rather than data importer: recognizes the strict four-key SOVIA sanitized-v1 envelope shape and refuses extra/missing/raw payload keys. Mock workflow-export and execution API profile labels with versions 1.x/2.x are **UNVERIFIED_RAW_PROFILE_BLOCKED**, other versions unrecognized. Created 30 tests `tests/test_n8n_compatibility.py`, 3 fabricated JSON manifest examples, `N8N_VERSION_PROBE.md`, and cross-link in `N8N_SANITIZED.md`. Existing converter and core unchanged; no release or customer evidence.
+## 3. Exact CI tests and unverified checks
+Verified [PR-head Actions 40464872399](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40464872399) on feature source SHA `b103c6df4f1167eaaaf1f0724dc4452865799485` **4/4 SUCCESS** Windows/Ubuntu × Python 3.11/3.13. Each `python -m unittest discover -s tests -v` found 414 tests; Windows 404 PASS/10 SKIP, Ubuntu 403 PASS/11 SKIP, 0 FAIL. Existing `python portable_smoke.py` 12-file v0.10 clean install/audit/SQLite/dashboard/backup-recovery/owner synthetic selfcheck PASS all jobs. Post-merge docs HEAD CI, actual owner's Windows hardware/browser/Defender/Korean PDF and real n8n version APIs remain **NOT VERIFIED**.
+## 4. Done, pending, stopping point
+DONE strict probe, 30 tests and PR #25 integration. PENDING actual n8n pinned release source schema verification and genuine sanitized event mapping, authorized customer operation, secure upstream redaction/PII evidence, authenticated consent/legal review, backup retention disposal, Windows owner visual/security checks, release. Stop after docs and current SHA verification, do not redo existing audit/portable capabilities.
+## 5. Failures, uncertainty and mitigations
+PR #25 final 4-job CI completed without test failures. Profile/version claims are self-declared; scanning only key names can miss everything about value types, credentials hidden in values, unsupported release changes. Hence all results say `raw_n8n_import_supported:false`, `native_n8n_schema_compatibility_verified:false`, `n8n_version_independently_verified:false`, `conversion_performed:false`. No actual customer incidents.
+## 6. Repo, branches, commits, file paths
+`hibi89/SOVIA_sovereign` PUBLIC synthetic-only, default `main` docs-only, source `develop`. Feature `feature/p2-n8n-compat-probe` tested source SHA `b103c6df4f1167eaaaf1f0724dc4452865799485`. [PR #25](https://github.com/hibi89/SOVIA_sovereign/pull/25) merged to `develop` at `4e25e3b08584d47261b24d3f296be129cdfbc7c7`. New `sovia_n8n_compatibility.py`, `tests/test_n8n_compatibility.py`, three `examples/synthetic_n8n_probe_*.json`, `N8N_VERSION_PROBE.md` and `N8N_SANITIZED.md` cross-link. Additional docs `GAP_MATRIX.md`, `STATUS.md`, `HANDOFF.md`, `RESUME.md`. Fetch latest HEAD post-update.
+## 7. Runtime and deployment
+Production URL NONE, Vercel NONE, paid APIs NONE. Key-only synthetic CLI: `python sovia_n8n_compatibility.py --input examples/synthetic_n8n_probe_sanitized_v1.json --synthetic-only` (status only, no actual conversion), mock 1x/2x produce exit 3. Existing sanitized converter `sovia_n8n_sanitized.py` separately validates actual pre-sanitized synthetic metadata. New probe outside old v0.10 12-file portable ZIP.
+## 8. Originals, secrets, backups, source permissions
+Only fabricated **key names** were processed and committed to public repo. No real n8n customer executions, prompts, credentials, items, node parameter data, personal files or backups processed or exported. No network/API, deletion, source modification, permissions change or main promotion. Operator manifest and profile label cannot independently establish consent.
+## 9. Next action / owner approval
+On next `ㄱ` check fresh develop SHA and docs, then work on another safe synthetic-only versioned field mapping reference or complete other P2 checks. For true n8n source support, obtain owner approval to define authorized source/version and verify pinned public schemas in isolation before allowing any potentially private executions. Real customer files, deployment, release, sales, access/visibility edits, destructive retention require prior approval. Owner manual Windows acceptance stays NOT_CHECKED.
+## 10. Date and verified boundary
+2026-10-27 KST, PR #25 tested feature SHA `b103c6df4f1167eaaaf1f0724dc4452865799485`, Actions run 40464872399 4/4 success, merged SHA `4e25e3b08584d47261b24d3f296be129cdfbc7c7`. Documentation HEAD CI not verified; fetch final SHA. Commercial suitability, real n8n version validation, real customer consent and owner physical Windows acceptance not proven.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 retention governance dry-run (10 sections)
 
 ## 1. Mission, scope and technical environment
