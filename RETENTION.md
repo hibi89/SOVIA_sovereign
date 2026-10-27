@@ -1,3 +1,9 @@
+## P2 follow-up — category policy dry-run (2026-10-27)
+
+An independent source-only `sovia_retention_review.py` applies strict synthetic **per-category review thresholds** and operator-asserted legal-hold/backup states to the existing metadata-only `sovia_retention.inventory` counts. See [RETENTION_REVIEW.md](RETENTION_REVIEW.md). It **never** grants deletion authority or invokes the history purge, never uses customer file contents and never ships in the existing portable v0.10 beta ZIP. Five scans share a fixed clock, but are **not an atomic filesystem snapshot**. All outputs remain human-review candidates, not lawful expiry dates. Full CI regression is required before develop integration.
+
+---
+
 # SOVIA P2 local data lifecycle: read-only inventory (development-only)
 
 Status: **safe diagnostic prototype**, NOT a retention/deletion implementation or commercial privacy clearance.

@@ -1,0 +1,31 @@
+{
+  "schema_version": "sovia.retention_review.v1",
+  "dry_run_only": true,
+  "categories": {
+    "source_or_export": {
+      "review_after_days": 30,
+      "legal_hold": "unknown",
+      "backup_lineage": "unknown"
+    },
+    "rendered_report": {
+      "review_after_days": 14,
+      "legal_hold": "none_claimed",
+      "backup_lineage": "unknown"
+    },
+    "history_or_backup": {
+      "review_after_days": 90,
+      "legal_hold": "present_claimed",
+      "backup_lineage": "unknown"
+    },
+    "history_sidecar": {
+      "review_after_days": 7,
+      "legal_hold": "none_claimed",
+      "backup_lineage": "reviewed_claimed"
+    },
+    "package_or_checksum": {
+      "review_after_days": 180,
+      "legal_hold": "none_claimed",
+      "backup_lineage": "reviewed_claimed"
+    }
+  }
+}
