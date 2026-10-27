@@ -179,6 +179,19 @@ def _pii():
     return module
 
 
+def _candidate():
+    path = Path(__file__).resolve().with_name("sovia_audit_v012.py")
+    spec = spec_from_file_location("_sovia_next_temporal", path)
+    if spec is None or spec.loader is None:
+        raise PreviewError("PREVIEW_TEMPORAL_ENGINE_UNAVAILABLE")
+    mod = module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except (OSError, ImportError) as exc:
+        raise PreviewError("PREVIEW_TEMPORAL_ENGINE_UNAVAILABLE") from exc
+    return mod
+
+
 def preview_files(input_path, output_path):
     """Read sanitized canonical input and exclusively publish one new HTML file."""
     source = Path(input_path).resolve()
@@ -195,7 +208,8 @@ def preview_files(input_path, output_path):
         # --synthetic-only is a self-declaration, not sanitization evidence.
         # Screen for recognizable PII/secrets before any report is published.
         _pii().assert_no_high_risk_patterns(document)
-        report = audit.evaluate(document)
+        # v0.12 candidate fixes burst-window UTC order; historic core and ZIP untouched.
+        report = _candidate().evaluate(document, legacy_audit=audit)
         payload = render(report)
         audit.write_reports_atomically([(destination, payload)])
     except (ValueError, TypeError, OSError, OverflowError, RecursionError) as exc:
