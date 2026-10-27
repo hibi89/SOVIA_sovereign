@@ -1,3 +1,13 @@
+# CURRENT SOVIA STATUS — 2026-10-27 synthetic n8n version/key probe integrated
+
+- **Repo:** `hibi89/SOVIA_sovereign` PUBLIC synthetic-only. Active code `develop`. [PR #25](https://github.com/hibi89/SOVIA_sovereign/pull/25) merged at `4e25e3b08584d47261b24d3f296be129cdfbc7c7`. `main` remains docs-only/unreleased; no production/Vercel/paid listing.
+- **New development feature:** `sovia_n8n_compatibility.py` bounded key-only strict manifest validator. Distinguishes `sovia_sanitized_metadata_v1` (4-key synthetic shape recognized) from `mock_n8n_workflow_export` and `mock_n8n_execution_api`, whose claimed n8n 1.x/2.x/other versions remain **blocked/unverified**. Blocks data/prompt/parameter/credentials/raw execution fields and extra/missing keys; reports only status/missing count and version bucket. 30 synthetic tests plus 3 fabricated key manifests, `N8N_VERSION_PROBE.md`, updated `N8N_SANITIZED.md`. No actual n8n API client, no raw log import, no customer data, actual vendor compatibility or PII/consent validation. Existing strict sanitized adapter and review/PII gate unchanged.
+- **Verified CI:** [Actions 40464872399](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40464872399) on PR source SHA `b103c6df4f1167eaaaf1f0724dc4452865799485`: Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 414 discovered/job; Windows 404 PASS/10 SKIP; Ubuntu 403 PASS/11 SKIP; 0 FAIL; unchanged prior 12-file portable audit/SQLite/dashboard/recovery/selfcheck smoke PASS all four. Docs HEAD CI NOT independently verified.
+- **Open:** real pinned-release n8n schema field mappings and test fixtures, data controller/operator approval and sanitized source authenticity, PII reliability, actual physical Windows/browser/Defender/Korean PDF tests, retention/backup legal governance, secure release/licensing and commercial permissions. All owner manual checks NOT_CHECKED. No new feature packaged into prior beta ZIP.
+- **Next `ㄱ`:** verify newest develop and docs; continue safe P2 synthetic source metadata schema mapping reference or explicit owner-device readiness artifact. Do not claim real n8n compatibility, import raw executions, touch customer data or redo P1/portable/history.
+
+---
+
 # CURRENT SOVIA STATUS — 2026-10-27 P2 retention policy review integrated
 
 - **Repository:** `hibi89/SOVIA_sovereign` PUBLIC synthetic-only. Active source `develop`; [PR #24](https://github.com/hibi89/SOVIA_sovereign/pull/24) MERGED SHA `40ed61a7e93d1588a453f27223d688b31d6de5c4`. `main` docs-only and unreleased, no Cloud, Vercel or paid listing.
