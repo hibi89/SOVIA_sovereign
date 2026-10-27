@@ -1,3 +1,9 @@
+## 2026-10-27 — actual CI-verified source-only 0.12 UTC temporal successor, PR #53
+
+[PR #53](https://github.com/hibi89/SOVIA_sovereign/pull/53) merged; 0.12.0-preview candidate now corrects BURST_TOOLS lexical timestamp false positives via timezone-aware UTC sort, 16 focused tests, 4/4 CI [40509368149](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40509368149) 797 tests/job, 0 failures. Existing 0.10/0.11.2 archive SHA unchanged. Opt-in next HTML preview calls successor. **R3 commercial supported release is still PARTIAL:** old packaged core still has defect, report identity shared across versioned findings breaks legacy SQLite idempotent meaning, new product package/strict installer/versioned history migration not implemented, no approved real n8n or owner Windows. Issue #52 OPEN. No production or sale.
+
+---
+
 ## 2026-10-27 R3 Issue #52 v0.12 temporal engine source candidate
 
 Reproducible old BURST_TOOLS false alert; versioned source-only candidate rewrites only sliding-window results in UTC-aware order. Opt-in v0.12 printable preview uses it; historic v0.10/v0.11.2 unchanged. Legacy SQLite identity can collide for same document and is NOT supported for candidate. See TEMPORAL_ENGINE_V012.md. Candidate CI pending; no real customer use or release.

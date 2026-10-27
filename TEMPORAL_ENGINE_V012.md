@@ -1,3 +1,9 @@
+## 2026-10-27 verified candidate checkpoint
+
+[PR #53](https://github.com/hibi89/SOVIA_sovereign/pull/53) merged 9a1e21c279e27e03dc4bb75e43cb385dc5bfe1d1. [CI 40509368149](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40509368149) Windows/Ubuntu Python3.11/3.13 **4/4 SUCCESS**, 797 tests per job, 0 fails, original v0.10 and v0.11.2 immutable ZIP SHA-256 clean extract smoke PASS. New 0.12 source-only evaluator / CLI and opt-in preview are verified on synthetic inputs; no commercial package or real n8n support. Legacy history/report identity migration OPEN and Issue #52 intentionally remains OPEN for supported release. Current CI generated Edge synthetic A4 but this run's PDF was not independently raster-inspected.
+
+---
+
 # SOVIA 0.12 temporal correctness candidate — NOT A CUSTOMER RELEASE
 
 ## Reproducible defect
