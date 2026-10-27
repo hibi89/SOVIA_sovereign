@@ -132,10 +132,18 @@ def _insert(db, report):
     with db:
         db.execute("BEGIN IMMEDIATE")
         row = db.execute(
-            "SELECT findings_digest FROM reports WHERE report_uid=?", (uid,)
+            "SELECT source_report_id, engine_version, source_digest, "
+            "findings_digest, event_count, finding_count "
+            "FROM reports WHERE report_uid=?", (uid,)
         ).fetchone()
         if row is not None:
-            if row[0] != finding_digest:
+            # A matching findings hash alone cannot prove that persisted
+            # event/finding counts and identity metadata were not changed.
+            expected = (
+                report["report_id"], ENGINE_VERSION, source_digest,
+                finding_digest, report["event_count"], report["finding_count"],
+            )
+            if row != expected:
                 raise HistoryV012Error("VERSIONED_RESULT_CONFLICT")
             return {"status": "already_present", "report_uid": uid, "reports_added": 0}
         db.execute("""INSERT INTO reports VALUES (?,?,?,?,?,?,?,?)""", (
