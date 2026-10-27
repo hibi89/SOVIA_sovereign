@@ -1,6 +1,7 @@
 """Synthetic-only end-to-end validation for direct sanitized adapter audit."""
 from datetime import datetime, timedelta, timezone
 import json
+import os
 from pathlib import Path
 import socket
 import subprocess
@@ -198,6 +199,64 @@ class DirectSanitizedAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(direct.DirectAuditError, "^LOCAL_SOURCE_MISSING_OR_SYMLINK$"):
             direct.direct_audit(link, self.policy, self.html, self.report,
                                 synthetic_only=True)
+
+    def test_approved_local_refuses_symlink_ancestor_before_read(self):
+        self.attest()
+        home = self.html.parent
+        alias = home / "linked_parent"
+        try:
+            alias.symlink_to(home, target_is_directory=True)
+        except (OSError, NotImplementedError):
+            self.skipTest("Directory symlinks unavailable")
+        for selected in ("source", "policy", "attestation", "output"):
+            fields = {
+                "source": self.source, "policy": self.policy,
+                "attestation": self.review,
+                "output": self.html,
+            }
+            altered = home / "linked_parent" / fields[selected].name
+            fields[selected] = altered
+            with self.subTest(kind=selected):
+                with self.assertRaisesRegex(
+                    direct.DirectAuditError, "^APPROVED_LOCAL_PATH_REFUSED$"
+                ):
+                    direct.direct_audit(
+                        fields["source"], fields["policy"], fields["output"],
+                        self.report, mode="approved-local",
+                        attestation=fields["attestation"],
+                    )
+                self.assertFalse(self.html.exists())
+                self.assertFalse(self.report.exists())
+
+    @unittest.skipUnless(os.name == "nt", "NTFS junction integration is Windows-only")
+    def test_approved_local_refuses_actual_ntfs_junction_output_parent(self):
+        self.attest()
+        home = self.html.parent
+        target = home / "candidate"
+        target.mkdir()
+        alias = home / "candidate-junction"
+        process = subprocess.run(
+            ["cmd.exe", "/d", "/c", "mklink", "/J", str(alias), str(target)],
+            capture_output=True, text=True, timeout=15,
+        )
+        self.assertEqual(0, process.returncode, process.stderr[:120])
+        with self.assertRaisesRegex(
+            direct.DirectAuditError, "^APPROVED_LOCAL_PATH_REFUSED$"
+        ):
+            direct.direct_audit(
+                self.source, self.policy, alias / "new.html",
+                self.report, mode="approved-local", attestation=self.review,
+            )
+        self.assertFalse((target / "new.html").exists())
+        self.assertFalse(self.report.exists())
+
+    def test_approved_local_control_succeeds_after_path_checks(self):
+        self.attest()
+        result = self.approved()
+        self.assertEqual("REPORTS_CREATED_WITH_UNVERIFIED_OPERATOR_CLAIMS",
+                         result["status"])
+        self.assertTrue(self.html.is_file())
+        self.assertTrue(self.report.is_file())
 
     def test_missing_output_folder_denied(self):
         with self.assertRaisesRegex(direct.DirectAuditError, "^OUTPUT_DIRECTORY_MISSING$"):

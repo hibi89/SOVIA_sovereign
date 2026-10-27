@@ -217,6 +217,40 @@ class SyntheticExecutionBridgeTests(unittest.TestCase):
         with self.assertRaisesRegex(bridge.BridgeError, "PRE_SANITIZED_STEPS_OR_POLICY_REJECTED"):
             bridge.convert_synthetic(d, pol)
 
+    def test_bridge_rejects_pii_like_sanitized_codes(self):
+        # All specimens are fabricated but conform to the CODE allowlist,
+        # which previously let the bridge publish them into canonical JSON.
+        for kind, value in (
+            ("phone", "01012345678"),
+            ("ipv4", "10.0.0.9"),
+            ("api-token", "sk-" + "x" * 26),
+        ):
+            doc = sample()
+            doc["sanitized_steps"][0]["evidence_ref"] = value
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(bridge.BridgeError, "^PREFLIGHT_REJECTED$"):
+                    bridge.convert_synthetic(doc, policy())
+
+    def test_bridge_rejects_suspect_policy_metadata(self):
+        config = policy()
+        config["policy"]["allowed_tools"].append("sk-" + "z" * 27)
+        with self.assertRaisesRegex(bridge.BridgeError, "^PREFLIGHT_REJECTED$"):
+            bridge.convert_synthetic(sample(), config)
+
+    def test_bridge_cli_rejects_suspect_metadata_without_output_or_echo(self):
+        doc = sample()
+        doc["sanitized_steps"][0]["evidence_ref"] = "01012345678"
+        self.save(doc=doc)
+        response = self.cli("--input", str(self.src), "--policy", str(self.pol),
+                            "--output", str(self.out), "--synthetic-only")
+        self.assertEqual(2, response.returncode)
+        self.assertEqual(
+            "PREFLIGHT_REJECTED", json.loads(response.stderr)["error_code"]
+        )
+        self.assertFalse(self.out.exists())
+        self.assertNotIn("01012345678", response.stdout + response.stderr)
+        self.assertNotIn(str(self.root), response.stdout + response.stderr)
+
     def test_cli_requires_synthetic_ack_and_makes_no_output(self):
         proc = self.cli("--input", str(self.src), "--policy", str(self.pol), "--output", str(self.out))
         self.assertEqual(2, proc.returncode)

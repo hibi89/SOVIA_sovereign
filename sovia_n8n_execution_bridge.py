@@ -106,6 +106,14 @@ def convert_synthetic(document, policy_document):
         "execution_id": "exec_" + execution,
         "steps": steps,
     }
+    # This formerly bypassed the pattern guard used by direct audit and the
+    # v0.12 MVP, permitting recognisable private strings to reach a canonical
+    # JSON export even though this bridge calls steps "sanitized".
+    pii = _sibling("sovia_pii_preflight.py", "_sovia_bridge_privacy_preflight")
+    try:
+        pii.assert_no_high_risk_patterns(contract, policy_document)
+    except ValueError as exc:
+        raise BridgeError("PREFLIGHT_REJECTED") from exc
     converter = _sibling("sovia_n8n_sanitized.py", "_sovia_bridge_existing_converter")
     try:
         canonical = converter.convert(contract, policy_document)
