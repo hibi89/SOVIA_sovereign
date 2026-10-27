@@ -1,3 +1,11 @@
+## CURRENT P2 — bounded synthetic HTML/JSON output budget preflight (2026-10-27 KST)
+
+[PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged develop SHA `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`. New source-only `sovia_output_budget.py` checks actual audited HTML/indented JSON byte length against strictly hypothetical 1/2/4MiB per-file limits for fixed generated cases 10/100/500/1000 normal/alert_dense. Exit 0 within, 3 simulated exceed, 2 rejected. Metadata only, no report file, secrets or network, no changes to real core/portable ZIP. 16 adversarial tests. [Actions 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308) full 4/4 Windows/Ubuntu Python 3.11/3.13 SUCCESS, 648 discovered each, zero failure, clean portable smoke PASS unchanged SHA.
+
+**Remaining export gap:** checker is NOT integrated into real CLI, so output size isn't enforced. No low-disk, CSV/PDF or all-or-nothing multi-output failure proof, nor approved limit. Do not conflate 1 MiB input cap with output budget or claim commercial SLA. Next distinct P2 work may test failure-safe optional real export under an explicitly agreed limit; owner device/browser/Defender/PDF, real sanctioned n8n, consent, privacy false negatives, retention/support and listing/release are still pending.
+
+---
+
 ## CURRENT P2 — bounded synthetic core performance and input/output capacity (2026-10-27 KST)
 
 [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged `develop` SHA `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. Added `sovia_capacity_benchmark.py` (source-only; no customer data), 33 adversarial tests, `SYNTHETIC_CAPACITY.md`, four-matrix CI workload step. Generates allowlisted 10/100/500/1000 events × 0-findings normal or dense 4N+(N−2) findings, uses bounded existing JSON reader/evaluator/HTML+JSON serializers and reports one-round elapsed time and Python tracemalloc peak, all WITHOUT customer/SLA claims. Does not persist benchmarks, run n8n, PDFs, SQLite or export files. Original core input 1 MiB/1000 records, main and old 12-file beta ZIP unchanged.
