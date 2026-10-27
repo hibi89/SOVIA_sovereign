@@ -35,6 +35,11 @@ rem The MVP refuses existing outputs and keeps all output outside install root.
 %PYTHON% %PY_ARGS% -I -B "%ROOT%sovia_mvp_v012.py" --input "%ROOT%examples\demo_five_rules.json" --output-dir "%OUTPUT%" --synthetic-only
 if errorlevel 1 goto audit_failed
 
+rem Read-only consistency gate: reject interrupted, mismatched or damaged
+rem HTML/JSON/SQLite before opening the report in the local browser.
+%PYTHON% %PY_ARGS% -I -B "%ROOT%sovia_mvp_v012.py" --verify-output-dir "%OUTPUT%"
+if errorlevel 1 goto audit_failed
+
 echo SOVIA SYNTHETIC DEMO COMPLETE
 echo LOCAL REPORT: "%OUTPUT%\report.html"
 if /i "%~1"=="--ci" exit /b 0

@@ -11,12 +11,17 @@ from importlib.util import module_from_spec, spec_from_file_location
 import json
 import os
 from pathlib import Path
+import re
+import sqlite3
+import stat
 import sys
 import tempfile
 
 
 OUTPUTS = ("report.html", "report.json", "history.sqlite3")
 INCOMPLETE_MARKER = ".SOVIA_INCOMPLETE"
+MAX_VERIFIED_LEDGER_BYTES = 16_777_216  # bounded synthetic SQLite v2
+
 
 
 class MVPError(ValueError):
@@ -170,20 +175,130 @@ def run(input_path, output_dir, *, synthetic_only=False,
         raise MVPError("MVP_INPUT_OR_OUTPUT_REJECTED") from exc
 
 
+
+def verify_output_dir(output_dir):
+    """Read-only evidence agreement check for a previously produced v0.12 run.
+
+    Verify the complete fixed file inventory, regenerated HTML from JSON and
+    strict v2 SQLite schema + matching single metadata row. This is an
+    unsigned consistency check, NOT original-input provenance, a crash-atomic
+    commit, customer authorization, or a race-free filesystem sandbox.
+    """
+    try:
+        root = Path(os.path.abspath(output_dir))
+        reparse = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0x400)
+        for path in (root, *root.parents):
+            meta = path.stat(follow_symlinks=False)
+            if (stat.S_ISLNK(meta.st_mode) or
+                    getattr(meta, "st_file_attributes", 0) & reparse):
+                raise MVPError("VERIFY_LINKED_PATH_REFUSED")
+            if path == root and not stat.S_ISDIR(meta.st_mode):
+                raise MVPError("VERIFY_INVALID_DIRECTORY")
+        names = set()
+        for entry in root.iterdir():
+            if entry.name == INCOMPLETE_MARKER:
+                raise MVPError("VERIFY_INCOMPLETE")
+            if entry.name not in OUTPUTS:
+                raise MVPError("VERIFY_UNEXPECTED_ENTRY")
+            meta = entry.stat(follow_symlinks=False)
+            if (stat.S_ISLNK(meta.st_mode) or
+                    getattr(meta, "st_file_attributes", 0) & reparse or
+                    not stat.S_ISREG(meta.st_mode)):
+                raise MVPError("VERIFY_INVALID_ENTRY")
+            limit = (MAX_VERIFIED_LEDGER_BYTES if entry.name == OUTPUTS[2]
+                     else 4_194_304)
+            if meta.st_size <= 0 or meta.st_size > limit:
+                raise MVPError("VERIFY_INVALID_SIZE")
+            names.add(entry.name)
+        if names != set(OUTPUTS):
+            raise MVPError("VERIFY_INCOMPLETE")
+        report = json.loads((root / OUTPUTS[1]).read_text(encoding="utf-8"))
+        if (type(report) is not dict or
+                type(report.get("event_count")) is not int or
+                type(report.get("finding_count")) is not int or
+                type(report.get("events")) is not list or
+                type(report.get("findings")) is not list or
+                len(report["events"]) != report["event_count"] or
+                len(report["findings"]) != report["finding_count"] or
+                type(report.get("normalized_policy_sha256")) is not str or
+                re.fullmatch(r"[a-f0-9]{64}", report["normalized_policy_sha256"]) is None):
+            raise MVPError("VERIFY_INVALID_REPORT")
+        history = _module("sovia_history_v012.py", "_sovia_verify_history")
+        renderer = _module("sovia_report_print_preview.py", "_sovia_verify_renderer")
+        # Byte-for-byte HTML render agreement detects changed/partial HTML,
+        # not forged replacement of every artifact or missing source history.
+        expected_html = renderer.render(report).encode("utf-8")
+        if (root / OUTPUTS[0]).read_bytes() != expected_html:
+            raise MVPError("VERIFY_HTML_MISMATCH")
+        uid, digest, findings_digest = history._signature(report)
+        # SQLite URI immutable+mode=ro does not create WAL/SHM or modify the
+        # existing history. Only inspect already complete static snapshots.
+        uri = (root / OUTPUTS[2]).as_uri() + "?mode=ro&immutable=1"
+        # sqlite3.Connection's context manager commits/rolls back but does
+        # NOT close its file handle. Explicit close is mandatory on Windows
+        # so a verified folder can immediately be archived/moved/removed.
+        db = sqlite3.connect(uri, uri=True, timeout=5)
+        try:
+            history._schema(db)
+            rows = db.execute(
+                "SELECT report_uid, source_report_id, engine_version, "
+                "source_digest, findings_digest, event_count, finding_count "
+                "FROM reports LIMIT 2"
+            ).fetchall()
+        finally:
+            db.close()
+        expected_row = (
+            uid, report["report_id"], history.ENGINE_VERSION,
+            digest, findings_digest, report["event_count"], report["finding_count"],
+        )
+        if rows != [expected_row]:
+            raise MVPError("VERIFY_LEDGER_MISMATCH")
+        return {
+            "status": "SYNTHETIC_V012_OUTPUT_CONSISTENT_NOT_AUTHENTICATED",
+            "engine_version": history.ENGINE_VERSION,
+            "files": list(OUTPUTS),
+            "events": report["event_count"],
+            "findings": report["finding_count"],
+            "read_only": True,
+            "source_authorization_verified": False,
+            "publisher_identity_verified": False,
+        }
+    except MVPError:
+        raise
+    except (OSError, ValueError, TypeError, KeyError, OverflowError,
+            RecursionError, UnicodeError, sqlite3.Error) as exc:
+        raise MVPError("VERIFY_RESULT_REJECTED") from exc
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description="SOVIA v0.12 offline synthetic-only one-command MVP"
     )
-    parser.add_argument("--input", required=True, help="synthetic canonical or pre-sanitized n8n-like JSON")
+    parser.add_argument("--input", help="synthetic canonical or pre-sanitized n8n-like JSON")
     parser.add_argument("--source-format", choices=("canonical", "n8n-sanitized"),
                         default="canonical")
     parser.add_argument("--policy", help="required for n8n-sanitized, forbidden for canonical")
-    parser.add_argument("--output-dir", required=True, help="brand NEW directory")
+    parser.add_argument("--output-dir", help="brand NEW directory")
+    parser.add_argument("--verify-output-dir", help="read-only check of existing synthetic result folder")
     parser.add_argument("--synthetic-only", action="store_true")
     args = parser.parse_args(argv)
+    if args.verify_output_dir is not None:
+        if (args.input is not None or args.output_dir is not None or
+                args.policy is not None or args.synthetic_only or
+                args.source_format != "canonical"):
+            print(json.dumps({"status": "REJECTED",
+                              "error_code": "VERIFY_MODE_CONFLICT"}), file=sys.stderr)
+            return 2
+    elif args.input is None or args.output_dir is None:
+        print(json.dumps({"status": "REJECTED",
+                          "error_code": "INPUT_AND_OUTPUT_REQUIRED"}), file=sys.stderr)
+        return 2
     try:
-        result = run(args.input, args.output_dir, synthetic_only=args.synthetic_only,
-                     source_format=args.source_format, policy_path=args.policy)
+        if args.verify_output_dir is not None:
+            result = verify_output_dir(args.verify_output_dir)
+        else:
+            result = run(args.input, args.output_dir, synthetic_only=args.synthetic_only,
+                         source_format=args.source_format, policy_path=args.policy)
     except (MVPError, OSError, ValueError, TypeError, RecursionError) as exc:
         code = str(exc) if isinstance(exc, MVPError) else "MVP_REJECTED"
         print(json.dumps({"status": "REJECTED", "error_code": code}), file=sys.stderr)

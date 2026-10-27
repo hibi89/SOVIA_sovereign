@@ -32,6 +32,7 @@ class WindowsRunnerPackageContractTests(unittest.TestCase):
         self.assertIn(b"verify_portable_v012.py", runner)
         self.assertIn(b"--directory", runner)
         self.assertIn(b"--ci", runner)
+        self.assertIn(b"--verify-output-dir", runner)
         for dangerous in (b"curl ", b"wget ", b"Invoke-WebRequest",
                           b"powershell ", b"del /", b"rmdir /"):
             self.assertNotIn(dangerous, runner)
@@ -71,6 +72,7 @@ class WindowsRunnerActualTests(unittest.TestCase):
         result = self.launch()
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertIn("SOVIA SYNTHETIC DEMO COMPLETE", result.stdout)
+        self.assertIn("SYNTHETIC_V012_OUTPUT_CONSISTENT_NOT_AUTHENTICATED", result.stdout)
         self.assertEqual(
             {"report.html", "report.json", "history.sqlite3"},
             {item.name for item in self.output.iterdir()},
