@@ -1,3 +1,8 @@
+## CURRENT P2 GAP — 2026-10-27 (integrated, not commercial)
+PR [#17](https://github.com/hibi89/SOVIA_sovereign/pull/17) merged the read-only local retention inventory into `develop` at `c462f480eb2fee35e5830ceb807c9cf2396f31d4`. PR head [CI 40454869234](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40454869234) **4/4 PASS** (Ubuntu/Windows × Python 3.11/3.13); each job ran 200 tests, 0 failed; 10/11 optional/platform tests skipped respectively, and the pre-existing 12-file portable smoke passed unchanged. This closes ONLY the *development-only, read-only inventory* subgap. Explicit deletion/retention enforcement, inventory coverage proof, authorized sanitized n8n source, owner Windows acceptance, actual customers and commercial security gates all remain **OPEN**. Post-merge push CI is not independently verified yet. See RETENTION.md. Prior feature-only checkpoint below is archived.
+
+---
+
 ## P2 retention inventory checkpoint — 2026-10-27 KST (feature only)
 Read-only `sovia_retention.py` inventory and `RETENTION.md` design drafted and locally tested: **11 PASS / 0 FAIL** (synthetic temporary files, Python compileall pass). Safe output is aggregated only, no file names/paths/content, no network/read of contents/deletion; bounded recursion and symlink avoidance. GitHub blob hashes of code/tests/docs matched local tested snapshots. This work is **FEATURE-ONLY, NOT PACKAGED IN v0.10 ZIP**, and full repository GitHub Actions CI is pending. Privacy/PII, consented n8n inputs, definitive retention policy, backup lineage, customer machine and sale acceptance remain OPEN. See `RETENTION.md`. Never mark automated deletion, real retention enforcement or customer clearance complete.
 
