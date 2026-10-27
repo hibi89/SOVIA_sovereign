@@ -137,6 +137,40 @@ class PreflightTests(unittest.TestCase):
         self.assertEqual("HEURISTIC_PATTERN_SCAN_CLEAR_NOT_PII_CERTIFIED",
                          preflight.assert_no_high_risk_patterns({"text": "999.999.999.999"}))
 
+    def test_ipv6_literals_blocked_without_disclosure(self):
+        # RFC 3849 documentation range, IPv4-mapped address and scoped link
+        # local notation. No real user IPs or production metadata.
+        for sample in (
+            "2001:db8::7", "[2001:db8::1]",
+            "https://[2001:db8::1]:443/", "::ffff:192.0.2.1",
+            "fe80::1%eth0", "key=2001:db8::1.",
+        ):
+            with self.subTest(kind=sample[:8]):
+                with self.assertRaisesRegex(
+                    preflight.PreflightError, "^PREFLIGHT_SUSPECT_METADATA$"
+                ) as caught:
+                    preflight.assert_no_high_risk_patterns({"evidence_ref": sample})
+                self.assertNotIn(sample, str(caught.exception))
+
+    def test_ipv6_like_labels_and_timestamps_remain_allowed(self):
+        for sample in (
+            "2026-10-26T00:01:00Z", "synthetic:1", "tag:alpha:beta",
+            "2001:db8", "version:v0.12", "scope.internal",
+        ):
+            with self.subTest(kind=sample[:8]):
+                self.assertEqual(
+                    "HEURISTIC_PATTERN_SCAN_CLEAR_NOT_PII_CERTIFIED",
+                    preflight.assert_no_high_risk_patterns({"evidence_ref": sample}),
+                )
+
+    def test_approved_local_rejects_ipv6_in_evidence_before_export(self):
+        doc = copy.deepcopy(ORIGINAL)
+        doc["steps"][0]["evidence_ref"] = "2001:db8::42"
+        self.store(source=doc)
+        with self.assertRaisesRegex(adapter.ContractError, "PREFLIGHT_REJECTED"):
+            self.approved()
+        self.assertFalse(self.output.exists())
+
     def test_approved_metadata_rejects_uuid_like_reference(self):
         doc = copy.deepcopy(ORIGINAL)
         doc["execution_id"] = "123e4567-e89b-12d3-a456-426614174000"
