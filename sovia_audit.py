@@ -186,25 +186,67 @@ def evaluate(document):
 
 
 def render_html(report):
+    """Accessible offline report with narrow-screen scrolling and print-only cards.
+
+    The existing in-browser table layout stays unchanged. Printing uses per-cell
+    trusted column labels so long Korean text is not squeezed into tiny columns.
+    """
     esc = lambda v: html.escape(str(v if v is not None else "미제공"), quote=True)
-    rows = "".join(f"<tr><td>{esc(f['severity'])}</td><td>{esc(f['rule_id'])}</td><td>{esc(f['event_ids'][0])}</td><td>{esc(f['source_pointer'])}</td><td>{esc(f['rationale'])}</td><td>{esc(f['recommended_action'])}</td></tr>" for f in report["findings"])
+
+    def cell(label, value):
+        # label is a trusted, static heading, never an imported event value.
+        return f'<td data-label="{label}">{esc(value)}</td>'
+
+    finding_fields = (
+        ("등급", "severity"), ("규칙", "rule_id"), ("이벤트", "event_ids"),
+        ("증거", "source_pointer"), ("근거", "rationale"),
+        ("권고", "recommended_action"),
+    )
+    rows = "".join(
+        "<tr>" + "".join(cell(label, f[key][0] if key == "event_ids" else f[key])
+                            for label, key in finding_fields) + "</tr>"
+        for f in report["findings"]
+    )
     if not rows:
         rows = "<tr><td colspan='6'>탐지된 규칙 위반 없음 (안전성 보증 아님)</td></tr>"
-    timeline = "".join("<tr>" + "".join(f"<td>{esc(event.get(k))}</td>" for k in
-               ("occurred_at_utc", "event_id", "agent_id", "run_id", "tool_name", "target", "destination_domain", "outcome", "source_pointer")) + "</tr>"
-               for event in sorted(report["events"], key=lambda e: (e["occurred_at_utc"], e["event_id"])))
+    timeline_fields = (
+        ("일시", "occurred_at_utc"), ("이벤트", "event_id"),
+        ("에이전트", "agent_id"), ("실행", "run_id"), ("도구", "tool_name"),
+        ("대상", "target"), ("목적지", "destination_domain"),
+        ("결과", "outcome"), ("증거 위치", "source_pointer"),
+    )
+    timeline = "".join(
+        "<tr>" + "".join(cell(label, event.get(key)) for label, key in timeline_fields) + "</tr>"
+        for event in sorted(report["events"], key=lambda e: (e["occurred_at_utc"], e["event_id"]))
+    )
     if not timeline:
         timeline = "<tr><td colspan='9'>입력된 이벤트 없음</td></tr>"
     limits = "".join(f"<li>{esc(x)}</li>" for x in report["coverage_limits"])
+    styles = (
+        "body{font-family:system-ui,sans-serif;margin:2rem;max-width:1200px;color:#152335}"
+        ".table-scroll{max-width:100%;overflow-x:auto}"
+        "table{border-collapse:collapse;width:100%}"
+        "th,td{border:1px solid #cad1da;padding:9px;text-align:left;vertical-align:top}"
+        "th{background:#e9eef5}li{margin:8px 0}"
+        "@media print{"
+        "@page{size:A4 portrait;margin:14mm}"
+        "body{margin:0;max-width:none;font-size:10pt}"
+        ".table-scroll{overflow:visible}"
+        "table,tbody{display:block;width:100%}thead{display:none}"
+        "tbody tr{display:block;border:1px solid #cad1da;margin:0 0 12px;break-inside:avoid}"
+        "tbody td{display:block;border:0;border-bottom:1px solid #e3e8ef;padding:5px 8px;overflow-wrap:anywhere}"
+        "tbody td:last-child{border-bottom:0}"
+        "tbody td[data-label]::before{content:attr(data-label) ': ';font-weight:700;color:#152335}"
+        "}"
+    )
     return ("<!doctype html><html lang='ko'><head><meta charset='utf-8'><title>SOVIA 감사 결과</title>"
-            "<style>body{font-family:system-ui,sans-serif;margin:2rem;max-width:1200px;color:#152335}table{border-collapse:collapse;width:100%}th,td{border:1px solid #cad1da;padding:9px;text-align:left;vertical-align:top}th{background:#e9eef5}li{margin:8px 0}</style></head><body>"
+            "<style>" + styles + "</style></head><body>"
             f"<h1>SOVIA Audit Lite</h1><p>엔진 {esc(report['engine_version'])} · 보고서 {esc(report['report_id'])}</p>"
             f"<p>검토 이벤트 {report['event_count']}건 · 위험 소견 {report['finding_count']}건</p>"
-            "<h2>탐지 결과</h2><table><thead><tr><th>등급</th><th>규칙</th><th>이벤트</th><th>증거</th><th>근거</th><th>권고</th></tr></thead><tbody>"
-            + rows + "</tbody></table><h2>이벤트 타임라인 (UTC)</h2><table><thead><tr><th>일시</th><th>이벤트</th><th>에이전트</th><th>실행</th><th>도구</th><th>대상</th><th>목적지</th><th>결과</th><th>증거 위치</th></tr></thead><tbody>"
-            + timeline + "</tbody></table><h2>관측 범위 및 미확인 사항</h2><ul>" + limits + "</ul>"
+            "<h2>탐지 결과</h2><div class='table-scroll'><table><thead><tr><th>등급</th><th>규칙</th><th>이벤트</th><th>증거</th><th>근거</th><th>권고</th></tr></thead><tbody>"
+            + rows + "</tbody></table></div><h2>이벤트 타임라인 (UTC)</h2><div class='table-scroll'><table><thead><tr><th>일시</th><th>이벤트</th><th>에이전트</th><th>실행</th><th>도구</th><th>대상</th><th>목적지</th><th>결과</th><th>증거 위치</th></tr></thead><tbody>"
+            + timeline + "</tbody></table></div><h2>관측 범위 및 미확인 사항</h2><ul>" + limits + "</ul>"
             "<p>합성 데이터용 사후 규칙 진단입니다. 침해 탐지·사고 부재·컴플라이언스를 보증하지 않습니다.</p></body></html>")
-
 
 FINDING_CSV_FIELDS = (
     "report_id", "finding_id", "rule_id", "rule_version", "severity",
