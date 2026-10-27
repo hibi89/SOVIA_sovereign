@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "kind": "sovia.safe_code_registry.v1",
+  "tool_codes": {
+    "approved_lookup": "tool.lookup",
+    "unauthorized_export": "tool.export"
+  },
+  "target_codes": {
+    "public_docs": "scope.public",
+    "client_records": "scope.sensitive"
+  }
+}
