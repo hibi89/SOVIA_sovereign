@@ -242,5 +242,89 @@ class DirectSanitizedAuditTests(unittest.TestCase):
         self.assertFalse(self.report.exists())
 
 
+
+class DirectAuditBudgetIntegrationTests(unittest.TestCase):
+    """P2 budget checks use actual sanitized contract + renderer, not mocks."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory(prefix="sovia-direct-budget-")
+        self.addCleanup(tmp.cleanup)
+        self.base = Path(tmp.name)
+        self.source = self.base / "source.json"
+        self.policy = self.base / "policy.json"
+        self.html = self.base / "new.html"
+        self.machine = self.base / "new.json"
+        self.source.write_bytes((ROOT / "examples/demo_n8n_sanitized.json").read_bytes())
+        self.policy.write_bytes((ROOT / "examples/demo_policy.json").read_bytes())
+
+    def run_direct(self, budget):
+        return direct.direct_audit(
+            self.source, self.policy, self.html, self.machine,
+            synthetic_only=True, local_test_budget_bytes=budget)
+
+    def test_optional_1mib_success_actual_bytes(self):
+        result = self.run_direct(1_048_576)
+        self.assertEqual(result["events"], 3)
+        self.assertEqual(result["findings"], 5)
+        self.assertEqual(result["local_test_budget_per_file_bytes"], 1_048_576)
+        self.assertTrue(result["best_effort_free_space_checked"])
+        self.assertEqual(result["html_bytes"], self.html.stat().st_size)
+        self.assertEqual(result["json_bytes"], self.machine.stat().st_size)
+        self.assertFalse(result["full_multi_file_transaction_guaranteed"])
+
+    def test_invalid_local_budget_fail_closed_before_outputs(self):
+        for budget in (True, 0, 1, 1_048_575, 3_000_000, -1, "1048576", 1.0):
+            with self.subTest(budget=budget), self.assertRaisesRegex(
+                    direct.DirectAuditError, "^INVALID_LOCAL_TEST_BUDGET$"):
+                self.run_direct(budget)
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.machine.exists())
+
+    def test_dense_sanitized_input_exceeds_budget_without_output(self):
+        document = json.loads(self.source.read_text(encoding="utf-8"))
+        base_step = document["steps"][2]
+        document["steps"] = [
+            dict(base_step, step_id=f"synthetic_{i}") for i in range(1000)
+        ]
+        self.source.write_text(json.dumps(document), encoding="utf-8")
+        with self.assertRaisesRegex(
+                direct.DirectAuditError, "^OUTPUT_EXCEEDS_SELECTED_LOCAL_TEST_BUDGET$"):
+            self.run_direct(1_048_576)
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.machine.exists())
+        self.assertEqual(list(self.base.glob(".sovia-staging-*")), [])
+
+    def test_free_space_shortage_denied_without_publishing(self):
+        import sovia_guarded_export as guard
+        from unittest.mock import Mock
+        with patch.object(guard.shutil, "disk_usage", return_value=Mock(free=0)):
+            with self.assertRaisesRegex(
+                    direct.DirectAuditError, "^OUTPUT_STORAGE_PREFLIGHT_FAILED$"):
+                self.run_direct(1_048_576)
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.machine.exists())
+
+    def test_free_space_query_failure_uses_generic_error(self):
+        import sovia_guarded_export as guard
+        with patch.object(guard.shutil, "disk_usage",
+                          side_effect=OSError("PRIVATE_STORED_LOCAL_PATH")):
+            with self.assertRaisesRegex(
+                    direct.DirectAuditError, "^OUTPUT_STORAGE_PREFLIGHT_FAILED$"):
+                self.run_direct(1_048_576)
+        self.assertFalse(self.html.exists())
+        self.assertFalse(self.machine.exists())
+
+    def test_optional_limit_cli_isolated_mode(self):
+        cmd = [sys.executable, "-I", "-B", str(ROOT / "sovia_n8n_direct_audit.py"),
+               "--input", str(self.source), "--policy", str(self.policy),
+               "--html-output", str(self.html), "--json-output", str(self.machine),
+               "--synthetic-only", "--local-test-budget-bytes", "1048576"]
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=25)
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+        result = json.loads(proc.stdout)
+        self.assertTrue(result["best_effort_free_space_checked"])
+        self.assertNotIn(str(self.base), proc.stdout)
+
+
 if __name__ == "__main__":
     unittest.main()
