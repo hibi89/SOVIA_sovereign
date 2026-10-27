@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic output size preflight / PR #33
+
+## 1. Goal, approved scope, stack
+SOVIA Audit Lite offline-first Python 3.11+ read-only 5-rule audit, Korean HTML and optional PDF, local SQLite/dashboard. New work is source-only synthetic report output budget preflight; no new customer quotas, real logs, API or deployment.
+
+## 2. Design, implemented features, decision
+Compared A) modify actual CLI+v0.10 ZIP immediately to enforce arbitrary limit (could break no-clobber/recovery or silently restrict customers), with B) offline source-only fixed-fabricated workload size gate that uses real parser+renderers (selected). Added `sovia_output_budget.py`, 16 tests in `tests/test_output_budget.py`, `SYNTHETIC_OUTPUT_BUDGET.md`. Checks fixed 10/100/500/1000 counts, normal/alert_dense profiles, hypothetical 1/2/4MiB per-file caps, actual HTML and indented JSON bytes. Metadata-only stdout, temporary fabricated input cleaned, no reports written.
+
+## 3. Test command, exact evidence, validation
+`python -m unittest discover -s tests -v`; `python -I -B sovia_output_budget.py --synthetic-only --events 1000 --profile alert_dense --budget-bytes 1048576`. [PR #33 CI 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308): Windows/Ubuntu x Python 3.11/3.13 **4/4 SUCCESS**, 648 tests discovered each, Windows 638 PASS/10 SKIP, Ubuntu 637 PASS/11 SKIP, zero failures. Existing extracted v0.10 portable smoke all PASS with original archive checksum `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. No actual owner computer or production verification.
+
+## 4. Done / pending / blocked
+DONE source-only new report-size classification (CLI exit 0 simulated within, 3 over, 2 invalid), full CI, integration to develop. PENDING real CLI enforcement, disk-full/atomic multi-output recovery, CSV/PDF bounds, actual Windows browser/PDF/Defender QA, actual authorized n8n version/data controller/privacy, paid release. Cloud/Private not started.
+
+## 5. Failure evidence, known limitations and no repeats
+No failures in PR #33 CI. Prior benchmark proved fabricated 1000 dense ~307KB input creates ~2.14MB compact JSON, while CLI indented output may be larger. Input 1MiB/1000-event caps are not output quotas. Preflight materializes report in memory and does not guard file-writing or prove available disk. Do not redo earlier PRs #16–#33 or claim commercial readiness.
+
+## 6. Repository, branch, SHA, key paths
+`hibi89/SOVIA_sovereign` **PUBLIC**; code `develop`, default `main` docs-only. [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`, verified feature SHA `37e4775a495ede6870c242087e987149beb39e30`; files as section 2. Docs follow-up may advance develop HEAD, verify before edits.
+
+## 7. Production, URL, run command, environment
+No Vercel, deployed production URL, signed release or commercial listing. The new module runs as source-only offline Python with no paid API. Existing 12-file unsigned portable beta was not altered. Output limits are **hypothetical test budgets**, not seller promises.
+
+## 8. Original files, backup, secrets, do-not-modify
+Original audit CLI, customer inputs (none used), existing SQLite, portable build and `main` unchanged. Merge parent is a rollback checkpoint, without force push. No secrets, private data, local machine paths, fonts or real artifacts committed; temp synthetic source deleted. Public repo visibility must not be changed without owner permission.
+
+## 9. Prioritized next action, completion criteria, approvals
+On next `ㄱ`: check current develop/docs CI then choose a distinct P2 step: optional output-writing guard with defined limits and tested low-disk/no-overwrite/recovery, or a buyer contract scope matrix. Actual customer limit enforcement, real n8n/API access, customer data, retention/deletion policy, payments, publication, access changes, production or signing need explicit owner approval. Owner physical Windows/Defender/browser/Korean PDF validation remains NOT_CHECKED.
+
+## 10. KST checkpoint and evidence basis
+2026-10-27 KST. Starting HEAD `a9cca597a30b4e49905461e7752adaa868be3fb7` had [push CI 40474364793](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40474364793) SUCCESS. PR test head `37e4775a495ede6870c242087e987149beb39e30` passed [4 jobs 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308); merged `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`. Docs head CI to verify after write; independent customer and owner acceptance not performed.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 bounded synthetic workload benchmark (10 sections)
 
 ## 1. Mission, approved scope and technical stack
