@@ -1,3 +1,37 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 PR #34 report publisher failure-safety integration (10 sections)
+
+## 1. Goals, confirmed scope, stack
+SOVIA Sovereign Audit Lite offline-first deterministic five-rule Python 3.11+ audit (JSON/CSV, Korean HTML/optional PDF, SQLite/history/dashboard). Active code `develop`; default `main` remains docs-only. Completed a P2 original-writer publication/rollback order safety fix with no external service, customer input, commercial quota or deployment. PR #35 optional guarded source export from another work session was already merged before this PR #34.
+
+## 2. Completed changes / alternatives / rationale
+Existing `sovia_audit.write_reports_atomically()` used to `os.link(staged, destination)` *before* `os.stat(staged)` was saved for rollback. An unexpected post-publication stat failure could leave an unregistered newly published report after error; invalid non-bytes payload also allocated a staging fd before rejection. Compared A: tests only (known defect persists), B: minimal ordering fix in core (selected), C: new transactional journaling (complex, no complete POSIX transaction guarantee). Now validates payload before `mkstemp`, obtains staged inode identity before `os.link`, preserving exclusive no-overwrite, `fsync`, best-effort inode-checked rollback. Ten synthetic adversarial tests in `tests/test_report_writer_faults.py`. Current source-only opt-in guarded export from PR #35 also uses the hardened core writer.
+
+## 3. Tests, counts, verified vs not verified
+[Feature CI 40478529065](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478529065) on PR #34 feature SHA `19da0d7919efb3b0708138f644afdd5a5fdd19e9`: **4/4 SUCCESS** Windows/Ubuntu x Python 3.11/3.13, 681 discovered tests/job, Windows 671 PASS/10 SKIP, Ubuntu 670 PASS/11 SKIP, **0 FAIL**. Extracted 12-file portable audit/SQLite/dashboard/backup/selfcheck smoke PASS all four. Prior generated ZIP SHA `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`, writer-hardened source ZIP SHA `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`, measured consistently Windows/Ubuntu and both Python versions. Both explicit hashes are pinned in source-only `sovia_owner_evidence.py`; unknown hash rejects. Post-merge combined PR #35+#34 and docs-only HEAD CI require separate checks.
+
+## 4. Done / progressing / pending / blocked
+DONE PR #34 code+test+merge, initial checksum regression resolved, old historical hash retained. DONE distinct PR #35 already on develop (optional source-only guarded HTML+JSON local export). PENDING standalone physical owner PC Windows/browser/Defender/Korean font/PDF, real sanctioned n8n source/version/privacy/PII and data controller authorization, legally approved retention/support and commercial signing/listing. Filesystem multi-file rollback is still **best-effort**, not atomic for concurrent readers/power failure.
+
+## 5. Failures, evidence, root cause and retry guidance
+Initial PR #34 run 40477881434 failed because legacy owner-evidence unit tests intentionally required the old fixed ZIP hash while `sovia_audit.py` was changed; not evidence of a broken audit rule. A diagnostic 40478291808 measured new deterministic SHA `68c05795...` on Ubuntu and Windows, then was removed. Minimum scoped correction: immutable allowlist containing historical+new SHA and update test expectations/documentation. Full rerun 40478529065 **4/4 successful**; do not repeat diagnostic, remove hash pin, relax it to arbitrary input, force push, or publish these unsigned betas as signed releases. No real-data failure evidence.
+
+## 6. Repository, branch, SHA, paths
+GitHub PUBLIC `hibi89/SOVIA_sovereign`. PR #34 tested feature head `19da0d7919efb3b0708138f644afdd5a5fdd19e9`; [PR #34](https://github.com/hibi89/SOVIA_sovereign/pull/34) merged on develop commit `60f9bc8cfb95012428f36064f0c29c1a54c93a40`. Earlier parallel [PR #35](https://github.com/hibi89/SOVIA_sovereign/pull/35) merged `9d27e3468eb555ed72dfd2229cf414fbe674ebf1`. Changed `sovia_audit.py`, `sovia_owner_evidence.py`, `tests/test_report_writer_faults.py`, `tests/test_owner_evidence.py`, `REPORT_WRITER_FAULT_SAFETY.md`, `OWNER_EVIDENCE_CHECKER.md`. Updated handoff docs may advance HEAD; compare latest ref before edits.
+
+## 7. Production, URL, run commands, cost
+No deployed production URL, Vercel deployment, signed Release or sale; not applicable. Run `python -m unittest discover -s tests -v`, `python portable_smoke.py`. The source-only guarded CLI from parallel PR #35 can be invoked as `python -I -B sovia_guarded_export.py --input examples/demo_five_rules.json --html-output NEW.html --json-output NEW.json --local-test-budget-bytes 1048576`; not part of the historical ZIP or a customer quota. Stdlib only for core; no paid APIs or telemetry.
+
+## 8. Original data, backups, auth, prohibited changes
+No original user/customer records, SQLite databases, protected docs, API tokens, owner-device paths or secret values introduced. Original pre-change GitHub commit `6b858d8b75fc2b01b4161b7990943575cf11c0bb` and prior unsigned 12-file archive act as preservation/rollback references; do not silently roll back concurrent PR #35. Both archive hashes remain documented and strict. Repository access/visibility settings untouched; public repository demands synthetic only.
+
+## 9. Priorities, next steps, approvals
+On next `ㄱ`: verify current HEAD and combined 4-job CI, close remaining synthetic output recovery edge cases without redefining quotas, confirm source-only guarded CLI uses hardened writer, and prioritize actual owner Windows acceptance/authorized n8n privacy source gates. Avoid redoing #16–#35 and overwriting concurrent commits. Do not start external API/customer data processing, destructive retention, release, deployment, commercial listing, price/quota promises or permission/security changes without explicit approval. Success for P2 shipment requires owner-device real tests + clear data and support scope, not only CI.
+
+## 10. KST update / verification evidence
+2026-10-27 KST; feature verified SHA `19da0d7919efb3b0708138f644afdd5a5fdd19e9` via [run 40478529065](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40478529065), 4 jobs 681 tests each 0 failures. Merge SHA `60f9bc8cfb95012428f36064f0c29c1a54c93a40` confirmed; post-merge combined code CI and latest docs HEAD to verify. Actual owner hardware/customer/prod remains NOT VERIFIED.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 guarded local export / PR #35 (10 required sections)
 
 ## 1. Mission, confirmed requirements, technology
