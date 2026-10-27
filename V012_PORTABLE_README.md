@@ -2,7 +2,7 @@
 
 NOT signed, customer-released, privacy-certified, native n8n-integrated, or production deployed.
 
-New ten-member ZIP: version 0.12.0-beta, format SOVIA_PORTABLE_V012_V1, fixed prefix SOVIA-V012/, new verifier and detached SHA-256 transport checksum. Neither checksum nor manifest proves publisher identity. Old v0.10/v0.11.2 binaries, source and hash baselines stay unchanged.
+New thirteen-member ZIP: version 0.12.0-beta, format SOVIA_PORTABLE_V012_V1, fixed prefix SOVIA-V012/, new verifier and detached SHA-256 transport checksum. Neither checksum nor manifest proves publisher identity. Old v0.10/v0.11.2 binaries, source and hash baselines stay unchanged.
 
 Use ONLY sovia_audit_v012.py for corrected fractional UTC BURST_TOOLS findings. The packaged legacy sovia_audit.py is an unchanged strict validation dependency and retains its historical bug; it must not be advertised as corrected. The source-only printable preview uses the new candidate.
 
@@ -13,11 +13,17 @@ Python 3.11+ standard library, trusted source checkout. Prepare dist and use fre
     python -I -B build_portable_v012.py --output dist/SOVIA-Audit-Lite-0.12.0-beta.zip
     python -I -B verify_portable_v012.py --archive dist/SOVIA-Audit-Lite-0.12.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.12.0-beta.zip.sha256 --extract-to NEW-V012
 
-The NEW-V012 extraction root contains the ten member files directly. From inside it, run the **one-command minimum working unit** into a NEW directory OUTSIDE the install folder (Python 3.11+ stdlib, no web UI required):
+The NEW-V012 extraction root contains the thirteen member files directly. From inside it, run the **one-command minimum working unit** into a NEW directory OUTSIDE the install folder (Python 3.11+ stdlib, no web UI required):
 
     python -I -B sovia_mvp_v012.py --input examples/demo_five_rules.json --output-dir ../sovia-mvp-output --synthetic-only
 
 Three files appear in the new folder: `report.html` (basic front end), `report.json` (structured audit result), `history.sqlite3` (versioned metadata ledger). The five-rule fixture yields three events and five findings. Reuse neither output folder nor existing files; the tool never overwrites. An interrupted run can leave an incomplete *new* output folder; rerun using a different new folder. `--synthetic-only` is an unverified claim, NOT authorization to load real customer data.
+
+**P2 synthetic n8n metadata contract (not native n8n support):** The same single command accepts the bundled fabricated, already-sanitized `sovia.n8n_sanitized.v1` fixture with a separately supplied allowlisted policy. This converts strictly checked metadata into canonical SOVIA events in an ephemeral local staging folder and then uses the corrected v0.12 engine and history ledger:
+
+    python -I -B sovia_mvp_v012.py --source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../sovia-n8n-demo --synthetic-only
+
+The output inventory is the same three files (`report.html`, `report.json`, `history.sqlite3`), with no canonical intermediary in final output. Temporary canonical staging is not securely erased and OS/filesystem traces may remain; do not pass original live n8n logs, tokens or customer data. This does not validate an installed n8n version, upstream redaction, provenance or customer authorization. The `--source-format n8n-sanitized` flag requires `--policy`; canonical mode explicitly rejects it. Inputs are never overwritten.
 
 Individual expert CLI commands still work for debugging and backups:
 

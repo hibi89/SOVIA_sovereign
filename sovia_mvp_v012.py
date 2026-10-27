@@ -35,7 +35,8 @@ def _module(filename, alias):
     return module
 
 
-def run(input_path, output_dir, *, synthetic_only=False):
+def run(input_path, output_dir, *, synthetic_only=False,
+        source_format="canonical", policy_path=None):
     """Preflight/run wholly in a staging directory, then publish fresh files.
 
     Directory and output files are individually exclusive, not a transaction
@@ -44,6 +45,10 @@ def run(input_path, output_dir, *, synthetic_only=False):
     """
     if synthetic_only is not True:
         raise MVPError("SYNTHETIC_ACK_REQUIRED")
+    if source_format not in ("canonical", "n8n-sanitized"):
+        raise MVPError("SOURCE_FORMAT_UNSUPPORTED")
+    if (source_format == "n8n-sanitized") != (policy_path is not None):
+        raise MVPError("POLICY_REQUIRED_ONLY_FOR_N8N")
     source = Path(os.path.abspath(input_path))
     target = Path(os.path.abspath(output_dir))
     if (not source.is_file() or source.is_symlink() or
@@ -55,6 +60,14 @@ def run(input_path, output_dir, *, synthetic_only=False):
         raise MVPError("OUTPUT_EXISTS")
     if source.resolve() == target.resolve():
         raise MVPError("PATH_COLLISION")
+    policy = None
+    if policy_path is not None:
+        policy = Path(os.path.abspath(policy_path))
+        if (policy.is_symlink() or not policy.is_file() or
+                policy.suffix.lower() != ".json"):
+            raise MVPError("INVALID_POLICY_SOURCE")
+        if policy.resolve() == source.resolve():
+            raise MVPError("SOURCE_POLICY_COLLISION")
     created = False
     published = []
     try:
@@ -64,10 +77,31 @@ def run(input_path, output_dir, *, synthetic_only=False):
             stage = Path(temp)
             engine = _module("sovia_audit_v012.py", "_sovia_mvp_engine")
             history = _module("sovia_history_v012.py", "_sovia_mvp_history")
+            selected_input = source
+            if source_format == "n8n-sanitized":
+                # Only pre-sanitized fabricated n8n-like metadata. This is NOT
+                # an API client, raw execution importer or proof of consent.
+                core = _module("sovia_audit.py", "_sovia_mvp_n8n_reader")
+                pii = _module("sovia_pii_preflight.py", "_sovia_mvp_n8n_pii")
+                adapter = _module("sovia_n8n_sanitized.py", "_sovia_mvp_n8n_adapter")
+                source_document = core.read_document(source)
+                policy_document = core.read_document(policy)
+                pii.assert_no_high_risk_patterns(source_document, policy_document)
+                canonical = adapter.convert(source_document, policy_document)
+                # Keep the intermediate canonical representation confined to
+                # a temporary private working folder; nothing is published
+                # except the three fixed final artifacts. This is not secure
+                # erase; abrupt termination can leave temporary disk traces.
+                selected_input = stage / "_temporary_canonical.json"
+                core.write_reports_atomically([(
+                    selected_input,
+                    json.dumps(canonical, ensure_ascii=False, sort_keys=True,
+                               separators=(",", ":"), allow_nan=False),
+                )])
             report = engine.run_synthetic(
-                source, stage / OUTPUTS[0], stage / OUTPUTS[1]
+                selected_input, stage / OUTPUTS[0], stage / OUTPUTS[1]
             )
-            entry = history.import_synthetic(stage / OUTPUTS[2], source)
+            entry = history.import_synthetic(stage / OUTPUTS[2], selected_input)
             if entry["status"] != "imported":
                 raise MVPError("HISTORY_IMPORT_INCOMPLETE")
             if any(not (stage / name).is_file() for name in OUTPUTS):
@@ -88,6 +122,7 @@ def run(input_path, output_dir, *, synthetic_only=False):
                 "findings": report["findings"],
                 "history_schema_version": history.SCHEMA_VERSION,
                 "files": list(OUTPUTS),
+                "source_format": source_format,
                 "real_n8n_verified": False,
                 "customer_release_approved": False,
             }
@@ -113,12 +148,16 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="SOVIA v0.12 offline synthetic-only one-command MVP"
     )
-    parser.add_argument("--input", required=True, help="canonical synthetic JSON")
+    parser.add_argument("--input", required=True, help="synthetic canonical or pre-sanitized n8n-like JSON")
+    parser.add_argument("--source-format", choices=("canonical", "n8n-sanitized"),
+                        default="canonical")
+    parser.add_argument("--policy", help="required for n8n-sanitized, forbidden for canonical")
     parser.add_argument("--output-dir", required=True, help="brand NEW directory")
     parser.add_argument("--synthetic-only", action="store_true")
     args = parser.parse_args(argv)
     try:
-        result = run(args.input, args.output_dir, synthetic_only=args.synthetic_only)
+        result = run(args.input, args.output_dir, synthetic_only=args.synthetic_only,
+                     source_format=args.source_format, policy_path=args.policy)
     except (MVPError, OSError, ValueError, TypeError, RecursionError) as exc:
         code = str(exc) if isinstance(exc, MVPError) else "MVP_REJECTED"
         print(json.dumps({"status": "REJECTED", "error_code": code}), file=sys.stderr)

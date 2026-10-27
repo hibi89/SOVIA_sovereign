@@ -28,10 +28,10 @@ class V012PortableTests(unittest.TestCase):
     def create(self):
         return build.build(self.zip)
 
-    def test_ten_files_manifest_prefix_and_deterministic_bytes(self):
+    def test_thirteen_files_manifest_prefix_and_deterministic_bytes(self):
         a=build.package_bytes()
         self.assertEqual(a,build.package_bytes())
-        self.assertEqual(10,len(verify.FILES))
+        self.assertEqual(13,len(verify.FILES))
         self.assertEqual("0.12.0-beta",verify.VERSION)
         self.assertEqual("SOVIA-V012/",verify.PREFIX)
         with zipfile.ZipFile(self._bytesio(a)) as z:
@@ -51,9 +51,9 @@ class V012PortableTests(unittest.TestCase):
     def test_fixed_zip_sha_and_exact_fresh_install(self):
         result=self.create()
         self.assertEqual(result["sha256"],hashlib.sha256(self.zip.read_bytes()).hexdigest())
-        self.assertEqual(10,verify.verify_archive(self.zip,self.sha)["files"])
+        self.assertEqual(13,verify.verify_archive(self.zip,self.sha)["files"])
         verify.extract_verified(self.zip,self.install,self.sha)
-        self.assertEqual(10,verify.verify_directory(self.install)["files"])
+        self.assertEqual(13,verify.verify_directory(self.install)["files"])
 
     def test_old_v011_verifier_does_not_accept_new_candidate(self):
         self.create()
@@ -96,7 +96,7 @@ class V012PortableTests(unittest.TestCase):
                              "--directory",str(self.install)],
                             capture_output=True,text=True,timeout=30)
         self.assertEqual(0,proc.returncode,proc.stderr)
-        self.assertEqual(10,json.loads(proc.stdout)["files"])
+        self.assertEqual(13,json.loads(proc.stdout)["files"])
 
     def test_extracted_full_synthetic_smoke(self):
         from portable_smoke_v012 import smoke
