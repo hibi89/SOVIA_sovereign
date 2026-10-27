@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Compile source/tests
-        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py owner_selfcheck.py sovia_capacity_benchmark.py tests
+        run: python -m compileall -q sovia_audit.py sovia_csv_input.py sovia_pdf.py sovia_history.py sovia_dashboard.py build_portable.py verify_portable.py portable_smoke.py owner_selfcheck.py sovia_capacity_benchmark.py build_portable_p2.py verify_portable_p2.py owner_p2_selfcheck.py portable_smoke_p2.py sovia_n8n_direct_audit.py sovia_n8n_sanitized.py sovia_guarded_export.py sovia_ephemeral_diagnostic.py tests
       - name: Run stdlib regression (optional PDF cases may skip)
         run: python -m unittest discover -s tests -v
 
@@ -32,6 +32,24 @@ jobs:
 
       - name: Verify extracted beta ZIP end-to-end (isolated Python)
         run: python portable_smoke.py
+      - name: Verify extracted v0.11 P2 candidate end-to-end (isolated Python)
+        run: python portable_smoke_p2.py
+      - name: Build distinct downloadable v0.11 P2 candidate
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: |
+          python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
+          python -I -B build_portable_p2.py --output dist/SOVIA-Audit-Lite-0.11.0-beta.zip
+          python -I -B verify_portable_p2.py --archive dist/SOVIA-Audit-Lite-0.11.0-beta.zip --sha256-file dist/SOVIA-Audit-Lite-0.11.0-beta.zip.sha256
+      - name: Publish distinct v0.11 P2 CI artifact (NOT a release)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovia-portable-p2-beta
+          path: |
+            dist/SOVIA-Audit-Lite-0.11.0-beta.zip
+            dist/SOVIA-Audit-Lite-0.11.0-beta.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
       - name: Build downloadable synthetic portable beta
         if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: |
