@@ -1,3 +1,6 @@
+## LATEST SOVIA WORK (PR #38 — read first, 2026-10-27)
+**Read [LATEST_HANDOFF.md](LATEST_HANDOFF.md) before archived HANDOFF/STATUS/RESUME**. PR #38 was merged to develop at `19d715062787bacbf24e6e3b1e8ebdf1501dad5f`; [Actions 40482664680](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40482664680) 4/4 green, 732 tests/job, unchanged old v0.10 12-file ZIP hash. Source-only direct audit optional output budget and portable artifact publisher rollback were fixed. Continue next with separately versioned clean-install P2 beta; no customer data, sale, access/visibility changes or production approval. Historical handoff docs are preserved, not current PR #38. Always verify latest SHA and current CI.
+
 # SOVIA operating instructions
 Updated: 2026-10-26 KST
 
