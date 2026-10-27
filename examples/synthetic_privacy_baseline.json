@@ -1,0 +1,51 @@
+{
+  "schema_version": "sovia.privacy_triage.v1",
+  "synthetic_only": true,
+  "cases": [
+    {
+      "case_id": "short-tool",
+      "specimen": "tool.lookup",
+      "expected_reject": false
+    },
+    {
+      "case_id": "short-scope",
+      "specimen": "scope.internal",
+      "expected_reject": false
+    },
+    {
+      "case_id": "approved-host",
+      "specimen": "internal.example",
+      "expected_reject": false
+    },
+    {
+      "case_id": "mock-email",
+      "specimen": "user@example.com",
+      "expected_reject": true
+    },
+    {
+      "case_id": "mock-mobile",
+      "specimen": "010-1234-5678",
+      "expected_reject": true
+    },
+    {
+      "case_id": "mock-resident-shape",
+      "specimen": "000000-1000000",
+      "expected_reject": true
+    },
+    {
+      "case_id": "mock-ip",
+      "specimen": "10.0.0.5",
+      "expected_reject": true
+    },
+    {
+      "case_id": "mock-uuid",
+      "specimen": "123e4567-e89b-12d3-a456-426614174000",
+      "expected_reject": true
+    },
+    {
+      "case_id": "mock-token",
+      "specimen": "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "expected_reject": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": "sovia.privacy_triage.v1",
+  "synthetic_only": true,
+  "cases": [
+    {
+      "case_id": "fp-internal-ip",
+      "specimen": "10.0.0.5",
+      "expected_reject": false
+    },
+    {
+      "case_id": "fn-semantic-label",
+      "specimen": "reviewed_personal_name_placeholder",
+      "expected_reject": true
+    },
+    {
+      "case_id": "tn-generic-code",
+      "specimen": "tool.lookup",
+      "expected_reject": false
+    }
+  ]
+}
