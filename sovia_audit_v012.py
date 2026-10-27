@@ -80,6 +80,59 @@ def evaluate(document, *, legacy_audit=None):
     report["engine_version"] = VERSION
     return report
 
+
+def write_synthetic_document(document, html_output, json_output, *, legacy_audit=None):
+    """Render already-parsed synthetic metadata without a canonical JSON input file.
+
+    Preserves the same heuristic PII screen, four existing rules plus corrected
+    BURST_TOOLS, per-output budget and exclusive report writer as run_synthetic.
+    Used by the offline n8n-like adapter; no upstream source authority implied.
+    """
+    targets = (Path(os.path.abspath(html_output)),
+               Path(os.path.abspath(json_output)))
+    if len({path.resolve() for path in targets}) != 2:
+        raise CandidateError("PATH_COLLISION")
+    if any(path.exists() or path.is_symlink() for path in targets):
+        raise CandidateError("OUTPUT_EXISTS")
+    if any(not path.parent.is_dir() for path in targets):
+        raise CandidateError("OUTPUT_PARENT_MISSING")
+    core = legacy_audit if legacy_audit is not None else _sibling(
+        "sovia_audit.py", "_sovia_v012_memory_reader"
+    )
+    try:
+        _sibling("sovia_pii_preflight.py", "_sovia_v012_memory_pii").assert_no_high_risk_patterns(
+            document
+        )
+        result = evaluate(document, legacy_audit=core)
+        data = (
+            _sibling("sovia_report_print_preview.py", "_sovia_v012_memory_view")
+            .render(result).encode("utf-8"),
+            json.dumps(result, ensure_ascii=False, sort_keys=True,
+                       indent=2, allow_nan=False).encode("utf-8"),
+        )
+        if any(len(payload) > MAX_OUTPUT_BYTES for payload in data):
+            raise CandidateError("OUTPUT_LIMIT")
+        if any(path.exists() or path.is_symlink() for path in targets):
+            raise CandidateError("OUTPUT_EXISTS")
+        if len({path.resolve() for path in targets}) != 2:
+            raise CandidateError("PATH_COLLISION")
+        core.write_reports_atomically(list(zip(targets, data)))
+    except CandidateError:
+        raise
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError,
+            OverflowError, RecursionError) as exc:
+        raise CandidateError("INPUT_OR_OUTPUT_REJECTED") from exc
+    return {
+        "status": "SYNTHETIC_V012_TEMPORAL_PREVIEW",
+        "engine_version": VERSION,
+        "events": result["event_count"],
+        "findings": result["finding_count"],
+        "historic_zip_modified": False,
+        "legacy_history_compatible": False,
+        "genuine_n8n_verified": False,
+        "commercial_release_approved": False,
+    }
+
 def run_synthetic(input_path, html_output, json_output):
     source = Path(os.path.abspath(input_path))
     targets = (Path(os.path.abspath(html_output)), Path(os.path.abspath(json_output)))

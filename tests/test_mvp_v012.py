@@ -1,16 +1,20 @@
 """Single-command v0.12 MVP regression: real offline engine/report/ledger path."""
 from __future__ import annotations
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import sovia_mvp_v012 as mvp
 import sovia_history_v012 as history
+import sovia_audit_v012 as engine
+import sovia_audit as core_audit
 
 GOLDEN = ROOT / "examples" / "demo_five_rules.json"
 BOUNDARY = ROOT / "examples" / "demo_temporal_boundary.json"
@@ -82,6 +86,78 @@ class MVPV012Tests(unittest.TestCase):
         self.assertEqual((1, 5), (status["reports"], status["finding_count_total"]))
         self.assertFalse(result["real_n8n_verified"])
         self.assertFalse(result["customer_release_approved"])
+
+    def test_n8n_never_writes_intermediate_canonical_even_in_staging(self):
+        # Old implementation published _temporary_canonical.json under a
+        # temporary folder. Track every hardlink destination, not just final
+        # output files, to prove the new pipeline never materializes it.
+        destinations = []
+        original_link = os.link
+
+        def recorded_link(source, destination, *args, **kwargs):
+            destinations.append(Path(destination).name)
+            return original_link(source, destination, *args, **kwargs)
+
+        with patch("sovia_mvp_v012.os.link", side_effect=recorded_link):
+            result = mvp.run(
+                N8N, self.target, synthetic_only=True,
+                source_format="n8n-sanitized", policy_path=POLICY
+            )
+        self.assertEqual((3, 5), (result["events"], result["findings"]))
+        self.assertEqual(set(mvp.OUTPUTS), set(destinations))
+        self.assertNotIn("_temporary_canonical.json", destinations)
+
+    def test_in_memory_evaluation_matches_file_based_engine_findings(self):
+        document = core_audit.read_document(GOLDEN)
+        memory_root = self.root / "memory"
+        memory_root.mkdir()
+        file_root = self.root / "file"
+        file_root.mkdir()
+        in_memory = engine.write_synthetic_document(
+            document, memory_root / "report.html", memory_root / "report.json",
+            legacy_audit=core_audit
+        )
+        via_file = engine.run_synthetic(
+            GOLDEN, file_root / "report.html", file_root / "report.json"
+        )
+        self.assertEqual(in_memory["events"], via_file["events"])
+        self.assertEqual(in_memory["findings"], via_file["findings"])
+        memory_report = json.loads((memory_root / "report.json").read_text("utf-8"))
+        file_report = json.loads((file_root / "report.json").read_text("utf-8"))
+        self.assertEqual(memory_report, file_report)
+        self.assertEqual(3, memory_report["event_count"])
+        self.assertEqual(5, memory_report["finding_count"])
+        self.assertEqual(
+            (memory_root / "report.html").read_bytes(),
+            (file_root / "report.html").read_bytes()
+        )
+        self.assertFalse((memory_root / "_temporary_canonical.json").exists())
+
+    def test_in_memory_history_matches_path_based_result_and_no_raw_content(self):
+        document = core_audit.read_document(GOLDEN)
+        memory_db = self.root / "memory.sqlite3"
+        result = history.import_synthetic_document(
+            memory_db, document, legacy_audit=core_audit
+        )
+        self.assertEqual("imported", result["status"])
+        self.assertEqual(
+            "already_present",
+            history.import_synthetic(memory_db, GOLDEN)["status"]
+        )
+        self.assertEqual((1, 3, 5), (
+            history.status(memory_db)["reports"],
+            history.status(memory_db)["event_count_total"],
+            history.status(memory_db)["finding_count_total"],
+        ))
+        self.assertNotIn(b"client_records", memory_db.read_bytes())
+
+    def test_in_memory_history_refuses_recognizable_private_metadata(self):
+        document = core_audit.read_document(GOLDEN)
+        document["events"][0]["agent_id"] = "user@example.com"
+        db = self.root / "denied.sqlite3"
+        with self.assertRaises(ValueError):
+            history.import_synthetic_document(db, document)
+        self.assertFalse(db.exists())
 
     def test_n8n_rejects_missing_policy_without_publishing(self):
         with self.assertRaisesRegex(mvp.MVPError, "POLICY_REQUIRED_ONLY_FOR_N8N"):

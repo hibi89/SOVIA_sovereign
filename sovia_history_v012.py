@@ -168,17 +168,36 @@ def _insert(db, report):
 
 
 def import_synthetic(db_path, input_path):
-    """Never accept live data, v1 DBs, or implicit conversion."""
+    """Existing JSON-path API, synthetic only, no v1 DB migrations."""
     target = _destination(db_path)
     source = Path(os.path.abspath(input_path))
     if source.is_symlink() or not source.is_file() or target.resolve() == source.resolve():
         raise HistoryV012Error("INVALID_SOURCE_OR_ALIAS")
     core = _sibling("sovia_audit.py", "_sovia_h012_reader")
     document = core.read_document(source)
-    _sibling("sovia_pii_preflight.py", "_sovia_h012_pii").assert_no_high_risk_patterns(document)
-    report = _sibling("sovia_audit_v012.py", "_sovia_h012_engine").evaluate(
+    return import_synthetic_document(target, document, legacy_audit=core)
+
+
+def import_synthetic_document(db_path, document, *, legacy_audit=None):
+    """Import metadata hashes from an in-memory synthetic canonical document.
+
+    Re-evaluate and screen the supplied source in memory; never accept a
+    caller-provided report/finding digest as a substitute for the audit.
+    """
+    target = _destination(db_path)
+    core = legacy_audit if legacy_audit is not None else _sibling(
+        "sovia_audit.py", "_sovia_h012_memory_reader"
+    )
+    _sibling("sovia_pii_preflight.py", "_sovia_h012_memory_pii").assert_no_high_risk_patterns(
+        document
+    )
+    report = _sibling("sovia_audit_v012.py", "_sovia_h012_memory_engine").evaluate(
         document, legacy_audit=core
     )
+    return _save_report(target, report)
+
+
+def _save_report(target, report):
     if target.exists():
         db = _connect(_existing(target))
         try:
