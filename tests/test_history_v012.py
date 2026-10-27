@@ -149,6 +149,50 @@ class HistoryV012Tests(unittest.TestCase):
             h.import_synthetic(self.db,SAMPLE)
         self.assertEqual(1,h.status(self.db)["reports"])
 
+    def test_changed_persisted_event_or_finding_counts_refused_on_reimport(self):
+        for field in ("event_count", "finding_count"):
+            with self.subTest(field=field):
+                dbpath = self.root / (field + ".sqlite3")
+                h.import_synthetic(dbpath, SAMPLE)
+                with closing(sqlite3.connect(dbpath)) as db:
+                    db.execute(f"UPDATE reports SET {field}={field}+1")
+                    db.commit()
+                with closing(sqlite3.connect(dbpath)) as db:
+                    before = db.execute(
+                        "SELECT report_uid, event_count, finding_count FROM reports"
+                    ).fetchone()
+                with self.assertRaisesRegex(
+                    h.HistoryV012Error, "VERSIONED_RESULT_CONFLICT"
+                ):
+                    h.import_synthetic(dbpath, SAMPLE)
+                with closing(sqlite3.connect(dbpath)) as db:
+                    after = db.execute(
+                        "SELECT report_uid, event_count, finding_count FROM reports"
+                    ).fetchone()
+                self.assertEqual(before, after)
+
+    def test_changed_persisted_identity_columns_refused_on_reimport(self):
+        for field in ("source_report_id", "engine_version", "source_digest"):
+            with self.subTest(field=field):
+                dbpath = self.root / (field + ".sqlite3")
+                h.import_synthetic(dbpath, SAMPLE)
+                with closing(sqlite3.connect(dbpath)) as db:
+                    db.execute(
+                        f"UPDATE reports SET {field}=?",
+                        ("tampered-local-metadata",),
+                    )
+                    db.commit()
+                with self.assertRaisesRegex(
+                    h.HistoryV012Error, "VERSIONED_RESULT_CONFLICT"
+                ):
+                    h.import_synthetic(dbpath, SAMPLE)
+                with closing(sqlite3.connect(dbpath)) as db:
+                    self.assertEqual(
+                        "tampered-local-metadata",
+                        db.execute(f"SELECT {field} FROM reports").fetchone()[0],
+                    )
+
+
 
 if __name__=="__main__":
     unittest.main()
