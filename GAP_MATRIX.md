@@ -1,3 +1,9 @@
+## 2026-10-27 P2 Windows reparse point scan gate
+
+**DONE_VERIFIED synthetic CI:** separate retention metadata inventory now rejects root and skips child NTFS reparse-point markers, preventing normal traversal of simulated junction/file/mount entries while retaining 1-pass category thresholds. [PR #44](https://github.com/hibi89/SOVIA_sovereign/pull/44) merged, 4/4 OS/Python CI success 757 tests/job, portable v0.10 and v0.11.2 ZIP smoke untouched. **PARTIAL_NOT_CERTIFIED:** Actual Windows junctions on owner device, concurrent path swaps (TOCTOU), native n8n supported source and consent, real PII sanitization, browser/Defender/PDF acceptance, legal retention/contract/signing/commercial release. No legal deletion permission created.
+
+---
+
 ## 2026-10-27 P2 retention review performance — feature candidate, not a commercial gate completion
 
 Offline read-only artifact retention policy previously scanned five times at distinct category thresholds. Source-only feature `feature/p2-retention-single-pass` permits one category-threshold scan, retains original single-threshold inventory and unchanged packaging/source checksums. Directories may still change during the scan, mtime is not legal retention start, hold/backup declarations remain unverified and deletion remains forbidden. Synthetic cross-check to legacy counts and OS/Python CI are required before integration. Owner Windows/manual, authorized native n8n and privacy, support/legal obligations, signing and sale approval remain OPEN.
