@@ -1,4 +1,4 @@
-# SOVIA Audit Lite v0.11.1-beta — P2 offline portable CANDIDATE
+# SOVIA Audit Lite v0.11.2-beta — P2 offline portable CANDIDATE
 
 **Not signed. Not a customer release, security certification, native n8n integration, or production distribution.** This candidate packages already-developed P2 opt-in source tools in a separately versioned strict allowlist ZIP. v0.10 remains unchanged. No phone-home, service daemon, installer, credentials, source customer logs, or extra files.
 
@@ -13,8 +13,8 @@ Python **3.11+** required (stdlib flows need no pip or internet). ReportLab plus
 Create the target `dist` folder in advance. Use fresh filenames; existing artifacts are never overwritten.
 
 ```powershell
-py -3 -I -B build_portable_p2.py --output dist\SOVIA-Audit-Lite-0.11.1-beta.zip
-py -3 -I -B verify_portable_p2.py --archive dist\SOVIA-Audit-Lite-0.11.1-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.11.1-beta.zip.sha256 --extract-to NEW-SOVIA-P2-INSTALL
+py -3 -I -B build_portable_p2.py --output dist\SOVIA-Audit-Lite-0.11.2-beta.zip
+py -3 -I -B verify_portable_p2.py --archive dist\SOVIA-Audit-Lite-0.11.2-beta.zip --sha256-file dist\SOVIA-Audit-Lite-0.11.2-beta.zip.sha256 --extract-to NEW-SOVIA-P2-INSTALL
 ```
 
 **Provenance warning:** SHA256 plus manifest check detect accidental/unauthorized changes relative to the trusted expected value; if both archive and checksum are replaced, a detached checksum does *not* prove publisher identity. No digital signature or Windows SmartScreen approval is claimed.
