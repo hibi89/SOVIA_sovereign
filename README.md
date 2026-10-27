@@ -1,5 +1,12 @@
 # SOVIA Sovereign — local-first AI agent evidence audit
 
+## 2026-10-28 P2 data minimization — no intermediate canonical JSON (PR #61)
+
+[PR #61](https://github.com/hibi89/SOVIA_sovereign/pull/61) merged into `develop` at `e738f818f52c056f31aff9c88948b4269cba29bf`. The fabricated, pre-sanitized n8n-like one-command flow now converts to the canonical event document **in memory** and passes it directly to v0.12 report generation and SQLite v2 history. It **no longer creates `_temporary_canonical.json` on disk**, including in the private temporary directory. The same three final outputs intentionally persist: `report.html`, `report.json`, `history.sqlite3`. [CI #40532162423](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40532162423): Windows/Ubuntu × Python 3.11/3.13 4/4 PASS, 851 discovered/job, zero failures, separate 13-file ZIP isolated smoke. Beta ZIP SHA256 `11a63ad14c6d6f55cd041893f84348974223f24c8678c0582ef1f10a3b7ec602`; prior beta hashes are historical, not signatures. No real n8n API, true source authority, PII certification, physical owner Windows approval, customer sale or deployment.
+
+---
+
+
 ## 2026-10-28 accelerated P2: one-command synthetic n8n-like metadata accepted
 
 [PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) merged into active `develop`, code SHA `58281a01a6067e4787a0ce5c47dc5b65f62f6776`. In addition to prior canonical synthetic JSON, the existing v0.12 one-command CLI supports the strict already-sanitized, fabricated `sovia.n8n_sanitized.v1` envelope plus separate policy. Python 3.11+ stdlib, offline, no UI/dependency install:
@@ -8,7 +15,7 @@
 python -I -B sovia_mvp_v012.py --source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../n8n-demo-output --synthetic-only
 ```
 
-Three output files: HTML report, JSON report, SQLite v2 metadata history; 3 synthetic events/5 findings. Corrected v0.12 UTC rules and heuristic metadata/PII checks remain active; no original raw execution body or secret field accepted, intermediate canonical file staged temporarily and not published. [PR CI #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186) Windows/Ubuntu × Python3.11/3.13 4/4 SUCCESS, 847 tests discovered per job, zero failures; separately packaged 13-file v0.12 ZIP smoke succeeded. This is **NOT** native n8n execution/API integration, actual version proof, source authorization, full PII clearance or a commercial release; no real customer data. See [MVP_20261028_RUNBOOK.md](MVP_20261028_RUNBOOK.md) and [HANDOFF.md](HANDOFF.md).
+Three output files: HTML report, JSON report, SQLite v2 metadata history; 3 synthetic events/5 findings. Corrected v0.12 UTC rules and heuristic metadata/PII checks remain active; no original raw execution body or secret field accepted, the earlier PR #60 implementation staged an intermediate canonical file; PR #61 above removes it. [PR CI #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186) Windows/Ubuntu × Python3.11/3.13 4/4 SUCCESS, 847 tests discovered per job, zero failures; separately packaged 13-file v0.12 ZIP smoke succeeded. This is **NOT** native n8n execution/API integration, actual version proof, source authorization, full PII clearance or a commercial release; no real customer data. See [MVP_20261028_RUNBOOK.md](MVP_20261028_RUNBOOK.md) and [HANDOFF.md](HANDOFF.md).
 
 ---
 

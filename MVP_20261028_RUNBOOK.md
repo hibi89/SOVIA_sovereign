@@ -1,5 +1,12 @@
 # SOVIA Audit Lite — 최소작동단위(MVP), 2026-10-28
 
+## 2026-10-28 P2 no intermediate canonical file (PR #61)
+
+The same `--source-format n8n-sanitized` command now passes canonical metadata from strict adapter directly to the v0.12 report and SQLite history functions **in memory**. Unlike the initial implementation, it never writes `_temporary_canonical.json` to staging. The three expected final artifacts `report.html`, `report.json`, `history.sqlite3` still persist; OS/shell/FS traces remain possible. [PR #61](https://github.com/hibi89/SOVIA_sovereign/pull/61), [Actions #40532162423](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40532162423) 4/4 PASS, 851 discovered/job, zero failures; separate 13-file candidate ZIP checksum `11a63ad14c6d6f55cd041893f84348974223f24c8678c0582ef1f10a3b7ec602`. Synthetic only; actual n8n API, real-source consent/PII certification and commercial release are NOT approved.
+
+---
+
+
 ## 2026-10-28 P2 acceleration — fabricated pre-sanitized n8n metadata supported in same CLI
 
 The verified separate v0.12 beta can also accept the pre-existing fabricated, strictly pre-sanitized n8n-like metadata contract without manually running the adapter first:
@@ -10,7 +17,7 @@ python -I -B sovia_mvp_v012.py --source-format n8n-sanitized --input examples/de
 
 It outputs a new folder containing `report.html`, `report.json`, and `history.sqlite3`; synthetic fixture: 3 event rows/5 findings. Canonical mode remains default and still rejects a `--policy` argument. Tested after extracting the **13-file** distinct ZIP in Windows/Ubuntu Python3.11/3.13 CI. [PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) / [Actions #40530323186](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40530323186): 847 discovered tests each job, 4/4 success, no failures. Current new v0.12 *synthetic CI artifact* SHA256 `63fbe704163611ec82b581be50854a4467dd8041da91e4aede33057022abad80`. Existing old ZIP archives are untouched.
 
-Only pre-sanitized **synthetic** n8n-like step metadata is accepted. This is NOT actual n8n API/version compatibility, live execution import, independently reviewed de-identification or lawful customer data handling. Policy and input are validated, recognizable private patterns rejected heuristically; no actual n8n credentials/network used. Temporary canonical metadata is staged locally and deleted during normal cleanup, **not securely erased**. No signed installer, validated owner Windows or commercial release.
+Only pre-sanitized **synthetic** n8n-like step metadata is accepted. This is NOT actual n8n API/version compatibility, live execution import, independently reviewed de-identification or lawful customer data handling. Policy and input are validated, recognizable private patterns rejected heuristically; no actual n8n credentials/network used. In the original PR #60 flow, canonical metadata was staged on disk; PR #61 removed that intermediate file, while final reports and OS traces may persist. No signed installer, validated owner Windows or commercial release.
 
 ---
 

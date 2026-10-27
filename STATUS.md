@@ -1,3 +1,11 @@
+## 2026-10-28 — PR #61: eliminate intermediate canonical JSON in synthetic n8n P2 flow
+
+- [PR #61](https://github.com/hibi89/SOVIA_sovereign/pull/61) merged code SHA `e738f818f52c056f31aff9c88948b4269cba29bf`. New in-memory APIs in v0.12 auditor/history directly consume canonical sanitized synthetic metadata: **no disk `_temporary_canonical.json`**, even in private staging; canonical JSON mode unchanged. Report HTML/JSON and metadata SQLite still intentionally written, no customer data allowed.
+- [CI #40532162423](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40532162423) Windows/Ubuntu × Python3.11/3.13 4/4 PASS, 851 discovered/job, zero failures, 4 new tests for intercepting real staging hardlinks and format/history parity/PII rejection. Clean 13-file v0.12 ZIP synthetic smoke and unchanged historical v0.10/v0.11.2 ZIPs PASS. New v0.12 ZIP SHA256 `11a63ad14c6d6f55cd041893f84348974223f24c8678c0582ef1f10a3b7ec602`.
+- Release gates remain: actual approved n8n source/version, privacy/consent/retention/legal/support, owner physical Windows, signing/commercial publication. No signed product or Production. This is data-minimization improvement, NOT memory/security certification.
+
+---
+
 ## 2026-10-28 — Accelerated P2 PR #60: synthetic pre-sanitized n8n-like one-command adapter MERGED
 
 - [PR #60](https://github.com/hibi89/SOVIA_sovereign/pull/60) code merged `develop` SHA `58281a01a6067e4787a0ce5c47dc5b65f62f6776`. Single-command `sovia_mvp_v012.py` now supports `--source-format n8n-sanitized --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --output-dir ../n8n-demo-output --synthetic-only`. Strict fabricated, pre-sanitized metadata only; reuse PII preflight and corrected v0.12 engine; three normal output files. No original raw node parameters, credentials, API fetch or actual customer n8n compatibility. Temporary canonical metadata staging not a secure erase guarantee.
