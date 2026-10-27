@@ -31,6 +31,9 @@ def smoke():
                       "--json-output",root/"boundary.json","--synthetic-only")
         if (boundary["events"],boundary["findings"])!=(3,0):
             raise RuntimeError("incorrect synthetic boundary oracle")
+        page=(root/"boundary.html").read_text(encoding="utf-8")
+        if page.index("2026-10-25T15:01:00Z") >= page.index("2026-10-25T15:01:00.500000Z"):
+            raise RuntimeError("v0.12 packaged HTML chronology incorrect")
         five=call(engine,"--input",golden,"--html-output",root/"gold.html",
                   "--json-output",root/"gold.json","--synthetic-only")
         if (five["events"],five["findings"])!=(3,5):
