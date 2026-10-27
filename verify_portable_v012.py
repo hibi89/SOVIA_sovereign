@@ -25,6 +25,7 @@ FILES = (
     "sovia_audit.py",
     "sovia_audit_v012.py",
     "sovia_mvp_v012.py",
+    "sovia_n8n_sanitized.py",
     "sovia_pii_preflight.py",
     "sovia_report_print_preview.py",
     "sovia_history_v012.py",
@@ -32,6 +33,8 @@ FILES = (
     "V012_PORTABLE_README.md",
     "examples/demo_five_rules.json",
     "examples/demo_temporal_boundary.json",
+    "examples/demo_n8n_sanitized.json",
+    "examples/demo_policy.json",
 )
 MANIFEST = "MANIFEST.json"
 MAX_FILE_BYTES = 2_097_152
