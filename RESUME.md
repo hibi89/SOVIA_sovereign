@@ -1,3 +1,13 @@
+# LATEST RESUME — 2026-10-27 PR #33 synthetic output size budget preflight
+
+PUBLIC `hibi89/SOVIA_sovereign`, code `develop`, main docs-only. Latest implemented [PR #33](https://github.com/hibi89/SOVIA_sovereign/pull/33) merged SHA `5d5f56106cd8aa5bf09ca5a35a10f74d764911ae`. New source-only `sovia_output_budget.py`, 16 tests `tests/test_output_budget.py`, guide `SYNTHETIC_OUTPUT_BUDGET.md` use strict fabricated 10/100/500/1000 event profiles, actual real HTML and indented JSON serializations, and 1/2/4MiB hypothetical output caps to check whether outputs would exceed a limit. No report files written, no real data/API, no customer quota approved, original audit core and v0.10 12-file ZIP unmodified.
+
+[CI 40476502308](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40476502308), tested feature `37e4775a495ede6870c242087e987149beb39e30`, Windows/Ubuntu Python 3.11/3.13 **4/4 SUCCESS**, 648 discovered/job, 0 FAIL, portable smoke PASS and SHA unchanged `894d83d5df3aa99fcd324454c9b28b2d3257b1dfc4465f963937e98c7a888f8b`. Post-docs HEAD CI separately verify.
+
+Next `ㄱ`: read latest HANDOFF (10 sections), STATUS, AGENTS, REQUIREMENTS and actual source. Distinct P2 action: optional **approved** export size enforcement with actual CLI and low-space/no-clobber recovery tests, or explicit seller/customer support contract boundaries. Do not repeat PRs #16–#33. No real owner Windows/Defender/browser/PDF, n8n actual API, privacy/consent, commercial release, production, access change or spend verification/approval.
+
+---
+
 # LATEST RESUME — 2026-10-27 PR #32 bounded synthetic performance/capacity benchmark
 
 Canonical PUBLIC GitHub `hibi89/SOVIA_sovereign`; `develop` source, `main` docs-only. [PR #32](https://github.com/hibi89/SOVIA_sovereign/pull/32) merged `e8250fdac11ea1c89e482e26bcfca5ff23fe3183`. New source-only `sovia_capacity_benchmark.py`, 33 `tests/test_capacity_benchmark.py`, `SYNTHETIC_CAPACITY.md`, workflow measurement step in four OS/Python runners. Strictly fabricated only: 10/100/500/1000 events in normal/alert_dense profile; temporary JSON is deleted, measures read_document/evaluate/HTML/JSON serialization with perf_counter + tracemalloc Python allocations (not RSS). Core 1MiB input/1000 event cap unchanged; 1000 dense events yield 4998 findings and 2136699-byte JSON report from 307201-byte input.
