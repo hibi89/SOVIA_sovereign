@@ -1,3 +1,37 @@
+# LATEST SOVIA HANDOFF — 2026-10-27 PR #41 v0.11.2-beta privacy-gate fix (10 sections)
+
+## 1. Owner goal and current phase
+Owner approved workflow: functional MVP → reconcile R1–R9 original blueprint → harden security/stability/compatibility for deliverable. P1 MVP and P2 pre-sanitized offline workflow plus separate portable beta are synthetically verified. Not customer-ready until real evidence.
+
+## 2. Concrete delivered change
+[PR #41](https://github.com/hibi89/SOVIA_sovereign/pull/41) merged at `e5754eb08d98339d93dd14fdb604832298bf9fc7`. **Confirmed direct-audit mode loophole**: prior `sovia_n8n_direct_audit.py` ran PII/credential pattern screening only in `approved-local`; choosing `--synthetic-only` skipped it. Now both modes always run the existing bounded `sovia_pii_preflight.assert_no_high_risk_patterns(document, policy_doc)` BEFORE report render/publish. Approved-local additionally requires the previous unsigned review-claim attestation; a synthetic flag still does not prove data provenance. Output `pii_pattern_scan_executed=true` in both modes, `pii_absence_proven=false`, `source_authorization_independently_verified=false`. Source and policy token-like patterns rejected with no raw-content/path disclosure. Bundled owner P2 selfcheck now asserts the above flags, otherwise fails. No broad claim about the separate canonical base auditor or synthetic converter, which are not automatically covered.
+
+## 3. Exact tests / reproducer
+[GitHub Actions PR run 40486828662](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40486828662) feature head `e5f58509e475e4f1e17e7c180428d684a49a4598`: Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, **750 tests discovered/job**, zero failed (Windows 740 pass/10 skip, Ubuntu 739 pass/11 skip). Four new `tests/test_n8n_direct_audit.py` regressions: clean mode scan confirmed, synthetic Luhn-like ID rejected, fabricated secret-like policy rejected, isolated CLI generic rejection with no value/path echo. Packaged `tests/test_portable_p2.py` additionally verifies `checks.direct_metadata_pattern_scan=PASS` from extracted v0.11.2 ZIP owner selfcheck. Legacy v0.10 smoke and new v0.11.2 extracted-package smoke PASS. New **v0.11.2-beta inner ZIP SHA256 `5667be53c206af5b8e4c0c96239595988b7866a655587d73d6a18a8078a8a71e`**; legacy **v0.10 ZIP SHA256 `68c05795f871bd3698526f8fc34e4e58e60e4ec03f18fbbd0b56524d41f6f2d9`** remains unchanged. Historic v0.11.1 inner ZIP `a31073a4fec63916ffa0b5f18fcb577bccaad7fc453bc644df939c3ab8aabf27`. CI uploaded separate `sovia-portable-p2-beta` artifact, UNSIGNED and not a release.
+
+## 4. DONE and unresolved
+DONE loophole prevention in direct offline pre-sanitized mode, owner selfcheck assertion, extracted packaging, four-platform regression, versioned v0.11.2 beta. UNVERIFIED: actual owner's Windows/browser/Defender/SmartScreen/Korean PDF manual acceptance, lawful approved genuine native n8n source/version and upstream PII false-negative evaluation, customer contract quotas/retention/support and commercial signing/release. No production or buyer evidence.
+
+## 5. Limitation and adverse case
+Metadata PII/credential detection is pattern-based, can produce false positives and misses unseen patterns. `--synthetic-only` remains a user assertion, not a proof of fabricated source. Separate legacy `sovia_audit.py` and `sovia_n8n_sanitized.convert_paths` synthetic path do not universally enforce the new direct-audit mode gate. Never claim end-to-end data protection, zero leak, native n8n compatibility, legal consent or SOC certification.
+
+## 6. Repo, branches, SHA and changed files
+PUBLIC `hibi89/SOVIA_sovereign` authoritative code `develop`, `main` docs-only. PR #41 merged `e5754eb08d98339d93dd14fdb604832298bf9fc7`, tested head `e5f58509e475e4f1e17e7c180428d684a49a4598`. Paths: `sovia_n8n_direct_audit.py`, `sovia_pii_preflight.py` docstring, `owner_p2_selfcheck.py`, `tests/test_n8n_direct_audit.py`, `tests/test_portable_p2.py`, `build_portable_p2.py`, `verify_portable_p2.py`, `P2_PORTABLE_README.md`, `N8N_DIRECT_AUDIT.md`, `P2_PORTABLE_SECURITY_0112.md` and CI. Post-doc commit will advance HEAD; verify current state on continuation.
+
+## 7. Runtime, artifacts, costs
+Source-only demo from verified extracted candidate: `python -I -B sovia_n8n_direct_audit.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --html-output NEW_REPORT.html --json-output NEW_REPORT.json --synthetic-only --local-test-budget-bytes 1048576` (write report OUTSIDE install). `RUN_P2_SELF_CHECK.cmd` uses only synthetic packaged data and writes outside install. P2 `SOVIA-Audit-Lite-0.11.2-beta.zip` via GitHub Actions `sovia-portable-p2-beta` (14-day artifact retention). No chargeable API, real customer log, Vercel or Production URL, digital signature or public commercial listing.
+
+## 8. Original data and access
+No customer records, secrets, fonts, local device path/screenshots or private inputs were used. Old v0.10 and previous v0.11.1 package provenance preserved by previous GitHub commit/CI run. No force push, branch access/security changes, deletion or deployment.
+
+## 9. NEXT `ㄱ` order and actual blocker
+**Physical owner Windows synthetic acceptance is next**. Select v0.11.2 package artifact from successful final `develop` Actions run, verify inner SHA256 against `5667be53c206af5b8e4c0c96239595988b7866a655587d73d6a18a8078a8a71e`, extract into a fresh non-synced folder and run `RUN_P2_SELF_CHECK.cmd`. Manually view Korean HTML/dashboard, any optional PDF, and note Defender/SmartScreen without disabling security. Report `SELF_CHECK_RESULT.json` outcome only if user chooses; avoid source/customer secrets. Real native n8n API/consent blocked without explicitly approved version/source. If user declines device check, offer a precise owner manual command/checklist rather than claiming completed; avoid new redundant helper scripts and avoid repeatedly rebuilding feature MVP.
+
+## 10. Cutoff KST
+2026-10-27. Latest completed tested feature PR #41: [Actions 40486828662](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40486828662), 4/4 success, 750 tests/job. Post-document HEAD CI must be confirmed after docs update. No owner hardware, customer consent, production or signed release verification.
+
+---
+
 # LATEST SOVIA HANDOFF — 2026-10-27 P2 v0.11.1-beta safety patch (10 sections)
 
 ## 1. Goal
