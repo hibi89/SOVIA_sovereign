@@ -5,7 +5,7 @@ NOT an n8n API client or a parser for raw n8n execution exports.
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import hashlib
 import hmac
 from importlib.util import module_from_spec, spec_from_file_location
@@ -160,9 +160,13 @@ def verify_operator_attestation(attestation, source_document, policy_document, *
     except ValueError as exc:
         raise ContractError("INVALID_ATTESTATION_EXPIRY") from exc
     instant = datetime.now(timezone.utc) if now is None else now
-    if (not isinstance(instant, datetime) or instant.tzinfo is None or
-            until <= instant.astimezone(timezone.utc)):
+    if not isinstance(instant, datetime) or instant.tzinfo is None:
+        raise ContractError("INVALID_CLOCK")
+    utc_now = instant.astimezone(timezone.utc)
+    if until <= utc_now:
         raise ContractError("ATTESTATION_EXPIRED")
+    if until - utc_now > timedelta(days=30):
+        raise ContractError("ATTESTATION_TOO_LONG_LIVED")
     return "OPERATOR_CLAIMS_PRESENT_NOT_INDEPENDENTLY_VERIFIED"
 
 
