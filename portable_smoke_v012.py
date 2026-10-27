@@ -72,6 +72,28 @@ def smoke():
         if (indexed["schema_version"], indexed["reports"],
                 indexed["finding_count_total"]) != (2, 1, 5):
             raise RuntimeError("v0.12 MVP ledger mismatch")
+        # P2 fast track: one invocation over fabricated pre-sanitized n8n-like
+        # steps plus policy. No network, no raw n8n execution and no approvals.
+        n8n_result = root / "n8n-one-command-result"
+        n8n = call(extracted / "sovia_mvp_v012.py",
+                   "--source-format", "n8n-sanitized",
+                   "--input", extracted / "examples" / "demo_n8n_sanitized.json",
+                   "--policy", extracted / "examples" / "demo_policy.json",
+                   "--output-dir", n8n_result, "--synthetic-only")
+        if (n8n["status"], n8n["events"], n8n["findings"],
+                n8n["source_format"]) != (
+                "SYNTHETIC_V012_MVP_COMPLETE", 3, 5, "n8n-sanitized"):
+            raise RuntimeError("synthetic n8n one-command result mismatch")
+        if sorted(p.name for p in n8n_result.iterdir()) != sorted(n8n["files"]):
+            raise RuntimeError("synthetic n8n output inventory mismatch")
+        n8n_json = json.loads((n8n_result / "report.json").read_text("utf-8"))
+        n8n_history = call(history, "status",
+                           "--db", n8n_result / "history.sqlite3")
+        if (n8n_json["finding_count"], n8n_json["engine_version"],
+                n8n_history["reports"],
+                n8n_history["finding_count_total"]) != (
+                5, "0.12.0-preview", 1, 5):
+            raise RuntimeError("synthetic n8n report or metadata ledger mismatch")
         verify_directory(extracted)
         return {"status":"v012_portable_clean_install_pass",
                 "version":"0.12.0-beta","files":result["files"],
@@ -79,7 +101,8 @@ def smoke():
                 "boundary_findings":0,"five_rule_findings":5,
                 "history_schema_version":2,"history_backup_restored":True,
                 "legacy_history_migrated":False,"mvp_one_command_pass":True,
-                "mvp_outputs":3,"owner_manual_acceptance":False,
+                "mvp_outputs":3,"n8n_synthetic_one_command_pass":True,
+                "n8n_native_api_verified":False,"owner_manual_acceptance":False,
                 "commercial_release_approved":False}
 
 if __name__=="__main__":
