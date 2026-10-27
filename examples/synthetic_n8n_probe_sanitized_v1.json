@@ -1,0 +1,12 @@
+{
+  "schema_version": "sovia.n8n_compatibility_probe.v1",
+  "synthetic_only": true,
+  "source_profile": "sovia_sanitized_metadata_v1",
+  "claimed_n8n_version": "not_applicable",
+  "field_keys": [
+    "format",
+    "workflow_id",
+    "execution_id",
+    "steps"
+  ]
+}

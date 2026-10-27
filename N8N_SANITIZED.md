@@ -1,3 +1,9 @@
+## P2 synthetic n8n field-family / version-claim probe (2026-10-27)
+
+`N8N_VERSION_PROBE.md` describes a new **key-only synthetic profile classifier** in `sovia_n8n_compatibility.py` which refuses direct n8n workflow/export or execution API import for *any* claimed 1.x/2.x version. The existing sanitized converter is unchanged, and the probe does not certify any n8n source version, authorize data, inspect raw payloads, or bypass the PII/attestation gates. See `tests/test_n8n_compatibility.py` for negative and regression tests.
+
+---
+
 ## Integrated P2 operator-review checkpoint — 2026-10-27 KST
 
 [PR #19](https://github.com/hibi89/SOVIA_sovereign/pull/19) adds a separate **`--mode approved-local --attestation FILE`** path to this same converter and is integrated into `develop` at `0a2a8cd7eeb78c2e8b5cf7e387ab2d50d6e34509`. Existing `--mode synthetic` is unchanged. Operator assertions, matching canonical SHA-256 of sanitized input/policy and bounded expiry are checked before any new output is created. See [N8N_APPROVAL_GATE.md](N8N_APPROVAL_GATE.md) for usage and limitations. These operator declarations **do not prove actual customer consent, source authenticity, or effective PII sanitization**. Raw n8n exports still rejected. Full Windows/Ubuntu 3.11/3.13 PR [CI 40458082863](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40458082863) passed 4/4, 245 discovered per environment, zero failures, and existing portable smoke passed. Main and old 12-file ZIP remain unchanged.
