@@ -44,6 +44,55 @@ class MVPV012Tests(unittest.TestCase):
                                     status["reports"], status["finding_count_total"]))
         self.assertEqual(pristine_source, GOLDEN.read_bytes())
 
+    def test_result_is_marked_incomplete_until_all_outputs_publish(self):
+        original_link = os.link
+        observed = []
+
+        def inspecting_link(src, dst, *args, **kwargs):
+            self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).is_file())
+            observed.append(Path(dst).name)
+            return original_link(src, dst, *args, **kwargs)
+
+        with patch("sovia_mvp_v012.os.link", side_effect=inspecting_link):
+            result = mvp.run(GOLDEN, self.target, synthetic_only=True)
+        self.assertEqual("SYNTHETIC_V012_MVP_COMPLETE", result["status"])
+        self.assertEqual(list(mvp.OUTPUTS), observed)
+        self.assertFalse((self.target / mvp.INCOMPLETE_MARKER).exists())
+        self.assertEqual(set(mvp.OUTPUTS), {p.name for p in self.target.iterdir()})
+
+    def test_publication_fault_rolls_back_outputs_and_marker(self):
+        original_link = os.link
+
+        def failing_second_link(src, dst, *args, **kwargs):
+            if Path(dst).name == "report.json":
+                self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).exists())
+                self.assertTrue((self.target / "report.html").exists())
+                raise OSError("synthetic fault after first link")
+            return original_link(src, dst, *args, **kwargs)
+
+        with patch("sovia_mvp_v012.os.link", side_effect=failing_second_link):
+            with self.assertRaisesRegex(
+                mvp.MVPError, "MVP_INPUT_OR_OUTPUT_REJECTED"
+            ):
+                mvp.run(GOLDEN, self.target, synthetic_only=True)
+        self.assertFalse(self.target.exists())
+
+    def test_nonstandard_interruption_leaves_explicit_incomplete_marker(self):
+        original_link = os.link
+
+        def interrupted_link(src, dst, *args, **kwargs):
+            if Path(dst).name == "report.json":
+                raise KeyboardInterrupt()
+            return original_link(src, dst, *args, **kwargs)
+
+        with patch("sovia_mvp_v012.os.link", side_effect=interrupted_link):
+            with self.assertRaises(KeyboardInterrupt):
+                mvp.run(GOLDEN, self.target, synthetic_only=True)
+        self.assertTrue((self.target / mvp.INCOMPLETE_MARKER).is_file())
+        self.assertTrue((self.target / "report.html").is_file())
+        self.assertFalse((self.target / "report.json").exists())
+        self.assertFalse((self.target / "history.sqlite3").exists())
+
     def test_boundary_uses_corrected_utc_engine(self):
         result = mvp.run(BOUNDARY, self.target, synthetic_only=True)
         self.assertEqual((3, 0), (result["events"], result["findings"]))

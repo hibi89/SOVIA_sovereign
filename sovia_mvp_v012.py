@@ -16,6 +16,7 @@ import tempfile
 
 
 OUTPUTS = ("report.html", "report.json", "history.sqlite3")
+INCOMPLETE_MARKER = ".SOVIA_INCOMPLETE"
 
 
 class MVPError(ValueError):
@@ -40,8 +41,9 @@ def run(input_path, output_dir, *, synthetic_only=False,
     """Preflight/run wholly in a staging directory, then publish fresh files.
 
     Directory and output files are individually exclusive, not a transaction
-    for concurrent readers. If publishing fails normally, remove only our own
-    inode-matched files; power loss can leave partial new output.
+    for concurrent readers. A fail-closed marker distinguishes incomplete
+    publication after interruption; ordinary failures roll back our own
+    inode-matched files. Power loss still has no durability guarantee.
     """
     if synthetic_only is not True:
         raise MVPError("SYNTHETIC_ACK_REQUIRED")
@@ -70,6 +72,8 @@ def run(input_path, output_dir, *, synthetic_only=False,
             raise MVPError("SOURCE_POLICY_COLLISION")
     created = False
     published = []
+    marker = target / INCOMPLETE_MARKER
+    marker_identity = None
     try:
         with tempfile.TemporaryDirectory(
             prefix=".sovia-mvp-stage-", dir=target.parent
@@ -109,12 +113,27 @@ def run(input_path, output_dir, *, synthetic_only=False,
             # os.mkdir and os.link both refuse to overwrite existing targets.
             target.mkdir(mode=0o700)
             created = True
+            # Leave an explicit incomplete marker before publishing any
+            # report file. Its contents contain no input or private data.
+            descriptor = os.open(
+                marker, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600
+            )
+            marker_stat = os.fstat(descriptor)
+            marker_identity = (marker_stat.st_dev, marker_stat.st_ino)
+            with os.fdopen(descriptor, "wb") as stream:
+                stream.write(b"SOVIA_SYNTHETIC_OUTPUT_INCOMPLETE\n")
+                stream.flush()
+                os.fsync(stream.fileno())
             for name in OUTPUTS:
                 original = stage / name
                 state = original.stat()
                 destination = target / name
                 os.link(original, destination)
                 published.append((destination, state.st_dev, state.st_ino))
+            marker_stat = marker.stat()
+            if (marker_stat.st_dev, marker_stat.st_ino) != marker_identity:
+                raise MVPError("OUTPUT_MARKER_CHANGED")
+            marker.unlink()
             return {
                 "status": "SYNTHETIC_V012_MVP_COMPLETE",
                 "engine_version": report["engine_version"],
@@ -133,6 +152,13 @@ def run(input_path, output_dir, *, synthetic_only=False,
                     current = path.stat()
                     if (current.st_dev, current.st_ino) == (device, inode):
                         path.unlink()
+                except OSError:
+                    pass
+            if marker_identity is not None:
+                try:
+                    current = marker.stat()
+                    if (current.st_dev, current.st_ino) == marker_identity:
+                        marker.unlink()
                 except OSError:
                     pass
             try:
