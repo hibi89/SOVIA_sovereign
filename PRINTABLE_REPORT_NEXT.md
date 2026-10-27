@@ -1,3 +1,9 @@
+## Actual Edge preview gate (added after initial 4/4 source-only tests, pending refreshed CI)
+
+The existing source-only preview now participates in the **actual Windows Edge** smoke on Python 3.11 via `--next-print-preview`: execute the new `sovia_report_print_preview.py` in isolated Python against the fabricated example from a pristine extracted v0.11.2 ZIP, open the **independently generated next-version HTML** in a real headless Edge `file://` tab, verify Korean labels `data-label`, and upload a third synthetic image `synthetic-next-print-preview-edge.png` alongside the unchanged current audit/dashboard images. The new module is loaded from the **repository only**, explicitly NOT from or included in the legacy ZIP. This is a visual design candidate, not a v0.12 signed installer or proof of physically printed A4 output. A screenshot must be retrieved and inspected before claiming a visual improvement. All three pages must be synthetic; the CI screenshot artifact remains short-retention and no customer data may be used.
+
+---
+
 # SOVIA source-only NEXT printable HTML preview — v0.12.0-preview
 
 ## Motivation and exact scope
