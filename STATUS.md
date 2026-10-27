@@ -1,3 +1,11 @@
+## 2026-10-28 — P2 Windows one-click synthetic demo PR #62 MERGED
+
+- [PR #62](https://github.com/hibi89/SOVIA_sovereign/pull/62) merged code SHA `40dc7f5c137b2259b72bf4cc382af75563db86e9`. New portable `RUN_V012_DEMO.cmd` double-click entrypoint verifies extracted package integrity, runs the existing fabricated five-rule v0.12 CLI, produces HTML/JSON/SQLite in a new sibling output folder, then requests local browser opening (normal interactive mode). `--ci` suppresses browser/pause; no network, real n8n, auto-overwrite or installer.
+- [PR CI #40535209040](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40535209040) **4/4 PASS**, 854 discovered tests per environment, 0 FAIL (Windows 843 PASS/11 SKIP, Ubuntu 835 PASS/19 SKIP). Actual Windows CMD headless runner tested with spaces/`&` installation path, 3 final artifacts, failed re-run preserving bytes, tampered ZIP member rejected before output. Separate 14-file v0.12 beta ZIP SHA256 `937c2fa0c5c90a5d17c9ca4b3aa63c665680fe2a1b818a25b9094e1c9279fe03` (NOT release/signature). v0.10/v0.11.2 frozen ZIP smoke unchanged. Earlier CI failures from outdated 13-file test assertion and incorrect test shell quoting fixed, rerun green.
+- **Open:** owner physical Windows/Defender/SmartScreen/browser open and Korean visual/print approval, real n8n source/version consent/privacy tests, licensing/retention/support/signing/commercial signoff. Frontend and Cloud deferred. Post-merge/docs CI to verify.
+
+---
+
 ## 2026-10-28 — PR #61: eliminate intermediate canonical JSON in synthetic n8n P2 flow
 
 - [PR #61](https://github.com/hibi89/SOVIA_sovereign/pull/61) merged code SHA `e738f818f52c056f31aff9c88948b4269cba29bf`. New in-memory APIs in v0.12 auditor/history directly consume canonical sanitized synthetic metadata: **no disk `_temporary_canonical.json`**, even in private staging; canonical JSON mode unchanged. Report HTML/JSON and metadata SQLite still intentionally written, no customer data allowed.

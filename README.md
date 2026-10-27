@@ -1,5 +1,12 @@
 # SOVIA Sovereign — local-first AI agent evidence audit
 
+## 2026-10-28 P2 — Windows offline synthetic one-click demo available
+
+[PR #62](https://github.com/hibi89/SOVIA_sovereign/pull/62) merged into `develop` (code SHA `40dc7f5c137b2259b72bf4cc382af75563db86e9`). From the **verified, pristine v0.12 beta ZIP extraction** with Python 3.11+ installed on Windows, double-click `RUN_V012_DEMO.cmd`. It verifies all package files/hashes and runs only the bundled fabricated five-rule fixture, creating a NEW sibling `SOVIA-v012-synthetic-output` directory with HTML, JSON and SQLite v2, then asks Windows to open the local report. Existing output is not overwritten, and tampered packages are refused before running audit. [PR CI #40535209040](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40535209040) 4/4 Windows/Ubuntu Python3.11/3.13 PASS (854 tests/job, 0 FAIL), actual Windows `cmd.exe --ci` smoke (no browser/pause), 14-file beta ZIP isolated tests. This is NOT an installer, signed release, genuine customer n8n connector, confirmed physical owner Windows/Defender or commercial product. See `V012_PORTABLE_README.md` and `HANDOFF.md`.
+
+---
+
+
 ## 2026-10-28 P2 data minimization — no intermediate canonical JSON (PR #61)
 
 [PR #61](https://github.com/hibi89/SOVIA_sovereign/pull/61) merged into `develop` at `e738f818f52c056f31aff9c88948b4269cba29bf`. The fabricated, pre-sanitized n8n-like one-command flow now converts to the canonical event document **in memory** and passes it directly to v0.12 report generation and SQLite v2 history. It **no longer creates `_temporary_canonical.json` on disk**, including in the private temporary directory. The same three final outputs intentionally persist: `report.html`, `report.json`, `history.sqlite3`. [CI #40532162423](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40532162423): Windows/Ubuntu × Python 3.11/3.13 4/4 PASS, 851 discovered/job, zero failures, separate 13-file ZIP isolated smoke. Beta ZIP SHA256 `11a63ad14c6d6f55cd041893f84348974223f24c8678c0582ef1f10a3b7ec602`; prior beta hashes are historical, not signatures. No real n8n API, true source authority, PII certification, physical owner Windows approval, customer sale or deployment.
