@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 synthetic code registry (10 sections)
+
+## 1. Goals, scope, tech
+Maintain the zero-cash, offline-first SOVIA Audit Lite; code source on develop. This iteration targets deterministic pseudonymous **synthetic code mapping**, not personal-data anonymization, using Python standard library.
+## 2. Work performed and architecture choice
+Compared automatic raw-name/PII replacement (unsafe risk of losing evidence and merging permissions) to an explicit safe-code registry (bounded, fail closed). Selected registry. Created `sovia_code_registry.py`, 31-case `tests/test_code_registry.py`, `examples/demo_code_registry.json`, `CODE_REGISTRY.md`, `FALSE_POSITIVE_REVIEW.md`. Maps tool/target aliases and matching policy lists, checks pre- and post-map metadata for heuristic PII, enforces injectivity, and checks unchanged audit finding signatures/coverage. No separate customer approval inferred. Prior P1/CSV/PDF/SQLite/dashboard/retention/n8n adapter/12-file beta unchanged.
+## 3. Actual tests, commands and results
+[PR CI 40460394248](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40460394248) 4/4 SUCCESS on Windows and Ubuntu Python 3.11/3.13 for exact PR head `2b50e2b8299ad74f8e757a090953e61a956c4050`. Per job `python -m unittest discover -s tests -v`: 305 discovered; Windows 295 PASS/10 SKIP, Ubuntu 294 PASS/11 SKIP, 0 FAIL. `python portable_smoke.py` previous 12-file v0.10 audit→SQLite/dashboard/backup/restore/self-check PASS all environments. Owner's actual Windows PC, Korean PDF/font/browser/AV, and post-doc CI NOT VERIFIED.
+## 4. Done vs pending and stopping point
+DONE explicit synthetic mapping, injectivity and policy equivalence, PII refusal, 31 regressions, PR #21 merged and handoff updated. PENDING genuine n8n version support and consented real metadata, effective upstream de-identification, authenticated approvals and false-positive adjudication, real retention/disposal, owner-PC and sales acceptance. Do not reimplement prior P1 or P2 integrated functionality.
+## 5. Failures/causes and resolutions
+First PR CI run `40460333123` failed a **test fixture bug** (`self.data` tuple item reassignment), not runtime source: `test_raw_n8n_execution_export_rejected`. Corrected test to replace the complete tuple. Full CI rerun `40460394248` passed in all four jobs. Mapping solution rejects high-risk ambiguity and cannot guarantee privacy. No actual customer/production incident.
+## 6. Repository, branches, commits, file paths
+Repo `hibi89/SOVIA_sovereign` PUBLIC. Feature `feature/p2-safe-code-registry` verified SHA `2b50e2b8299ad74f8e757a090953e61a956c4050`. [PR #21](https://github.com/hibi89/SOVIA_sovereign/pull/21) merged to `develop` at `c882ac46a837cbadc33eb0465a39c20d0f35bb01`. Default `main` docs-only. Main paths new `sovia_code_registry.py`, `tests/test_code_registry.py`, `examples/demo_code_registry.json`, `CODE_REGISTRY.md`, `FALSE_POSITIVE_REVIEW.md` plus `STATUS.md`, `HANDOFF.md`, `GAP_MATRIX.md`. Refresh latest develop SHA after docs.
+## 7. Runtime and deployment
+Production URL NONE; Vercel NONE, paid account/API NONE; no customer platform. Synthetic command: `python sovia_code_registry.py --input examples/demo_n8n_sanitized.json --policy examples/demo_policy.json --registry examples/demo_code_registry.json --output NEW_CANONICAL.json --synthetic-only`, then original `sovia_audit.py`. Developer-only and not packaged in old ZIP.
+## 8. Originals, backups, secrets and permissions
+Only fabricated synthetic fixture values committed to PUBLIC repo. No real personal/customer logs, prompts, credentials, exfiltration or source file alteration. Mapping preserves evidence, event IDs, permissions, timestamps and destinations. Never weaken PII scanner or grant a false-positive wildcard exception. Registry may be reversible; no anonymity guarantee. Existing backups/SQLite remain unchanged.
+## 9. Next action and owner approvals
+On next `ㄱ`, verify fresh develop and documents, continue safe synthetic review/false-positive protocol tests or staged manual owner Windows acceptance. Need owner consent for genuine customer data, external n8n integration, repository privacy/access modifications, paid listing, public release or destructive purge. Maintain no-risk signoffs only when proven.
+## 10. Timing and verification basis
+2026-10-27 KST. PR source CI 40460394248, 4/4 PASS and merge SHA `c882ac46a837cbadc33eb0465a39c20d0f35bb01`. Documentation commit SHA must be re-read; no production or customer acceptance claim. This heading supersedes old archived handoffs.
+
+---
+
 # CURRENT HANDOFF — 2026-10-27 P2 heuristic privacy preflight (ten sections)
 
 ## 1. Goal and technical direction
