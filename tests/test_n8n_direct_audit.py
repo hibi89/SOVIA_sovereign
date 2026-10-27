@@ -148,7 +148,7 @@ class DirectSanitizedAuditTests(unittest.TestCase):
     def test_approved_pii_pattern_rejected_before_export(self):
         self.attest()
         doc = json.loads(self.source.read_text(encoding="utf-8"))
-        doc["steps"][0]["evidence_ref"] = "somebody@example.com"
+        doc["steps"][0]["evidence_ref"] = "4111111111111111"
         self.source.write_text(json.dumps(doc), encoding="utf-8")
         # Bound an altered source to a matching (unverified) claim so the PII
         # scan, rather than the content digest, must be the reason for denial.
