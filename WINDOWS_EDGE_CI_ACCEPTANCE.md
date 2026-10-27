@@ -1,3 +1,13 @@
+## Screenshot evidence extension — 2026-10-27 (PR proposal)
+
+**Why:** The existing Windows Edge `--dump-dom` proof verifies Korean text and offline HTML parsing, but not rendered pixels. On the same temporary, verified/extracted v0.11.2 beta package, run Microsoft Edge headless to capture a **1440×1600 viewport** of the actual generated synthetic audit report and SQLite dashboard using `--screenshot`; validate expected PNG header and plausible dimensions with Python stdlib, upload precisely two PNGs as a **7-day GitHub Actions synthetic evidence artifact**. Rendered screenshots are real browser output, never fabricated illustrative images. Screenshots and browser profiles live outside pristine extracted ZIP; legacy archive SHA remains immutable.
+
+**Acceptance criteria:** Windows Python 3.11 Edge must succeed in both DOM and screenshot creation; `sovia-p2-synthetic-edge-visuals` artifact must contain `synthetic-audit-edge.png` and `synthetic-dashboard-edge.png`; entire Windows/Ubuntu 3.11/3.13 suite and legacy/current portable ZIP smokes must pass. Human/assistant inspection of the retrieved PNGs is a **separate** step; uploading PNGs does not imply someone viewed them, and image header checks cannot certify legibility. If screenshots reveal a readability issue, preserve stable v0.11.2 provenance; don't patch bundled historical source or change the v0.10 hash.
+
+**Limitations:** Viewport screenshots aren't printed pages, exhaustive scrolling, accessibility, customer UI validation, owner machine, Korean PDF, Defender/SmartScreen or a proof of Edge network silence. Browser flags reduce background network but no packet capture runs. All pages are generated from three fabricated events and offline metadata. No customer data, tokens, paid dependency, real n8n instance, Vercel or production release.
+
+---
+
 # P2 Windows Edge offline browser DOM smoke — synthetic, CI-only
 
 ## Need and design
