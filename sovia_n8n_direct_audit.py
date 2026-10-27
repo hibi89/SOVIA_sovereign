@@ -31,11 +31,31 @@ def _module(name, filename):
     return module
 
 
-def _paths(source, policy, html_output, json_output, attestation):
+def _paths(source, policy, html_output, json_output, attestation, *,
+           approved_local=False):
     sources = [Path(os.path.abspath(source)), Path(os.path.abspath(policy))]
     if attestation is not None:
         sources.append(Path(os.path.abspath(attestation)))
     targets = [Path(os.path.abspath(html_output)), Path(os.path.abspath(json_output))]
+    if approved_local:
+        # Preserve the established collision refusal contract without touching
+        # file contents or resolving potentially linked ancestor directories.
+        source_names = {os.path.normcase(str(p)) for p in sources}
+        target_names = [os.path.normcase(str(p)) for p in targets]
+        if (len(set(target_names)) != len(target_names) or
+                any(name in source_names for name in target_names)):
+            raise DirectAuditError("INPUT_OUTPUT_PATH_COLLISION")
+        # Reuse the operator-claim converter's lexical no-follow guard BEFORE
+        # resolving anything, for both inputs and proposed output parents.
+        # The guard is intentionally conservative, not a race-free sandbox.
+        guard = _module("_sovia_direct_local_path_guard", "sovia_n8n_sanitized.py")
+        try:
+            for p in sources:
+                guard._guard_approved_local_path(p)
+            for p in targets:
+                guard._guard_approved_local_path(p, output_parent=True)
+        except guard.ContractError as exc:
+            raise DirectAuditError("APPROVED_LOCAL_PATH_REFUSED") from exc
     if any(p.is_symlink() or not p.is_file() for p in sources):
         raise DirectAuditError("LOCAL_SOURCE_MISSING_OR_SYMLINK")
     canonical_sources = [p.resolve() for p in sources]
@@ -68,7 +88,8 @@ def direct_audit(source, policy, html_output, json_output, *,
             type(local_test_budget_bytes) is not int or
             local_test_budget_bytes not in (1_048_576, 2_097_152, 4_194_304)):
         raise DirectAuditError("INVALID_LOCAL_TEST_BUDGET")
-    sources, targets = _paths(source, policy, html_output, json_output, attestation)
+    sources, targets = _paths(source, policy, html_output, json_output, attestation,
+                              approved_local=(mode == "approved-local"))
     audit = _module("_sovia_direct_audit_core", "sovia_audit.py")
     adapter = _module("_sovia_direct_n8n_contract", "sovia_n8n_sanitized.py")
     try:
@@ -105,7 +126,8 @@ def direct_audit(source, policy, html_output, json_output, *,
             raise DirectAuditError("OUTPUT_STORAGE_PREFLIGHT_FAILED") from exc
     # Reject aliases again immediately before publication; the original writer
     # also uses exclusive hardlinks and never intentionally overwrites a file.
-    _paths(source, policy, html_output, json_output, attestation)
+    _paths(source, policy, html_output, json_output, attestation,
+           approved_local=(mode == "approved-local"))
     try:
         audit.write_reports_atomically(items)
     except (OSError, ValueError, TypeError, RecursionError) as exc:
