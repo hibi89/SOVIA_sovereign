@@ -264,7 +264,7 @@ class DemoPackTests(unittest.TestCase):
         self.assertIn("does not upload", scope.lower())
 
     def test_demo_bundle_not_added_to_original_portable_file_list(self):
-        from build_portable import FILES as portable_files
+        from verify_portable import FILES as portable_files
         self.assertFalse(any("sovia_demo_pack.py" in path for path in portable_files))
         self.assertEqual(12, len(portable_files))
 
