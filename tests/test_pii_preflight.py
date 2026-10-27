@@ -262,7 +262,9 @@ class PreflightTests(unittest.TestCase):
             self.fail("secret must be refused")
 
     def test_approved_path_cannot_publish_with_missing_checker(self):
-        with patch.object(adapter, "spec_from_file_location", return_value=None):
+        import sovia_audit
+        with patch.object(adapter, "_audit", return_value=sovia_audit), \
+             patch.object(adapter, "spec_from_file_location", return_value=None):
             with self.assertRaisesRegex(adapter.ContractError, "PREFLIGHT_MODULE_UNAVAILABLE"):
                 self.approved()
         self.assertFalse(self.output.exists())
