@@ -1,3 +1,11 @@
+## 2026-10-27 — PR #57 NTFS junction/reparse-point verification FIXED in distinct v0.12 beta
+
+- [PR #57](https://github.com/hibi89/SOVIA_sovereign/pull/57) merged to `develop` source SHA `eed263b3bf594d08cf59943c3cef67ae674b5566`. Extracted-package strict verification now rejects both symlinks and Windows NTFS reparse-point aliases of the selected root/children. Uses Python 3.11-compatible `lstat` file attributes; does NOT claim to stop hostile concurrent path swaps or linked ancestors outside the root. Actual `cmd.exe mklink /J` tests on GitHub-hosted Windows verify linked root and allowlisted `examples/` directory are refused, not followed/overwritten.
+- [CI #40520947638](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40520947638): Windows/Ubuntu × Python 3.11/3.13 **4/4 SUCCESS**, 831 discovered/job; Windows 820 PASS/11 optional SKIP/0 FAIL each, Ubuntu 814 PASS/17 optional SKIP/0 FAIL each. Legacy v0.10/v0.11.2 pinned ZIPs unchanged and isolated smoke PASS, new distinct synthetic v0.12 ZIP SHA256 `eec6b92ee2d87885b2ebb1c023ebb405bac3d8358cae35789be51e8e85242979`, NOT a signed/released installer.
+- **Next**: verify post-merge/docs-head CI; owner Windows/Defender/SmartScreen/browser/PDF acceptance, approved native n8n version/schema/permission, privacy/retention/support/signature/legal release gates still OPEN. Legacy default fractional-UTC burst defect (#52) remains in historical packages. Production/Vercel NONE; only synthetic tests in PUBLIC repo.
+
+---
+
 ## 2026-10-27 — PR #56 v0.12 SQLite repeat-import identity and count integrity FIXED
 
 - [PR #56](https://github.com/hibi89/SOVIA_sovereign/pull/56) merged `develop` code SHA `bf435408b628817cc678bc8312e5fa68379390f6`. Previously an existing versioned report UID with matching findings digest but modified event/finding counts or identity metadata was silently treated as `already_present`. Now strict six-field equality is mandatory on repeat import; conflicts reject and preserve existing row. SQLite schema v2 and old releases unchanged; two new regression tests with five corruption scenarios.

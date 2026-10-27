@@ -1,3 +1,9 @@
+## 2026-10-27 — P2 v0.12 extracted ZIP Windows NTFS junction integrity PR #57
+
+[PR #57](https://github.com/hibi89/SOVIA_sovereign/pull/57) merged `develop` SHA `eed263b3bf594d08cf59943c3cef67ae674b5566`. Source-only v0.12 package verifier now rejects NTFS root/child reparse junction aliases in addition to symlinks, as proved with two real GitHub Windows `mklink /J` scenarios; portable Python3.11-compatible `Path.lstat().st_file_attributes` implementation. [CI 40520947638](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40520947638) Win/Ubuntu × Python3.11/3.13 4/4, 831 discovered/job, 0 FAIL. Historical v0.10/v0.11.2 ZIPs unchanged; new v0.12 hash `eec6b92ee2d87885b2ebb1c023ebb405bac3d8358cae35789be51e8e85242979`. This only closes the specified NTFS verification gap; no TOCTOU/linked-ancestor security certification, owner Windows acceptance, true n8n/consent/PII/contract or signed release. No Production/Vercel.
+
+---
+
 ## 2026-10-27 — P2 SQLite metadata idempotency integrity closure PR #56
 
 [PR #56](https://github.com/hibi89/SOVIA_sovereign/pull/56) merged `develop` code SHA `bf435408b628817cc678bc8312e5fa68379390f6`. Repeat import checks persisted audit identity and count columns as well as findings digest, preventing silent `already_present` on altered metadata. Two tests / five synthetic subcases and [CI #40517663166](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40517663166) Win/Ubuntu Python 3.11/3.13 4/4 successful (826 discovered/job, 0 FAIL). Schema unchanged, old packages unchanged. This is local consistency, NOT cryptographic DB integrity against complete tampering and NOT permission to store real customer data. Sale gates remain user hardware/n8n provenance/PII/consent/licensing/retention/support/signing. No Vercel/Production.
