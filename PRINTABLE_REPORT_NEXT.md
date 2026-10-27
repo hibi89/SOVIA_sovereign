@@ -1,3 +1,9 @@
+## 2026-10-27 source-only v0.12 print preview: heuristic privacy preflight (candidate)
+
+Previously this opt-in preview rendered canonical event metadata without invoking the existing preflight, even though the direct n8n audit path did invoke it. A synthetic-only flag does NOT prove source provenance or PII absence. This scoped patch calls existing `sovia_pii_preflight.assert_no_high_risk_patterns` on the entire bounded canonical document BEFORE evaluation or output. Credential/email-like metadata fails closed with a fixed non-disclosing error code. Two regression tests cover valid-field sensitive values, no output, CLI isolation and path/token non-disclosure. **Heuristics can have false negatives and false positives**; no real customer data or authorization/consent proof. Historical v0.10/v0.11.2 unsigned ZIPs and `sovia_audit.py` are unchanged. Feature CI pending; do not claim a v0.12 product release.
+
+---
+
 ## Actual A4 print verification — CI 2026-10-27, PR #49 MERGED
 
 One Windows Edge v155 GitHub-hosted `--print-to-pdf` run on the opt-in `v0.12.0-preview` first produced **3 pages**, a near-empty last page with caveats only. Compacting **print CSS only** then produced **2 A4 portrait pages** (594.96×841.92 PDF points). PDF was downloaded from [CI 40502431335](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40502431335), SHA256 `9c49e874abd73457a4c9dcbcef2eef6be719b6b5ea0b08aae30b16e2e5c0fd88` (illustrative, PDF timestamps affect repeat-build hashes). Independent `pdfinfo`, `pdftotext -layout` and PDF raster review confirm 5 fabricated risk findings, 3 timeline entries, Korean caveats and no observed page clipping. The previous 3-page PDF had a near-empty caveat page and is not the approved preview shape.

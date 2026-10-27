@@ -101,6 +101,45 @@ class PrintablePreviewTests(unittest.TestCase):
         self.assertIn("입력된 이벤트 없음", page)
         self.assertNotIn("위험 소견 5건", page)
 
+    def test_privacy_gate_rejects_sensitive_event_values_before_output(self):
+        for field, value in (
+            ("agent_id", "person@example.com"),
+            ("source_pointer", "sk-" + "Q" * 28),
+        ):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as tmp:
+                source = Path(tmp) / "synthetic.json"
+                destination = Path(tmp) / "preview.html"
+                document = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+                document["events"][0][field] = value
+                source.write_text(json.dumps(document), encoding="utf-8")
+                with self.assertRaisesRegex(
+                        PreviewError, "^PREVIEW_INPUT_OR_OUTPUT_REJECTED$"):
+                    preview_files(source, destination)
+                self.assertFalse(destination.exists())
+                self.assertIn(value, source.read_text(encoding="utf-8"))
+
+    def test_privacy_gate_isolated_cli_hides_token_and_paths(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "synthetic.json"
+            destination = Path(tmp) / "preview.html"
+            secret = "sk-" + "R" * 28
+            document = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+            document["events"][0]["source_pointer"] = secret
+            source.write_text(json.dumps(document), encoding="utf-8")
+            cmd = [sys.executable, "-I", "-B",
+                   str(ROOT / "sovia_report_print_preview.py"),
+                   "--input", str(source), "--output", str(destination),
+                   "--synthetic-only"]
+            outcome = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
+            self.assertEqual(2, outcome.returncode)
+            self.assertEqual(
+                "PREVIEW_INPUT_OR_OUTPUT_REJECTED",
+                json.loads(outcome.stderr)["error_code"])
+            self.assertNotIn(secret, outcome.stderr)
+            self.assertNotIn(str(source), outcome.stderr)
+            self.assertNotIn(str(destination), outcome.stderr)
+            self.assertFalse(destination.exists())
+
     def test_real_synthetic_cli_isolated_and_no_clobber(self):
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / "preview.html"
