@@ -101,6 +101,11 @@ def standardize(source, policy, registry):
     # transformed canonical report and independently recomputes risk findings.
     canonical = {"schema_version": "1.0", "policy": mapped_policy,
                  "events": mapped_events}
+    # Validate transformed metadata too; a registry never bypasses preflight.
+    try:
+        checker.assert_no_high_risk_patterns(canonical)
+    except ValueError as exc:
+        raise RegistryError("REGISTRY_PRIVACY_PREFLIGHT_REJECTED") from exc
     audit = adapter._audit()
     try:
         initial_report = audit.evaluate(original)
