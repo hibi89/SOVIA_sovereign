@@ -68,35 +68,34 @@ def inventory(root, *, older_than_days=30, now=None, max_entries=MAX_ENTRIES):
         while stack:
             folder, depth = stack.pop()
             with os.scandir(folder) as scan:
-                entries = list(scan)
-            # Bounded before processing the batch, including irrelevant entries.
-            if scanned + len(entries) > max_entries:
-                raise InventoryError("ENTRY_LIMIT_EXCEEDED")
-            for entry in entries:
-                scanned += 1
-                mode = entry.stat(follow_symlinks=False)
-                if stat.S_ISLNK(mode.st_mode):
-                    skipped_links += 1
-                    continue
-                if stat.S_ISDIR(mode.st_mode):
-                    if entry.name in SKIP_DIRECTORIES:
+                for entry in scan:
+                    # Stream entries rather than materializing an unbounded directory.
+                    scanned += 1
+                    if scanned > max_entries:
+                        raise InventoryError("ENTRY_LIMIT_EXCEEDED")
+                    mode = entry.stat(follow_symlinks=False)
+                    if stat.S_ISLNK(mode.st_mode):
+                        skipped_links += 1
+                        continue
+                    if stat.S_ISDIR(mode.st_mode):
+                        if entry.name in SKIP_DIRECTORIES:
+                            ignored += 1
+                            continue
+                        if depth >= MAX_DEPTH:
+                            raise InventoryError("DEPTH_LIMIT_EXCEEDED")
+                        stack.append((Path(entry.path), depth + 1))
+                        continue
+                    if not stat.S_ISREG(mode.st_mode):
                         ignored += 1
                         continue
-                    if depth >= MAX_DEPTH:
-                        raise InventoryError("DEPTH_LIMIT_EXCEEDED")
-                    stack.append((Path(entry.path), depth + 1))
-                    continue
-                if not stat.S_ISREG(mode.st_mode):
-                    ignored += 1
-                    continue
-                category = _category(entry.name)
-                if category is None:
-                    ignored += 1
-                    continue
-                categories[category] += 1
-                if mode.st_mtime <= cutoff:
-                    candidates[category] += 1
-                    candidate_bytes[category] += mode.st_size
+                    category = _category(entry.name)
+                    if category is None:
+                        ignored += 1
+                        continue
+                    categories[category] += 1
+                    if mode.st_mtime <= cutoff:
+                        candidates[category] += 1
+                        candidate_bytes[category] += mode.st_size
     except InventoryError:
         raise
     except OSError as exc:
