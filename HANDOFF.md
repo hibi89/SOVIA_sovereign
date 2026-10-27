@@ -1,3 +1,18 @@
+# LATEST CHECKPOINT — SOVIA independent packaged artifact acceptance (10 sections, 2026-10-27 KST)
+
+1. **Goal/requirements/stack.** User-approved sequence P1 MVP → original blueprint reconciliation → security/stability/compatibility → shipping review; Python 3.11+ offline Audit Lite, no customer connection.
+2. **Finished changes/decision.** No source changes this turn. Retrieved and independently inspected the current v0.11.2-beta GitHub Actions artifact; package checksum, strict verification/extraction, extracted owner P2 synthetic selfcheck, fabricated-token refusal and locally generated Korean PDF visual review succeeded in assistant Linux container. See `LATEST_HANDOFF.md`.
+3. **Executed test evidence.** `verify_portable_p2.py --archive ZIP --sha256-file ZIP.sha256 --extract-to fresh-install` SUCCESS; `--directory fresh-install` SUCCESS; `python -I -B fresh-install/owner_p2_selfcheck.py --output-dir fresh-output` returned `AUTOMATED_PASS_MANUAL_PENDING`, 3 synthetic events/5 findings, 9 automated named checks PASS, optional PDF GENERATED_NEEDS_VISUAL_REVIEW. Token-pattern direct CLI exit 2 with generic rejection, no files/leak. `pdfinfo` 1 A4 page; `pdftotext` Korean text and `pdftoppm` rendered visually readable synthetic PDF. GitHub Actions develop SHA `2125cc66b6ac57e38e196be0f0aff425903afbad` [run 40487176510](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40487176510) 4/4 success.
+4. **Done/in progress/pending.** P1 & source P2 synthetic acceptance DONE; package separate-container independent Linux tests DONE; physical owner Windows, HTML browser, Defender/SmartScreen, optional PDF Windows fonts, native authorized n8n data/consent, commercial release UNVERIFIED/PENDING.
+5. **Errors/attempts/pivot.** Chromium headless screenshot timed out in the model container; browser manual QA not certified. PDF rendered via `pdftoppm` successfully, and acceptance JSON retained its original manual NOT_CHECKED flags. Do not retry blind or mislabel browser failure as product defect.
+6. **Repository/branch/SHA.** Public `hibi89/SOVIA_sovereign`; authoritative `develop` at start `2125cc66b6ac57e38e196be0f0aff425903afbad`; `main` docs-only. Only append documentation for this checkpoint; verify final docs SHA after commit. Inner ZIP SHA256 `5667be53c206af5b8e4c0c96239595988b7866a655587d73d6a18a8078a8a71e`.
+7. **Runtime/URL/cost.** Assistant ephemeral Linux 6.18.55 Python 3.13.5, offline extracted ZIP; artifact ID 12724979578 from develop run, download expires 2026-11-10 KST. No Vercel/Production URL, signed installer, payment or hosted customer deployment.
+8. **Originals/backups/privacy.** Only GitHub artifact and fixed synthetic examples; no owner original, customer log, private n8n record, secrets or machine were accessed. Existing v0.10/0.11 archives and product source unchanged. Test output in ephemeral workspace only; not durable storage.
+9. **Next ordered work/approval.** Physical owner Windows fresh-package check and HTML/PDF/Defender manual verdict; independently authorized actual n8n version/source and upstream sanitization review only with explicit owner data approval; then release/support/privacy/retention gates and separate sale approval. Do not add wrappers to simulate manual hardware checks.
+10. **Cutoff/verification.** 2026-10-27 KST. Verified exact SHA, actual downloaded artifact, two package verifications, extracted selfcheck, negative refusal and Linux PDF preview; **not** verified owner hardware, native n8n, real customer data or production. Following docs update confirm GitHub current HEAD and CI.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 direct sanitized input-to-report flow (10 sections)
 
 ## 1. Mission, requirements, stack
