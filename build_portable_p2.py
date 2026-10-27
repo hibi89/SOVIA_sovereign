@@ -1,4 +1,4 @@
-"""Reproducible, no-clobber SOVIA v0.11.1-beta isolated ZIP from a fixed public allowlist.
+"""Reproducible, no-clobber SOVIA v0.11.2-beta isolated ZIP from a fixed public allowlist.
 
 Build only synthetic examples + core offline Python scripts. No tree walk,
 external dependencies, customer records, repo settings or network calls.
@@ -26,7 +26,7 @@ verify = module_from_spec(_spec)
 _spec.loader.exec_module(verify)
 
 ROOT = Path(__file__).resolve().parent
-DEFAULT_NAME = "SOVIA-Audit-Lite-0.11.1-beta.zip"
+DEFAULT_NAME = "SOVIA-Audit-Lite-0.11.2-beta.zip"
 TEXT_SUFFIXES = (".py", ".json", ".csv", ".md")
 
 
@@ -152,7 +152,7 @@ def build(output_path, root=ROOT):
 
 def main(argv=None):
     p = argparse.ArgumentParser(description="Build reproducible SOVIA Audit Lite offline beta ZIP")
-    p.add_argument("--output", required=True, help="NEW SOVIA-Audit-Lite-0.11.1-beta.zip path")
+    p.add_argument("--output", required=True, help="NEW SOVIA-Audit-Lite-0.11.2-beta.zip path")
     args = p.parse_args(argv)
     try:
         print(json.dumps(build(args.output), ensure_ascii=False, sort_keys=True))
