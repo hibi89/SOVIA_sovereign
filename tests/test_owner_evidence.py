@@ -124,6 +124,18 @@ class OwnerEvidenceTests(unittest.TestCase):
         self.assertEqual("DECLARED_PASS_UNVERIFIED", result["pdf_claim"])
         self.assertIs(False, result["manual_observations_independently_verified"])
 
+    def test_optional_pdf_failure_prevents_claims_consistent(self):
+        self.save(automated=auto("FAILED_OPTIONAL_PDF"),
+                  manual=review("PASS", "PASS", "PASS", "NOT_TESTED"))
+        result = evidence.assess_files(self.portable, self.auto, self.manual)
+        self.assertEqual("MANUAL_REVIEW_BLOCKED", result["status"])
+
+    def test_human_pdf_fail_prevents_claims_consistent(self):
+        self.save(automated=auto("GENERATED_NEEDS_VISUAL_REVIEW"),
+                  manual=review("PASS", "PASS", "PASS", "FAIL"))
+        result = evidence.assess_files(self.portable, self.auto, self.manual)
+        self.assertEqual("MANUAL_REVIEW_BLOCKED", result["status"])
+
     def test_unsupported_pdf_status_is_refused(self):
         record = auto()
         record["checks"]["optional_pdf"] = "PASS"
