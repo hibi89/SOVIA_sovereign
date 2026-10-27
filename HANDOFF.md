@@ -1,3 +1,28 @@
+# CURRENT SOVIA HANDOFF — 2026-10-27 P2 retention governance dry-run (10 sections)
+
+## 1. Mission, scope and technical environment
+SOVIA offline-first zero-paid-API retrospective agent audit, Python stdlib. Continue P2 commercial readiness gates without reimplementing existing 5-rule audit/CSV/optional PDF/SQLite history/static dashboard, prior v0.10 portable Windows self-check, retention inventory, synthetic n8n-like strict adapter/operator SHA review, privacy preflight, safe-code registry, synthetic FP/FN triage and owner evidence consistency checker.
+## 2. Changes, alternatives and rationale
+Compared real auto-purge by age (unsafe without lawful retention commencement, legal holds, backups and consent) to strict category-level **review-only** aggregation atop `sovia_retention.inventory`; selected safe latter. Added `sovia_retention_review.py`, `examples/demo_retention_review_policy.json`, 25 tests in `tests/test_retention_review.py`, `RETENTION_REVIEW.md` and `RETENTION.md` addendum. Five fixed extension classes have explicit review-after-days and unverified legal-hold/backup states. HOLD/VERIFY/HUMAN_REVIEW_ONLY are **not deletion decisions**. Existing inventory/core/DB/portable unchanged.
+## 3. Actual tests / commands / limits
+[PR CI 40463702926](https://github.com/hibi89/SOVIA_sovereign/actions/runs/40463702926) at tested source HEAD `4f835648412892a94bcf79db93eebe98f4153efd` **4/4 SUCCESS**, Windows+Ubuntu × Python 3.11/3.13, `python -m unittest discover -s tests -v`: 384 discovered/job, Windows 374 PASS/10 SKIP, Ubuntu 373 PASS/11 SKIP, 0 FAIL. `python portable_smoke.py` old 12-file v0.10 ZIP audit/SQLite/dashboard/backup/restore/selfcheck PASS all. Owner's physical Windows/Defender/Korean HTML+PDF browser acceptance NOT VERIFIED; post-doc HEAD CI not independently verified.
+## 4. Done / active / pending and stopping point
+DONE strictly validated review policy, metadata-only category-specific thresholds, operator claimed hold/backup status, 25 synthetic tests, CI and PR integration. PENDING genuine retention starting points, verified legal authorization/holds/backup lineage, confidential customer data controller contract, filesystem-consistent snapshot/ownership model, approved erasure workflow and human signoff, authorized real n8n version-specific sanitized formats and owner physical PC/manual acceptance. Stop after status/doc updates and HEAD verify.
+## 5. Failures, evidence, retries and limitations
+PR #24 verified Actions 40463702926 passed without test failures. Source metadata is scanned up to five times with identical pinned clock and gross count consistency check; this is NOT atomic, and equal-count filesystem changes can go undetected. Filesystem mtime/extension does not indicate lawful creation/expiration. Policy legal-hold/backup assertions are self-declared. No actual deletion/external data/customer incident.
+## 6. Repository, branch, commits, paths
+`hibi89/SOVIA_sovereign` PUBLIC; default `main` docs-only, code on `develop`. Feature `feature/p2-retention-policy-dryrun` tested HEAD `4f835648412892a94bcf79db93eebe98f4153efd`; [PR #24](https://github.com/hibi89/SOVIA_sovereign/pull/24) merged `develop` at `40ed61a7e93d1588a453f27223d688b31d6de5c4`. New `sovia_retention_review.py`, `tests/test_retention_review.py`, `examples/demo_retention_review_policy.json`, `RETENTION_REVIEW.md`, updated `RETENTION.md`, `GAP_MATRIX.md`, `STATUS.md`, `HANDOFF.md`, `RESUME.md`. Refresh latest docs HEAD afterward.
+## 7. Production, environment and reproducible commands
+Production/Vercel/Cloud/paid listing NONE. Offline metadata example: `python sovia_retention_review.py --root SYNTHETIC_ARTIFACT_DIRECTORY --policy examples/demo_retention_review_policy.json --dry-run`. Separate `python -m unittest discover -s tests -p test_retention_review.py -v`. Tool **never** deletes data; no new portable distribution, outside existing v0.10 12-file ZIP. No customer source input in automated CI.
+## 8. Originals, credentials, backup, security
+Only fabricated local files/metadata in tests and PUBLIC repo. Original file contents never read by review planner; only policy JSON and folder metadata. No original filenames/paths in output or server telemetry. Symlinks/deep trees/large entry counts rejected through underlying inventory. No backup/SQLite modified or purge command invoked. No real client personal data, passwords/keys/creds, permission changes or network API calls.
+## 9. Next priorities and owner approvals
+On next `ㄱ`, verify fresh `develop` and ten-section handoff, pursue safe P2 versioned n8n metadata compatibility contract/negative tests (without raw customer data) or legal hold/backup lineage evidence design, not real erasure. Owner explicit approval before live n8n/customer data, production, privacy/visibility/access changes, release/listing/payments and destructive deletion. Real owner Windows manual acceptance remains pending.
+## 10. Date, exact evidence and uncertainty
+2026-10-27 KST. Tested source SHA `4f835648412892a94bcf79db93eebe98f4153efd` via Actions `40463702926` 4/4 success; source integration merge `40ed61a7e93d1588a453f27223d688b31d6de5c4`. New docs HEAD CI remains unverified; fetch actual HEAD after writes. No production, legal clearance, owner-PC independent acceptance or customer real-data evidence.
+
+---
+
 # CURRENT SOVIA HANDOFF — 2026-10-27 P2 owner Windows record consistency (10 sections)
 
 ## 1. Goal, scope and technologies
