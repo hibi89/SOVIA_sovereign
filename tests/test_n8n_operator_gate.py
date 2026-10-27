@@ -141,6 +141,14 @@ class OperatorGateTests(unittest.TestCase):
             self.approved()
         self.assertFalse(self.output.exists())
 
+    def test_claim_lifetime_must_not_exceed_30_days(self):
+        obj = claim()
+        obj["expires_utc"] = "2099-01-01T00:00:00Z"
+        self.claim.write_text(json.dumps(obj), encoding="utf-8")
+        with self.assertRaisesRegex(gate.ContractError, "ATTESTATION_TOO_LONG_LIVED"):
+            self.approved()
+        self.assertFalse(self.output.exists())
+
     def test_invalid_expiry_timezone_format_and_calendar(self):
         for stamp in ("2099-01-01T00:00:00+09:00", "2099-02-30T00:00:00Z",
                       "2099-01-01T00:00:00", 1234, "2099-01-01"):
