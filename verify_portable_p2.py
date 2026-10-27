@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import hmac
+import io
 import json
 import os
 from pathlib import Path
@@ -173,13 +174,23 @@ def verify_directory(root_path):
 def extract_verified(archive_path, destination, checksum_path=None):
     """Verify first; extract only fixed allowlisted paths into a new destination."""
     verified = verify_archive(archive_path, checksum_path)
+    # Pin the exact bytes that will be extracted. A locally replaced archive
+    # between verification and extraction must never be trusted implicitly.
+    # This bounded copy is held in memory and is NOT written to disk.
+    archive = Path(archive_path)
+    if archive.is_symlink() or not archive.is_file():
+        raise PackageError("Archive changed after verification")
+    data = archive.read_bytes()
+    if (len(data) > MAX_ARCHIVE_BYTES or
+            not hmac.compare_digest(_sha(data), verified["archive_sha256"])):
+        raise PackageError("Archive changed after verification")
     target = Path(destination).absolute()
     if not target.parent.is_dir() or target.exists() or target.is_symlink():
         raise PackageError("Extraction destination must be new under an existing directory")
     # Creating the new directory fails instead of overwriting a pre-existing path.
     target.mkdir()
     try:
-        with zipfile.ZipFile(archive_path) as z:
+        with zipfile.ZipFile(io.BytesIO(data)) as z:
             for name in FILES + (MANIFEST,):
                 target_file = target / name
                 target_file.parent.mkdir(exist_ok=True, parents=True)
