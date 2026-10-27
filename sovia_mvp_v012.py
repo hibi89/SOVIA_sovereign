@@ -1,0 +1,131 @@
+"""SOVIA v0.12 one-command minimum working unit, offline synthetic-only.
+
+Input: one canonical, locally supplied JSON fixture.
+Output: new directory with report.html, report.json, history.sqlite3.
+No genuine n8n API, customer integration, hosting or privacy certification.
+"""
+from __future__ import annotations
+
+import argparse
+from importlib.util import module_from_spec, spec_from_file_location
+import json
+import os
+from pathlib import Path
+import sys
+import tempfile
+
+
+OUTPUTS = ("report.html", "report.json", "history.sqlite3")
+
+
+class MVPError(ValueError):
+    """Non-disclosing rejection codes."""
+
+
+def _module(filename, alias):
+    path = Path(__file__).resolve().with_name(filename)
+    spec = spec_from_file_location(alias, path)
+    if spec is None or spec.loader is None:
+        raise MVPError("COMPONENT_UNAVAILABLE")
+    module = module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except (OSError, ImportError) as exc:
+        raise MVPError("COMPONENT_UNAVAILABLE") from exc
+    return module
+
+
+def run(input_path, output_dir, *, synthetic_only=False):
+    """Preflight/run wholly in a staging directory, then publish fresh files.
+
+    Directory and output files are individually exclusive, not a transaction
+    for concurrent readers. If publishing fails normally, remove only our own
+    inode-matched files; power loss can leave partial new output.
+    """
+    if synthetic_only is not True:
+        raise MVPError("SYNTHETIC_ACK_REQUIRED")
+    source = Path(os.path.abspath(input_path))
+    target = Path(os.path.abspath(output_dir))
+    if (not source.is_file() or source.is_symlink() or
+            source.suffix.lower() != ".json"):
+        raise MVPError("INVALID_SOURCE")
+    if not target.parent.is_dir():
+        raise MVPError("OUTPUT_PARENT_MISSING")
+    if target.exists() or target.is_symlink():
+        raise MVPError("OUTPUT_EXISTS")
+    if source.resolve() == target.resolve():
+        raise MVPError("PATH_COLLISION")
+    created = False
+    published = []
+    try:
+        with tempfile.TemporaryDirectory(
+            prefix=".sovia-mvp-stage-", dir=target.parent
+        ) as temp:
+            stage = Path(temp)
+            engine = _module("sovia_audit_v012.py", "_sovia_mvp_engine")
+            history = _module("sovia_history_v012.py", "_sovia_mvp_history")
+            report = engine.run_synthetic(
+                source, stage / OUTPUTS[0], stage / OUTPUTS[1]
+            )
+            entry = history.import_synthetic(stage / OUTPUTS[2], source)
+            if entry["status"] != "imported":
+                raise MVPError("HISTORY_IMPORT_INCOMPLETE")
+            if any(not (stage / name).is_file() for name in OUTPUTS):
+                raise MVPError("OUTPUT_INCOMPLETE")
+            # os.mkdir and os.link both refuse to overwrite existing targets.
+            target.mkdir(mode=0o700)
+            created = True
+            for name in OUTPUTS:
+                original = stage / name
+                state = original.stat()
+                destination = target / name
+                os.link(original, destination)
+                published.append((destination, state.st_dev, state.st_ino))
+            return {
+                "status": "SYNTHETIC_V012_MVP_COMPLETE",
+                "engine_version": report["engine_version"],
+                "events": report["events"],
+                "findings": report["findings"],
+                "history_schema_version": history.SCHEMA_VERSION,
+                "files": list(OUTPUTS),
+                "real_n8n_verified": False,
+                "customer_release_approved": False,
+            }
+    except Exception as exc:
+        if created:
+            for path, device, inode in reversed(published):
+                try:
+                    current = path.stat()
+                    if (current.st_dev, current.st_ino) == (device, inode):
+                        path.unlink()
+                except OSError:
+                    pass
+            try:
+                target.rmdir()
+            except OSError:
+                pass
+        if isinstance(exc, MVPError):
+            raise
+        raise MVPError("MVP_INPUT_OR_OUTPUT_REJECTED") from exc
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="SOVIA v0.12 offline synthetic-only one-command MVP"
+    )
+    parser.add_argument("--input", required=True, help="canonical synthetic JSON")
+    parser.add_argument("--output-dir", required=True, help="brand NEW directory")
+    parser.add_argument("--synthetic-only", action="store_true")
+    args = parser.parse_args(argv)
+    try:
+        result = run(args.input, args.output_dir, synthetic_only=args.synthetic_only)
+    except (MVPError, OSError, ValueError, TypeError, RecursionError) as exc:
+        code = str(exc) if isinstance(exc, MVPError) else "MVP_REJECTED"
+        print(json.dumps({"status": "REJECTED", "error_code": code}), file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
