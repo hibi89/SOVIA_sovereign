@@ -25,12 +25,26 @@ class ReconcileTests(unittest.TestCase):
         self.assertEqual((2, 2, 2), (result["planned_steps"], result["observed_events"],
                                     result["matched_step_ids"]))
         self.assertEqual(0, result["reconciliation_finding_count"])
-        self.assertEqual("SYNTHETIC_MATCH_NOT_AUTHENTICATED", result["status"])
+        # Matching IDs do not clear actual plan/post-audit risk findings.
+        self.assertEqual("SYNTHETIC_REVIEW_REQUIRED", result["status"])
         self.assertFalse(result["execution_authorized"])
         self.assertFalse(result["observation_completeness_verified"])
         self.assertFalse(result["real_la_integration_verified"])
         self.assertGreater(result["plan_risk_finding_count"], 0)
         self.assertGreater(result["post_audit_finding_count"], 0)
+
+
+    def test_zero_rule_findings_still_not_authenticated(self):
+        plan = copy.deepcopy(PLAN)
+        plan["steps"] = [plan["steps"][0]]
+        observed = copy.deepcopy(OBSERVED)
+        observed["events"] = [observed["events"][0]]
+        result = subject.reconcile(plan, POLICY, observed)
+        self.assertEqual(0, result["plan_risk_finding_count"])
+        self.assertEqual(0, result["post_audit_finding_count"])
+        self.assertEqual(0, result["reconciliation_finding_count"])
+        self.assertEqual("SYNTHETIC_MATCH_NOT_AUTHENTICATED", result["status"])
+        self.assertFalse(result["approval_identity_verified"])
 
     def test_missing_step_is_unknown_not_failed(self):
         obs = copy.deepcopy(OBSERVED)
