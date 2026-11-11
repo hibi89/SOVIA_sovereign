@@ -10,14 +10,26 @@ import argparse
 import hashlib
 import html
 import hmac
+from importlib.util import module_from_spec, spec_from_file_location
 import json
 import os
 from pathlib import Path
 import stat
 import sys
 
-import sovia_la_plan_reconcile as engine
-from sovia_audit import read_document
+
+def _local(filename, name):
+    source = Path(__file__).resolve().with_name(filename)
+    spec = spec_from_file_location(name, source)
+    if spec is None or spec.loader is None:
+        raise ReviewError("COMPONENT_MISSING")
+    mod = module_from_spec(spec)
+    try:
+        spec.loader.exec_module(mod)
+    except (OSError, ImportError) as exc:
+        raise ReviewError("COMPONENT_MISSING") from exc
+    return mod
+
 
 SCHEMA = "sovia.la_owner_review.v1"
 FILES = ("review.json", "review.html", "manifest.json")
@@ -127,6 +139,17 @@ def _require_review_structure(result):
                 "post_audit_finding_count", "reconciliation_finding_count"):
         if type(result.get(key)) is not int or not 0 <= result[key] <= 1000:
             raise ReviewError("REVIEW_SCHEMA_REFUSED")
+    if (type(result.get("coverage_limits")) is not list or
+            len(result["coverage_limits"]) > 50 or
+            any(type(x) is not str or len(x) > 200 for x in result["coverage_limits"])):
+        raise ReviewError("REVIEW_SCHEMA_REFUSED")
+    for finding in result["reconciliation_findings"]:
+        if (type(finding) is not dict or
+                set(finding) != {"step_or_event_id", "rule_id", "severity", "evidence_not_authenticated"} or
+                finding["evidence_not_authenticated"] is not True or
+                any(type(finding.get(key)) is not str or len(finding[key]) > 120
+                    for key in ("step_or_event_id", "rule_id", "severity"))):
+            raise ReviewError("REVIEW_SCHEMA_REFUSED")
     if result["status"] == "SYNTHETIC_MATCH_NOT_AUTHENTICATED" and (
         result["plan_risk_finding_count"] or
         result["post_audit_finding_count"] or
@@ -158,7 +181,9 @@ def create_bundle(plan_path, policy_path, observations_path, output_dir):
         raise ReviewError("OUTPUT_SOURCE_COLLISION")
 
     try:
-        result = _require_review_structure(engine.reconcile(
+        read_document = _local("sovia_audit.py", "_sovia_la_review_reader").read_document
+        reconcile = _local("sovia_la_plan_reconcile.py", "_sovia_la_review_engine").reconcile
+        result = _require_review_structure(reconcile(
             *(read_document(path) for path in sources)))
     except ReviewError:
         raise
