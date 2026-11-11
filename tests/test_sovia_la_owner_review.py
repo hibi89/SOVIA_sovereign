@@ -43,6 +43,10 @@ class OwnerReviewTests(unittest.TestCase):
                               review["reconciliation_finding_count"]))
             self.assertGreater(review["plan_risk_finding_count"], 0)
             self.assertGreater(review["post_audit_finding_count"], 0)
+            self.assertEqual(review["plan_risk_finding_count"],
+                             len(review["plan_risk_findings"]))
+            self.assertEqual(review["post_audit_finding_count"],
+                             len(review["post_audit_findings"]))
             self.assertFalse(review["real_la_integration_verified"])
             page = (output / "review.html").read_text("utf-8")
             self.assertIn("default-src 'none'", page)
@@ -50,6 +54,9 @@ class OwnerReviewTests(unittest.TestCase):
             self.assertNotIn("<script", page)
             self.assertNotIn("2026-10-28T01:00:00Z", page)
             self.assertNotIn('"events":', page)
+            self.assertNotIn("synthetic:lookup", page)
+            self.assertIn("UNAUTHORIZED_PLANNED_TOOL", page)
+            self.assertIn("UNAUTHORIZED_TOOL", page)
 
     def test_severity_of_missing_observation_is_review_required(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -117,6 +124,8 @@ class OwnerReviewTests(unittest.TestCase):
             "status": "<img src=x>", "planned_steps": 1, "observed_events": 1,
             "plan_risk_finding_count": 1, "post_audit_finding_count": 1,
             "reconciliation_finding_count": 1,
+            "plan_risk_findings": [{"step_id": "<plan>", "rule_id": "R1", "severity": "HIGH"}],
+            "post_audit_findings": [{"event_id": "<event>", "rule_id": "R2", "severity": "HIGH"}],
             "reconciliation_findings": [
                 {"step_or_event_id": "<script>x</script>", "rule_id": "RULE",
                  "severity": "HIGH"}],
