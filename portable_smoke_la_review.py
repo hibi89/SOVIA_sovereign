@@ -2,13 +2,28 @@
 from __future__ import annotations
 
 import json
+from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
 
-from build_portable_la_review import DEFAULT_NAME, build
-from verify_portable_la_review import extract_verified, verify_directory
+
+def _local(filename, alias):
+    spec = spec_from_file_location(alias, Path(__file__).resolve().with_name(filename))
+    if spec is None or spec.loader is None:
+        raise RuntimeError("LOCAL_SMOKE_COMPONENT_MISSING")
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_builder = _local("build_portable_la_review.py", "_sovia_la_smoke_builder")
+_verifier = _local("verify_portable_la_review.py", "_sovia_la_smoke_verifier")
+DEFAULT_NAME = _builder.DEFAULT_NAME
+build = _builder.build
+extract_verified = _verifier.extract_verified
+verify_directory = _verifier.verify_directory
 
 
 def _cli(script, *args, expected=0):
