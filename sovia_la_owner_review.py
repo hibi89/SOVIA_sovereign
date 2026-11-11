@@ -85,6 +85,16 @@ def render_html(review):
         "</td></tr>"
         for item in findings
     ) or "<tr><td colspan='3'>계획·관측 식별자 차이 없음. 안전성 승인 아님.</td></tr>"
+    plan_rows = "".join(
+        "<tr><td>" + _esc(f["step_id"]) + "</td><td>" +
+        _esc(f["rule_id"]) + "</td><td>" + _esc(f["severity"]) +
+        "</td></tr>" for f in review["plan_risk_findings"]
+    ) or "<tr><td colspan='3'>계획 규칙 위험 0건. 승인 아님.</td></tr>"
+    audit_rows = "".join(
+        "<tr><td>" + _esc(f["event_id"]) + "</td><td>" +
+        _esc(f["rule_id"]) + "</td><td>" + _esc(f["severity"]) +
+        "</td></tr>" for f in review["post_audit_findings"]
+    ) or "<tr><td colspan='3'>사후 탐지 위험 0건. 안전성 보증 아님.</td></tr>"
     limits = "".join("<li>" + _esc(x) + "</li>"
                      for x in review["coverage_limits"])
     return (
@@ -114,7 +124,12 @@ def render_html(review):
                       ("계획 위험", "plan_risk_finding_count"),
                       ("감사 위험", "post_audit_finding_count"),
                       ("대조 차이", "reconciliation_finding_count")))
-        + "</section><h2>계획 ↔ 관측 차이</h2>"
+        + "</section><h2>계획 검토 위험</h2>"
+        "<table><thead><tr><th>계획 단계</th><th>규칙</th><th>심각도</th></tr>"
+        "</thead><tbody>" + plan_rows + "</tbody></table>"
+        "<h2>사후 감사 위험</h2><table><thead><tr><th>이벤트</th>"
+        "<th>규칙</th><th>심각도</th></tr></thead><tbody>"
+        + audit_rows + "</tbody></table><h2>계획 ↔ 관측 차이</h2>"
         "<table><thead><tr><th>단계/이벤트</th><th>규칙</th><th>심각도</th>"
         "</tr></thead><tbody>" + rows + "</tbody></table>"
         "<h2>제약·미확인</h2><ul>" + limits + "</ul>"
@@ -131,6 +146,10 @@ def _require_review_structure(result):
             result.get("real_la_integration_verified") is not False or
             result.get("observation_completeness_verified") is not False or
             type(result.get("reconciliation_findings")) is not list or
+            type(result.get("plan_risk_findings")) is not list or
+            type(result.get("post_audit_findings")) is not list or
+            result.get("plan_risk_finding_count") != len(result["plan_risk_findings"]) or
+            result.get("post_audit_finding_count") != len(result["post_audit_findings"]) or
             result.get("reconciliation_finding_count") != len(result["reconciliation_findings"]) or
             result.get("status") not in ("SYNTHETIC_REVIEW_REQUIRED",
                                          "SYNTHETIC_MATCH_NOT_AUTHENTICATED")):
@@ -143,6 +162,15 @@ def _require_review_structure(result):
             len(result["coverage_limits"]) > 50 or
             any(type(x) is not str or len(x) > 200 for x in result["coverage_limits"])):
         raise ReviewError("REVIEW_SCHEMA_REFUSED")
+    for group, keys in (
+        ("plan_risk_findings", ("step_id", "rule_id", "severity")),
+        ("post_audit_findings", ("event_id", "rule_id", "severity")),
+    ):
+        for finding in result[group]:
+            if (type(finding) is not dict or set(finding) != set(keys) or
+                    any(type(finding.get(key)) is not str or len(finding[key]) > 120
+                        for key in keys)):
+                raise ReviewError("REVIEW_SCHEMA_REFUSED")
     for finding in result["reconciliation_findings"]:
         if (type(finding) is not dict or
                 set(finding) != {"step_or_event_id", "rule_id", "severity", "evidence_not_authenticated"} or
