@@ -94,8 +94,11 @@ def reconcile(plan_doc, policy_doc, observed_doc):
     # unobserved, or prove absence of other external side effects.
     return {
         "schema_version": "sovia.plan_observation_reconcile.v1",
-        "status": ("SYNTHETIC_REVIEW_REQUIRED" if findings else
-                   "SYNTHETIC_MATCH_NOT_AUTHENTICATED"),
+        # A match is not a cleared review when the preflight or independent
+        # retrospective audit found risk. Do not hide findings behind parity.
+        "status": ("SYNTHETIC_REVIEW_REQUIRED" if (
+            findings or planned["finding_count"] or audited["finding_count"]
+        ) else "SYNTHETIC_MATCH_NOT_AUTHENTICATED"),
         "plan_fingerprint_sha256": planned["plan_fingerprint_sha256"],
         "planned_steps": planned["step_count"],
         "observed_events": audited["event_count"],
