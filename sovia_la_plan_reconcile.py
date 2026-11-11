@@ -105,6 +105,18 @@ def reconcile(plan_doc, policy_doc, observed_doc):
         "matched_step_ids": len(step_by_id.keys() & observed_by_id.keys()),
         "plan_risk_finding_count": planned["finding_count"],
         "post_audit_finding_count": audited["finding_count"],
+        # Reviewable, strictly reduced metadata. Never copy raw event rows,
+        # source pointers, target names, operator notes, or policy text.
+        "plan_risk_findings": sorted(
+            ({"step_id": f["step_id"], "rule_id": f["rule_id"],
+              "severity": f["severity"]} for f in planned["findings"]),
+            key=lambda f: (f["step_id"], f["rule_id"])
+        ),
+        "post_audit_findings": sorted(
+            ({"event_id": f["event_ids"][0], "rule_id": f["rule_id"],
+              "severity": f["severity"]} for f in audited["findings"]),
+            key=lambda f: (f["event_id"], f["rule_id"])
+        ),
         "reconciliation_finding_count": len(findings),
         "reconciliation_findings": sorted(
             findings, key=lambda f: (f["step_or_event_id"], f["rule_id"])
