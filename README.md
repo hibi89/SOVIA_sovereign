@@ -1,3 +1,5 @@
+> **2026-11-12 P38 source-only SOVIA LA review delta:** Compare two independently consistency-checked, **unauthenticated synthetic** owner review bundles by total CRITICAL/HIGH/MEDIUM/LOW/UNKNOWN counts in plan, audit and reconciliation. No raw IDs or source; never treats a lower count as safety clearance. `python -I -B sovia_la_review_delta.py --previous OLD --current NEW --synthetic-only`. Exact [source+tests `cb41fcf85bd8`](https://github.com/hibi89/SOVIA_sovereign/commit/cb41fcf85bd8f2b9cc9aeb430184ed2a5056ffa5), [CI #43204176313](https://github.com/hibi89/SOVIA_sovereign/actions/runs/43204176313) **Windows/Ubuntu × Python3.11/3.13 4/4 SUCCESS**, per-job 924 discovered/0 FAIL; Windows913 PASS/11 SKIP, Ubuntu902 PASS/22 SKIP. This P38 source command is **not bundled in existing v0.13 beta**, genuine LA/private consent/customer/legal/physical Win verification not done. Provisional engineering **87% (85+2pp)**, P95 not achieved and RELEASE HOLD. [P38 record](docs/SOVIA_LA_DELTA_P38_20261112.md).
+
 # SOVIA Sovereign — local-first AI agent evidence audit
 
 ## 2026-10-28 P2 — Windows offline synthetic one-click demo available
