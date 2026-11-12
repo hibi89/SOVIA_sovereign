@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from sovia_audit import read_document
-from sovia_la_owner_review import create_bundle, ReviewError
-from sovia_la_review_delta import compare_review_bundles
+from sovia_la_owner_review import create_bundle
+from sovia_la_review_delta import compare_review_bundles, ReviewError
 
 PLAN = ROOT / "examples/demo_la_plan_review.json"
 POLICY = ROOT / "examples/demo_policy.json"
