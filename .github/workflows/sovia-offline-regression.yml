@@ -121,3 +121,21 @@ jobs:
             dist/SOVIA-LA-Review-0.13.0-beta.zip.sha256
           if-no-files-found: error
           retention-days: 14
+
+      - name: Build isolated SOVIA LA Minimal v0.15 candidate (NOT a release)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        run: |
+          python -c "from pathlib import Path; Path('dist').mkdir(exist_ok=True)"
+          python -I -B build_portable_la_minimal.py --output dist/SOVIA-LA-Minimal-0.15.0-beta.zip
+          python -I -B verify_portable_la_minimal.py --archive dist/SOVIA-LA-Minimal-0.15.0-beta.zip --sha256-file dist/SOVIA-LA-Minimal-0.15.0-beta.zip.sha256
+          python -I -B portable_smoke_la_minimal.py
+      - name: Upload SOVIA v0.15 synthetic CI artifact (NOT a release)
+        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sovia-la-minimal-v015-SYNTHETIC-NOT-RETAIL
+          path: |
+            dist/SOVIA-LA-Minimal-0.15.0-beta.zip
+            dist/SOVIA-LA-Minimal-0.15.0-beta.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
