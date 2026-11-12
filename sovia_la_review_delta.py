@@ -13,10 +13,26 @@ import json
 from pathlib import Path
 import sys
 
-from sovia_la_owner_review import (
-    FILES, MAX_FILE, ReviewError, _parse_json, _require_review_structure,
-    _safe_path, verify_bundle,
-)
+from importlib.util import module_from_spec, spec_from_file_location
+
+
+def _load_local_review():
+    # python -I intentionally omits the script directory from sys.path.
+    # Use the established SOVIA explicit local file loader, not sys.path hacks.
+    source = Path(__file__).resolve().with_name("sovia_la_owner_review.py")
+    spec = spec_from_file_location("_sovia_delta_review", source)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("SOVIA_REVIEW_COMPONENT_MISSING")
+    module = module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+_review = _load_local_review()
+FILES, MAX_FILE, ReviewError = _review.FILES, _review.MAX_FILE, _review.ReviewError
+_parse_json = _review._parse_json
+_require_review_structure = _review._require_review_structure
+_safe_path, verify_bundle = _review._safe_path, _review.verify_bundle
 
 SCHEMA = "sovia.la_review_delta.v1"
 SEVERITIES = ("CRITICAL", "HIGH", "MEDIUM", "LOW", "UNKNOWN")
